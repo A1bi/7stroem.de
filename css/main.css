@@ -1,0 +1,56 @@
+body {
+	margin: 0px;
+	font-family: "DejaVu Sans", "Arial";
+    background: url(/gfx/bg.png) repeat-x;
+	width: 1111px;
+}
+
+.header {
+	position: absolute;
+	width: 1111px;
+	height: 192px;
+	color: #ffffff;
+}
+.header .left {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	background: url(/gfx/header_left.png) no-repeat;
+	width: 802px;
+	height: 135px;
+}
+.header .left .claim {
+	position: absolute;
+	bottom: 29px;
+	left: 110px;
+}
+.header .right {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	background: url(/gfx/header_right.png) no-repeat;
+	width: 309px;
+	height: 135px;
+}
+.header .right .userbox {
+	position: absolute;
+	top: 5px;
+	background: url(/gfx/header_userbox.png) no-repeat;
+	width: 282px;
+	height: 100px;
+	padding-top: 15px;
+	padding-left: 18px;
+}
+.header .shadow {
+	position: absolute;
+	top: 135px;
+	width: 100%;
+	height: 57px;
+	background: url(/gfx/header_shadow.png) no-repeat;
+}
+.content {
+	position: absolute;
+	top: 192px;
+	left: 50px;
+	width: 95%;
+}
