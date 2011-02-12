@@ -1,0 +1,70 @@
+.join {
+	position: absolute;
+	background: url(/gfx/index/index_join.png) no-repeat;
+	width: 514px;
+	height: 456px;
+	top: 40px;
+}
+.join .text {
+	position: absolute;
+	top: 170px;
+	left: 20px;
+	color: #ffffff;
+	font-size: 24px;
+	width: 300px;
+	text-shadow: #000000 2px 2px 4px;
+}
+.join .signup {
+	position: absolute;
+	bottom: 40px;
+	left: 70px;
+}
+.strike {
+	position: absolute;
+	top: 0px;
+	left: 535px;
+	background: url(/gfx/index/strike.png) no-repeat;
+	width: 21px;
+	height: 579px;
+}
+.login {
+	position: absolute;
+	background: url(/gfx/index/login.png) no-repeat;
+	width: 407px;
+	height: 456px;
+	top: 40px;
+	left: 600px;
+	color: #ffffff;
+}
+.login .sep {
+	position: relative;
+	background: url(/gfx/index/login_sep.png) no-repeat;
+	width: 364px;
+	height: 9px;
+	margin-top: 5px;
+	margin-left: 17px;
+}
+.login .head {
+	position: relative;
+	padding-top: 10px;
+	padding-left: 20px;
+	font-size: 23px;
+	text-shadow: #000000 1px 1px 5px;
+}
+.login .top {
+	padding-top: 28px;
+}
+.login .space {
+	position: relative;
+	padding-left: 18px;
+	padding-top: 6px;
+	padding-right: 25px;
+}
+.login table {
+	width: 100%;
+	border-spacing: 0px 9px;
+}
+.login .field {
+	height: 18px;
+	font-size: 14px;
+}

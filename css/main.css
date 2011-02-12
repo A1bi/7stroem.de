@@ -1,15 +1,27 @@
+/* main layout elements */
 body {
-	margin: 0px;
 	font-family: "DejaVu Sans", "Arial";
     background: url(/gfx/bg.png) repeat-x;
 	width: 1111px;
+	margin: auto;
+}
+a {
+	color: #ffffff;
+}
+a:hover {
+	text-decoration: none;
+}
+img {
+	border: none;
 }
 
+/* header */
 .header {
 	position: absolute;
 	width: 1111px;
 	height: 192px;
 	color: #ffffff;
+	z-index: 2;
 }
 .header .left {
 	position: absolute;
@@ -48,9 +60,22 @@ body {
 	height: 57px;
 	background: url(/gfx/header_shadow.png) no-repeat;
 }
+
+/* content space */
 .content {
-	position: absolute;
-	top: 192px;
-	left: 50px;
-	width: 95%;
+	position: relative;
+	top: 170px;
+	width: 1000px;
+	margin: auto;
+}
+
+/* common classes */
+.vcen {
+	vertical-align: middle;
+}
+.hcen {
+	text-align: center;
+}
+.hright {
+	text-align: right;
 }

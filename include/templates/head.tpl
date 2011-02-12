@@ -10,6 +10,9 @@
 
 	</style>
 {/if}
+{if $cssfile != ""}
+	<link rel="stylesheet" type="text/css" href="/css/{$cssfile}.css" />
+{/if}
 </head>
 
 <body>
@@ -20,10 +23,8 @@
 			</div>
 		</div>
 		<div class="right">
-			<div class="userbox">
-				Hallo, Albi!
-				<p>Guthaben: 50 &euro;</p>
-			</div>
+{include file="head_userbox.tpl"}
+
 		</div>
 		<div class="shadow">&nbsp;</div>
 	</div>

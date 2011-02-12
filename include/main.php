@@ -2,7 +2,7 @@
 
 // enable error reporting
 ini_set('display_errors','on');
-error_reporting(E_ALL);
+error_reporting(E_ALL ^ E_NOTICE);
 
 /**
  * redirects to given url
@@ -49,5 +49,17 @@ $_base = $_SERVER['DOCUMENT_ROOT'];
 
 // load template engine
 loadComponent("templates");
+
+// database
+loadComponent("database");
+$_db = new database;
+
+/*
+// exclude internet explorer browsers < 7.0
+if (preg_match("#MSIE [1-6]#", $_SERVER['HTTP_USER_AGENT'])) {
+	echo 'Der Internet Explorer wird von PVshowcase nicht unterst&uuml;tzt. Bitte laden Sie sich kostenlos <a href="http://mozilla-europe.org">Mozilla Firefox</a> herunter.';
+	exit();
+}
+*/
 
 ?>
