@@ -33,7 +33,10 @@
 	width: 407px;
 	height: 456px;
 	top: 40px;
-	left: 600px;
+	left: 590px;
+	color: #ffffff;
+}
+.login a {
 	color: #ffffff;
 }
 .login .sep {

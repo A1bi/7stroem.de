@@ -2,11 +2,11 @@
 body {
 	font-family: "DejaVu Sans", "Arial";
     background: url(/gfx/bg.png) repeat-x;
-	width: 1111px;
+	width: 1009px;
 	margin: auto;
 }
 a {
-	color: #ffffff;
+	color: #474747;
 }
 a:hover {
 	text-decoration: none;
@@ -18,7 +18,7 @@ img {
 /* header */
 .header {
 	position: absolute;
-	width: 1111px;
+	width: 1009px;
 	height: 192px;
 	color: #ffffff;
 	z-index: 2;
@@ -28,44 +28,63 @@ img {
 	top: 0px;
 	left: 0px;
 	background: url(/gfx/header_left.png) no-repeat;
-	width: 802px;
+	width: 756px;
 	height: 135px;
 }
 .header .left .claim {
 	position: absolute;
 	bottom: 29px;
-	left: 110px;
+	left: 70px;
 }
 .header .right {
 	position: absolute;
 	top: 0px;
 	right: 0px;
 	background: url(/gfx/header_right.png) no-repeat;
-	width: 309px;
+	width: 253px;
 	height: 135px;
 }
 .header .right .userbox {
 	position: absolute;
 	top: 5px;
 	background: url(/gfx/header_userbox.png) no-repeat;
-	width: 282px;
+	width: 222px;
 	height: 100px;
 	padding-top: 15px;
 	padding-left: 18px;
+	padding-right: 10px;
+	font-size: 14px;
 }
-.header .shadow {
+.header .shadow_left {
+	position: absolute;
+	left: -46px;
+	background: url(/gfx/header_shadow_left.png) no-repeat;
+	width: 46px;
+	height: 192px;
+}
+.header .shadow_right {
+	position: absolute;
+	right: -56px;
+	background: url(/gfx/header_shadow_right.png) no-repeat;
+	width: 56px;
+	height: 192px;
+}
+.header .shadow_bottom {
 	position: absolute;
 	top: 135px;
-	width: 100%;
+	width: 1009px;
 	height: 57px;
-	background: url(/gfx/header_shadow.png) no-repeat;
+	background: url(/gfx/header_shadow_bottom.png) no-repeat;
+}
+.header a {
+	color: #ffffff;
 }
 
 /* content space */
 .content {
 	position: relative;
 	top: 170px;
-	width: 1000px;
+	width: 1009px;
 	margin: auto;
 }
 
@@ -78,4 +97,31 @@ img {
 }
 .hright {
 	text-align: right;
+}
+.head {
+	text-shadow: #000000 1px 1px 5px;
+	color: #ffffff;
+}
+
+/* content boxes */
+.box1 {
+	width: 630px;
+}
+.box1 .head {
+	height: 59px;
+	background: url(/gfx/box1_head.png) no-repeat;
+	padding-top: 38px;
+	padding-left: 20px;
+	padding-right: 25px;
+	font-size: 22px;
+	text-align: center;
+}
+.box1 .space {
+	background: url(/gfx/box1_bg.png) repeat-y;
+	padding: 0px 50px;
+	min-height: 120px;
+}
+.box1 .bottom {
+	background: url(/gfx/box1_bottom.png) no-repeat;
+	height: 82px;
 }

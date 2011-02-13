@@ -45,6 +45,30 @@ function createId($digits) {
 	return $id;
 }
 
+/**
+ * turns cents in euros and adds a zero if needed
+ *
+ * @param int $credit
+ * @return string
+ */
+function formatCredit($credit) {
+	$credit = str_replace(".", ",", ($credit/100));
+	// add zero to the end if needed
+	if (substr($credit, -2, 1) == ",") {
+		$credit .= "0";
+	}
+	return $credit;
+}
+
+/**
+ * kicks not logged in users back to login page
+ */
+function kickGuests() {
+	if (empty($_SESSION['user']['id'])) {
+		redirectTo("index.php");
+	}
+}
+
 $_base = $_SERVER['DOCUMENT_ROOT'];
 
 // load template engine
@@ -61,5 +85,36 @@ if (preg_match("#MSIE [1-6]#", $_SERVER['HTTP_USER_AGENT'])) {
 	exit();
 }
 */
+
+/**
+ * user session management
+ */
+
+// start session
+ini_set("session.use_only_cookies", 1);
+session_name("7stroem_sess");
+session_set_cookie_params(0, "/");
+session_start();
+
+// check if logged in
+if (!empty($_SESSION['user']['id'])) {
+	// look in database for given user
+	$result = $_db->query('SELECT id, name, credit FROM users WHERE id = ? AND pass = ?', array($_SESSION['user']['id'], $_SESSION['user']['pass']));
+	$user = $result->fetch();
+
+	// found ?
+	if (!empty($user['id'])) {
+		// mark as logged in for templates
+		$_tpl->assign("_username", $user['name']);
+		$_tpl->assign("_userid", $user['id']);
+		$_user = $user;
+		// format credit
+		$credit = formatCredit($user['credit']);
+		$_tpl->assign("_usercredit", $credit);
+	} else {
+		// not correct -> delete session
+		unset($_SESSION['user']);
+	}
+}
 
 ?>

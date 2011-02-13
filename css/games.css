@@ -1,0 +1,35 @@
+.create {
+	position: absolute;
+	background: url(/gfx/games/create.png) no-repeat;
+	width: 325px;
+	height: 354px;
+	left: 640px;
+	top: 0px;
+}
+.create .head {
+	padding-top: 24px;
+	padding-left: 17px;
+	font-size: 22px;
+}
+.create .space {
+	margin-top: 20px;
+	color: #ffffff;
+	padding-left: 15px;
+	padding-right: 15px;
+}
+.create .instructions {
+	font-size: 14px;
+}
+.playertable {
+	border-spacing: 0px;
+	font-size: 14px;
+	width: 100%;
+}
+.playertable .top {
+	font-weight: bold;
+	padding-top: 0px;
+}
+.playertable td {
+	border-bottom: 1px #cccccc solid;
+	padding: 4px;
+}

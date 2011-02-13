@@ -3,6 +3,7 @@
 <head>
 	<title>7ström{if $title != ""} - {$title}{/if}</title>
 	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+	<meta name="viewport" content="width=1009" />
 	<link rel="stylesheet" type="text/css" href="/css/main.css" />
 {if $css != ""}
 	<style type="text/css">
@@ -23,9 +24,11 @@
 			</div>
 		</div>
 		<div class="right">
-{include file="head_userbox.tpl"}
+{if $_userid != ""}{include file="head_userbox.tpl"}{/if}
 
 		</div>
-		<div class="shadow">&nbsp;</div>
+		<div class="shadow_left">&nbsp;</div>
+		<div class="shadow_right">&nbsp;</div>
+		<div class="shadow_bottom">&nbsp;</div>
 	</div>
 	<div class="content">
