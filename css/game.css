@@ -1,0 +1,140 @@
+.game {
+	position: absolute;
+	width: 100%;
+	height: 757px;
+}
+.game div {
+	position: absolute;
+}
+.game .players {
+	z-index: 2;
+	height: 100%;
+	width: 100%;
+}
+.game .players .bottom {
+	bottom: 0px;
+	height: 39%;
+	width: 100%;
+}
+.game .players .bottom .stack {
+	top: 0px;
+	left: 46%;
+	height: 131px;
+	width: 184px;
+}
+.game .players .bottom .hand {
+	bottom: 0px;
+	right: 25%;
+	height: 111px;
+	width: 164px;
+}
+.game .players .top {
+	top: 0px;
+	height: 39%;
+	width: 100%;
+}
+.game .players .top .stack {
+	bottom: 0px;
+	left: 46%;
+	height: 131px;
+	width: 184px;
+}
+.game .players .top .hand {
+	top: 0px;
+	left: 25%;
+	height: 111px;
+	width: 164px;
+}
+.game .players .left {
+	left: 0px;
+	top: 0px;
+	height: 100%;
+	width: 42%;
+}
+.game .players .left .stack {
+	top: 45%;
+	right: 0px;
+	height: 131px;
+	width: 184px;
+}
+.game .players .left .hand {
+	bottom: 25%;
+	left: 0px;
+	height: 111px;
+	width: 164px;
+}
+.game .players .right {
+	right: 0px;
+	top: 0px;
+	height: 100%;
+	width: 38%;
+}
+.game .players .right .stack {
+	top: 45%;
+	left: 0px;
+	height: 131px;
+	width: 184px;
+}
+.game .players .right .hand {
+	top: 28%;
+	right: 0px;
+	height: 111px;
+	width: 164px;
+}
+.game .table {
+	top: 10px;
+	width: 100%;
+}
+.game .table .top {
+	top: 0px;
+	background: url(/gfx/game/table_top.png) no-repeat;
+	width: 100%;
+	height: 109px;
+}
+.game .table .middle {
+	top: 109px;
+}
+.game .table .middle div {
+	height: 567px;
+}
+.game .table .middle .left {
+	background: url(/gfx/game/table_left.png) no-repeat;
+	width: 122px;
+}
+.game .table .middle .center {
+	background: url(/gfx/game/table_center.png) no-repeat;
+	left: 122px;
+	width: 768px;
+}
+.game .table .middle .right {
+	background: url(/gfx/game/table_right.png) no-repeat;
+	left: 890px;
+	width: 119px;
+}
+.game .table .bottom {
+	width: 100%;
+	top: 676px;
+	background: url(/gfx/game/table_bottom.png) no-repeat;
+	height: 81px;
+}
+.game .bottom .card {
+	width: 111px;
+	height: 164px;
+	background: url(/gfx/game/cards_bottom.png);
+}
+.game .top .card {
+	width: 111px;
+	height: 164px;
+	background: url(/gfx/game/cards_top.png);
+	background-position: 0px 0px;
+}
+.game .left .card {
+	width: 164px;
+	height: 111px;
+	background: url(/gfx/game/cards_left.png);
+}
+.game .right .card {
+	width: 164px;
+	height: 111px;
+	background: url(/gfx/game/cards_right.png);
+}

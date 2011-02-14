@@ -3,6 +3,10 @@ include('include/main.php');
 // TODO: error messages for user
 // no game id given -> kick back to games overview
 if (empty($_GET['id']))	redirectTo("games.php");
+kickGuests();
+
+$_tpl->display("game.tpl");
+exit();
 
 // get game info from db
 $result = $_db->query('SELECT * FROM games WHERE id = ? AND (public = 1 OR creator = ?)', array($_GET['id'], $_user['id']));
