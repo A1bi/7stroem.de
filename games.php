@@ -19,7 +19,7 @@ if ($_GET['action'] == "create") {
 	$maxplayers = (intval($_POST['maxplayers']) < 2 || intval($_POST['maxplayers']) > 4) ? 4 : intval($_POST['maxplayers']);
 
 	// create db entry
-	$_db->query('INSERT INTO games VALUES (null, ?, 1, ?, ?, 0, 0, ?, ?)', array($public, $maxplayers, $bet, time(), $_user['id']));
+	$_db->query('INSERT INTO games VALUES (null, ?, 0, ?, ?, 0, 0, ?, ?)', array($public, $maxplayers, $bet, time(), $_user['id']));
 	$id = $_db->id();
 	// create game on server
 	if (!$butler->createGame($id)) {

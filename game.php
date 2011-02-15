@@ -5,9 +5,6 @@ include('include/main.php');
 if (empty($_GET['id']))	redirectTo("games.php");
 kickGuests();
 
-$_tpl->display("game.tpl");
-exit();
-
 // get game info from db
 $result = $_db->query('SELECT * FROM games WHERE id = ? AND (public = 1 OR creator = ?)', array($_GET['id'], $_user['id']));
 $game = $result->fetch();
@@ -31,11 +28,17 @@ $butler = new butler;
 $authcode = createId(6);
 if ($butler->registerPlayer($game['id'], $_user['id'], $authcode)) {
 	$_db->query('INSERT INTO games_players VALUES (?, ?)', array($game['id'], $_user['id']));
-	$_db->query('UPDATE games SET player = player+1 WHERE id = ?', array($game['id']));
+	$_db->query('UPDATE games SET players = players+1 WHERE id = ?', array($game['id']));
 // some error occurred while trying to registerPlayer with butler
 } else {
 	redirectTo("games.php");
 }
+
+// prepare templates
+$_tpl->assign(array("username" => $_user['name'], "userid" => $_user['id'], "authcode" => $authcode, "gameid" => $game['id']));
+$jsvars = $_tpl->fetch("game_js.tpl");
+$_tpl->assign("js", $jsvars);
+$_tpl->display("game.tpl");
 
 echo "ok";
 ?>

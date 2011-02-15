@@ -1,140 +1,236 @@
-.game {
+#game {
 	position: absolute;
 	width: 100%;
 	height: 757px;
+	display: none;
 }
-.game div {
+#game div {
 	position: absolute;
 }
-.game .players {
+#game .players {
 	z-index: 2;
 	height: 100%;
 	width: 100%;
 }
-.game .players .bottom {
+#game .players .bottom {
 	bottom: 0px;
 	height: 39%;
 	width: 100%;
 }
-.game .players .bottom .stack {
+#game .players .bottom .stack {
 	top: 0px;
 	left: 46%;
 	height: 131px;
 	width: 184px;
 }
-.game .players .bottom .hand {
+#game .players .bottom .hand {
 	bottom: 0px;
 	right: 25%;
 	height: 111px;
 	width: 164px;
 }
-.game .players .top {
+#game .players .top {
 	top: 0px;
 	height: 39%;
 	width: 100%;
 }
-.game .players .top .stack {
+#game .players .top .stack {
 	bottom: 0px;
 	left: 46%;
 	height: 131px;
 	width: 184px;
 }
-.game .players .top .hand {
+#game .players .top .hand {
 	top: 0px;
 	left: 25%;
 	height: 111px;
 	width: 164px;
 }
-.game .players .left {
+#game .players .left {
 	left: 0px;
 	top: 0px;
 	height: 100%;
 	width: 42%;
 }
-.game .players .left .stack {
+#game .players .left .stack {
 	top: 45%;
 	right: 0px;
 	height: 131px;
 	width: 184px;
 }
-.game .players .left .hand {
+#game .players .left .hand {
 	bottom: 25%;
 	left: 0px;
 	height: 111px;
 	width: 164px;
 }
-.game .players .right {
+#game .players .right {
 	right: 0px;
 	top: 0px;
 	height: 100%;
 	width: 38%;
 }
-.game .players .right .stack {
-	top: 45%;
+#game .players .right .stack {
+	top: 44%;
 	left: 0px;
 	height: 131px;
 	width: 184px;
 }
-.game .players .right .hand {
+#game .players .right .hand {
 	top: 28%;
 	right: 0px;
 	height: 111px;
 	width: 164px;
 }
-.game .table {
+#game .table {
 	top: 10px;
 	width: 100%;
 }
-.game .table .top {
+#game .table .top {
 	top: 0px;
 	background: url(/gfx/game/table_top.png) no-repeat;
 	width: 100%;
 	height: 109px;
 }
-.game .table .middle {
+#game .table .middle {
 	top: 109px;
 }
-.game .table .middle div {
+#game .table .middle div {
 	height: 567px;
 }
-.game .table .middle .left {
+#game .table .middle .left {
 	background: url(/gfx/game/table_left.png) no-repeat;
 	width: 122px;
 }
-.game .table .middle .center {
+#game .table .middle .center {
 	background: url(/gfx/game/table_center.png) no-repeat;
 	left: 122px;
 	width: 768px;
 }
-.game .table .middle .right {
+#game .table .middle .right {
 	background: url(/gfx/game/table_right.png) no-repeat;
 	left: 890px;
 	width: 119px;
 }
-.game .table .bottom {
+#game .table .bottom {
 	width: 100%;
 	top: 676px;
 	background: url(/gfx/game/table_bottom.png) no-repeat;
 	height: 81px;
 }
-.game .bottom .card {
+#game .bottom .card {
 	width: 111px;
 	height: 164px;
 	background: url(/gfx/game/cards_bottom.png);
 }
-.game .top .card {
+#game .top .card {
 	width: 111px;
 	height: 164px;
 	background: url(/gfx/game/cards_top.png);
 	background-position: 0px 0px;
 }
-.game .left .card {
+#game .left .card {
 	width: 164px;
 	height: 111px;
 	background: url(/gfx/game/cards_left.png);
 }
-.game .right .card {
+#game .right .card {
 	width: 164px;
 	height: 111px;
 	background: url(/gfx/game/cards_right.png);
+}
+#panel {
+	position: absolute;
+	top: 250px;
+	left: 25px;
+	width: 100%;
+	display: none;
+}
+#panel .bottom {
+	top: 400px;
+}
+#panel div {
+	position: absolute;
+	z-index: 3;
+}
+#panel .head {
+	width: 100%;
+	text-align: center;
+	padding-top: 30px;
+	font-size: 17px;
+}
+#panel .chat {
+	left: 500px;
+	background: url(/gfx/game/chat.png) no-repeat;
+	width: 454px;
+	height: 311px;
+}
+#panel .chat .log {
+	top: 75px;
+	left: 50px;
+	font-size: 13px;
+	height: 170px;
+	width: 360px;
+	overflow: auto;
+}
+#panel .chat .log .message {
+	position: relative;
+}
+#panel .chat .input {
+	bottom: 30px;
+	left: 44px;
+}
+#panel .chat .input input {
+	width: 361px;
+}
+#panel .chat .input .inactive {
+	font-style: italic;
+	color: #cccccc;
+}
+#panel .box {
+	background: url(/gfx/game/box.png) no-repeat;
+	width: 513px;
+	height: 311px;
+}
+#panel .box .space {
+	color: #ffffff;
+	top: 80px;
+	left: 45px;
+	width: 424px;
+}
+#panel .box .space div {
+	position: relative;
+}
+#panel table {
+	width: 100%;
+	border-collapse: collapse;
+}
+#panel #results {
+	display: none;
+}
+#panel #results .strikes table td {
+	text-align: center;
+	border-left: 2px #363636 solid;
+}
+#panel #results .strikes table td:first-child {
+	border-left: none;
+}
+#panel #results .strikes table tr {
+	border-top: 2px #363636 solid;
+}
+#panel #results .strikes table .top {
+	border-top: none;
+	font-weight: bold;
+	font-size: 15px;
+}
+#panel #overview .space {
+	font-size: 14px;
+}
+#panel #overview ul {
+	margin: 0px;
+	padding: 0px;
+}
+#panel #overview tr td:first-child {
+	vertical-align: top;
+	font-weight: bold;
 }

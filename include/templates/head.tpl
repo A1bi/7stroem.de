@@ -14,6 +14,16 @@
 {if $cssfile != ""}
 	<link rel="stylesheet" type="text/css" href="/css/{$cssfile}.css" />
 {/if}
+	<script type="text/javascript" src="/js/fw/jquery.js"></script>
+{if $jsfile != ""}
+	<script type="text/javascript" src="/js/{$jsfile}.js"></script>
+{/if}
+{if $js != ""}
+	<script type="text/javascript">
+{$js}
+
+	</script>
+{/if}
 </head>
 
 <body>
