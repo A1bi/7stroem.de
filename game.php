@@ -6,7 +6,7 @@ if (empty($_GET['id']))	redirectTo("games.php");
 kickGuests();
 
 // get game info from db
-$result = $_db->query('SELECT * FROM games WHERE id = ? AND (public = 1 OR creator = ?)', array($_GET['id'], $_user['id']));
+$result = $_db->query('SELECT * FROM games WHERE id = ? AND (public = 1 OR host = ?)', array($_GET['id'], $_user['id']));
 $game = $result->fetch();
 // no game found ?
 if (empty($game['id']))	redirectTo("games.php");
@@ -35,7 +35,10 @@ if ($butler->registerPlayer($game['id'], $_user['id'], $authcode)) {
 }
 
 // prepare templates
-$_tpl->assign(array("username" => $_user['name'], "userid" => $_user['id'], "authcode" => $authcode, "gameid" => $game['id']));
+$_tpl->assign(array(
+	"username" => $_user['name'], "userid" => $_user['id'], "authcode" => $authcode, "gameid" => $game['id'],
+	"maxplayers" => $game['maxplayers'], "public" => $game['public'], "bet" => formatCredit($game['bet']), "host" => $game['host']
+));
 $jsvars = $_tpl->fetch("game_js.tpl");
 $_tpl->assign("js", $jsvars);
 $_tpl->display("game.tpl");

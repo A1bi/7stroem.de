@@ -4,7 +4,7 @@
 	<title>7ström{if $title != ""} - {$title}{/if}</title>
 	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
 	<meta name="viewport" content="width=1009" />
-	<link rel="stylesheet" type="text/css" href="/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="/css/main.css{fileVersion file="/css/main.css"}" />
 {if $css != ""}
 	<style type="text/css">
 {include file=$css}
@@ -12,11 +12,11 @@
 	</style>
 {/if}
 {if $cssfile != ""}
-	<link rel="stylesheet" type="text/css" href="/css/{$cssfile}.css" />
+	<link rel="stylesheet" type="text/css" href="/css/{$cssfile}.css{fileVersion file="/css/{$cssfile}.css"}" />
 {/if}
 	<script type="text/javascript" src="/js/fw/jquery.js"></script>
 {if $jsfile != ""}
-	<script type="text/javascript" src="/js/{$jsfile}.js"></script>
+	<script type="text/javascript" src="/js/{$jsfile}.js{fileVersion file="/js/{$jsfile}.js"}"></script>
 {/if}
 {if $js != ""}
 	<script type="text/javascript">

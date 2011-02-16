@@ -64,5 +64,15 @@ class butler {
 	function registerPlayer($gid, $pid, $authcode) {
 		return $this->makeRequest("registerPlayer", array("gId" => $gid, "pId" => $pid, "pAuthcode" => $authcode));
 	}
+
+	/**
+	 * starts a game by id
+	 * 
+	 * @param int $gid
+	 * @return bool
+	 */
+	function startGame($gid) {
+		return $this->makeRequest("startGame", array("gId" => $gid));
+	}
 }
 ?>

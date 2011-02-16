@@ -1,8 +1,7 @@
 #game {
 	position: absolute;
 	width: 100%;
-	height: 757px;
-	display: none;
+	height: 630px;
 }
 #game div {
 	position: absolute;
@@ -25,9 +24,7 @@
 }
 #game .players .bottom .hand {
 	bottom: 0px;
-	right: 25%;
-	height: 111px;
-	width: 164px;
+	left: 34%;
 }
 #game .players .top {
 	top: 0px;
@@ -42,9 +39,7 @@
 }
 #game .players .top .hand {
 	top: 0px;
-	left: 25%;
-	height: 111px;
-	width: 164px;
+	left: 34%;
 }
 #game .players .left {
 	left: 0px;
@@ -59,28 +54,24 @@
 	width: 184px;
 }
 #game .players .left .hand {
-	bottom: 25%;
+	top: 38%;
 	left: 0px;
-	height: 111px;
-	width: 164px;
 }
 #game .players .right {
 	right: 0px;
 	top: 0px;
 	height: 100%;
-	width: 38%;
+	width: 42%;
 }
 #game .players .right .stack {
-	top: 44%;
+	top: 45%;
 	left: 0px;
 	height: 131px;
 	width: 184px;
 }
 #game .players .right .hand {
-	top: 28%;
-	right: 0px;
-	height: 111px;
-	width: 164px;
+	top: 38%;
+	right: 160px;
 }
 #game .table {
 	top: 10px;
@@ -123,11 +114,17 @@
 	height: 164px;
 	background: url(/gfx/game/cards_bottom.png);
 }
+#game .bottom .card.back {
+	background-position: 0px -656px;
+}
 #game .top .card {
 	width: 111px;
 	height: 164px;
 	background: url(/gfx/game/cards_top.png);
 	background-position: 0px 0px;
+}
+#game .top .card.back {
+	background-position: 0px -656px;
 }
 #game .left .card {
 	width: 164px;
@@ -139,10 +136,16 @@
 	height: 111px;
 	background: url(/gfx/game/cards_right.png);
 }
+#game .card {
+	display: none;
+}
+#game .right .card.back {
+	background-position: -660px -781px;
+}
 #panel {
 	position: absolute;
 	top: 250px;
-	left: 25px;
+	left: 30px;
 	width: 100%;
 	display: none;
 }
@@ -205,20 +208,20 @@
 	width: 100%;
 	border-collapse: collapse;
 }
-#panel #results {
+#panel #strikes {
 	display: none;
 }
-#panel #results .strikes table td {
+#panel #strikes table td {
 	text-align: center;
 	border-left: 2px #363636 solid;
 }
-#panel #results .strikes table td:first-child {
+#panel #strikes table td:first-child {
 	border-left: none;
 }
-#panel #results .strikes table tr {
+#panel #strikes table tr {
 	border-top: 2px #363636 solid;
 }
-#panel #results .strikes table .top {
+#panel #strikes table .top {
 	border-top: none;
 	font-weight: bold;
 	font-size: 15px;
@@ -233,4 +236,10 @@
 #panel #overview tr td:first-child {
 	vertical-align: top;
 	font-weight: bold;
+}
+#panel #startGame {
+	margin-top: 10px;
+}
+#panel #startGame > div {
+	display: none;
 }

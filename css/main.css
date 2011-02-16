@@ -14,6 +14,9 @@ a:hover {
 img {
 	border: none;
 }
+p {
+	margin: 12px 0px;
+}
 
 /* header */
 .header {

@@ -20,11 +20,11 @@
 				<table style="width: 100%;">
 					<tr>
 						<td style="width: 42%;" class="vcen">Benutzername:</td>
-						<td><input type="text" name="name" class="field" /></td>
+						<td><input type="text" name="name" class="field" tabindex="1" /></td>
 					</tr>
 					<tr>
 						<td>Passwort:<div style="font-size: 12px;"><a href="forgotpass.php">vergessen?</a></div></td>
-						<td><input type="password" name="pass" class="field" /></td>
+						<td><input type="password" name="pass" class="field" tabindex="2" /></td>
 					</tr>
 				</table>
 				<div class="hright" style="margin: 5px;">

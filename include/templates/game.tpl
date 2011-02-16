@@ -14,11 +14,11 @@
 					<div class="stack"></div>
 					<div class="hand"></div>
 				</div>
-				<div class="top">
+				<div class="left">
 					<div class="stack"></div>
 					<div class="hand"></div>
 				</div>
-				<div class="left">
+				<div class="top">
 					<div class="stack"></div>
 					<div class="hand"></div>
 				</div>
@@ -37,43 +37,48 @@
 							<td>Spieler:</td>
 							<td>
 								<ul></ul>
-								noch <span>4</span> freie Plätze im Spiel
+								noch <span id="maxplayers">{$maxplayers}</span> freie Plätze im Spiel
 							</td>
 						</tr>
 						<tr>
 							<td>Einsatz:</td>
-							<td>0 &euro;</td>
+							<td>{$bet} &euro;</td>
 						</tr>
 						<tr>
 							<td>Typ:</td>
-							<td>öffentlich</td>
+							<td>{if $public}öffentlich{else}nur für Freunde{/if}</td>
 						</tr>
 					</table>
-					<div style="margin-top: 10px;">
-						Sobald du denkst, dass genug Spieler dem Spiel beigetreten sind, kannst du das Spiel starten.
-					</div>
-					<div class="hright">
-						<img src="/gfx/game/start.png" alt="Spiel starten" title="Spiel starten" id="startGameBtn" />
+					<div id="startGame">
+						<div>
+							Bitte warte, bis der Spielleiter das Spiel startet.
+						</div>
+						<div>
+							Sobald du denkst, dass genug Spieler dem Spiel beigetreten sind, kannst du das Spiel starten.
+							<div class="hright">
+								<img src="/gfx/game/start.png" alt="Spiel starten" title="Spiel starten" id="startGameBtn" />
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
-			<div class="box" id="results">
+			<div class="box" id="strikes">
 				<div class="head">Striche</div>
 				<div class="space">
 					<table>
 						<tr class="top head">
 							<td style="width: 10%;">Runde</td>
-							<td style="width: 20%;">Albi</td>
-							<td style="width: 20%;">Alex</td>
-							<td style="width: 20%;">Mike</td>
-							<td style="width: 20%;">Robert</td>
+							<td style="width: 20%;"></td>
+							<td style="width: 20%;"></td>
+							<td style="width: 20%;"></td>
+							<td style="width: 20%;"></td>
 						</tr>
 						<tr>
 							<td>1</td>
-							<td>III</td>
 							<td></td>
-							<td>II</td>
-							<td>I</td>
+							<td></td>
+							<td></td>
+							<td></td>
 						</tr>
 					</table>
 				</div>

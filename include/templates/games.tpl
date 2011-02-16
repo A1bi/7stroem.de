@@ -41,7 +41,7 @@
 				<p><strong>Max. Anzahl an Spielern:</strong>
 				<select name="maxplayers" class="vcen"><option>2</option><option>3</option><option>4</option></select></p>
 				<p><strong>Einsatz:</strong>
-				<select name="bet" class="vcen">{html_options options=$bets}</select> &euro;</p>
+				<select name="bet" class="vcen">{html_options options=$bets selected=50}</select> &euro;</p>
 				<div class="hright">
 					<input type="image" src="/gfx/games/create_button.png" name="create" />
 				</div>
