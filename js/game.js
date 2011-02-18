@@ -1,8 +1,10 @@
 var game = new function () {
 
+	var _this = this;
 	var players = [];
 	var playersCount = 0;
-	var turn;
+	this.turn = -1;
+
 	var direction = [];
 	direction[0] = "left";
 	direction[1] = "top";
@@ -16,20 +18,22 @@ var game = new function () {
 
 
 	// player
-	function Player(i, n, p) {
+	function Player(i, n) {
 
 		this.id = i;
 		this.name = n;
 		var strikes = 0;
-		var place = p;
+		var place = 0;
+		var dom;
 
-		this.startGame = function () {
-			$("#strikes .top > td").eq(place+1).html(this.name);
+		this.startGame = function (i, p) {
+			place = p;
+			dom = $(".players > div").eq(place);
+			$("#strikes .top > td").eq(i+1).html(this.name);
 		}
 
 		var getCard = function (card) {
 			suit = suits[card.substr(0, 1)];
-			//alert(card);
 			number = card.substr(1);
 
 			switch (place) {
@@ -61,13 +65,48 @@ var game = new function () {
 
 			for (i = 0; i < 4; i++) {
 				card = $("<div>").addClass("card");
+				// back for other players
 				if (cards == null) {
 					card = card.addClass("back");
+				// front for this player
 				} else {
-					card = card.css("background-position", getCard(newCards[i]));
+					// append an invisible container to later get the card id from
+					cardid = $("<div>").addClass(newCards[i]).html(newCards[i]);
+					// set correct background and click and hover events
+					card = card.append(cardid).css("background-position", getCard(newCards[i])).click(function () {
+						if (_this.turn == userid) {
+							butler.registerAction("layStack", $("div", this).first().html());
+						} else {
+							alert("Du bist nicht am Zug!");
+						}
+					}).hover(function () {
+						$(this).toggleClass("highlight");
+					});
 				}
-				$(".hand").eq(place).append(card.css(direction[place], i*70+"px").delay(i*100).fadeIn());
+				// add it to the players hand
+				$(".hand", dom).append(card.css(direction[place], i*70+"px").delay(i*100).fadeIn());
 			}
+		}
+
+		// user has laid a card on his stack
+		this.laidStack = function (cardid) {
+			// delete from own hand
+			if (place == 0) {
+				$(".hand .card > ."+cardid, dom).parent().remove();
+			// delete a randomly selected card from other player's hand
+			} else {
+				randomcard = Math.round(Math.random() * ($(".hand .card", dom).length-1));
+				$(".hand .card", dom).eq(randomcard).remove();
+			}
+			card = $("<div>").addClass("card").css("background-position", getCard(cardid)).css(direction[place], $(".stack .card", dom).length*20+"px").css("display", "block");
+			if (card != null) {
+				$(".stack", dom).append(card);
+			}
+		}
+
+		// current round has ended -> clear stack
+		this.roundStarted = function () {
+			$(".stack", dom).empty();
 		}
 
 		// add player to list
@@ -121,7 +160,7 @@ var game = new function () {
 			$.each(data, function (key, user) {
 				// only add player if he does not exist yet
 				if (players[user.id] == null) {
-					players[user.id] = new Player(user.id, user.name, playersCount);
+					players[user.id] = new Player(user.id, user.name);
 				}
 			});
 		});
@@ -140,10 +179,8 @@ var game = new function () {
 
 				// a player joined
 				case "playerJoined":
-					// ignore player at this computer
-					if (action.player == userid) {
-						players[action.player] = new Player(action.player, username, 0);
-					} else if (playersJoined == 0) {
+					// only update players once
+					if (playersJoined == 0) {
 						updatePlayerInfo();
 						playersJoined = 1;
 					}
@@ -158,7 +195,6 @@ var game = new function () {
 
 				// cards given
 				case "giveCards":
-					
 					$.each(players, function (key, player) {
 						if (player != null) {
 							if (player.id == userid) {
@@ -166,6 +202,24 @@ var game = new function () {
 							} else {
 								player.giveCards();
 							}
+						}
+					});
+					break;
+
+				case "turn":
+					// set turn
+					_this.turn = action.player;
+					break;
+
+				// some player has laid on of his cards on his stack
+				case "laidStack":
+					players[action.player].laidStack(action.content);
+					break;
+
+				case "roundStarted":
+					$.each(players, function (key, player) {
+						if (player != null) {
+							player.roundStarted();
 						}
 					});
 					break;
@@ -184,16 +238,30 @@ var game = new function () {
 
 	var finishStart = function () {
 		$("#overview").fadeOut();
+		i = 0;
+		$.each(players, function (key, player) {
+			if (player != null) {
+				if (player.id == userid) {
+					me = i;
+					return false;
+				}
+				i++;
+			}
+		});
+		i = 0;
+		$.each(players, function (key, player) {
+			if (player != null) {
+				pos = i - me;
+				if (pos < 0) {
+					pos = 4-pos*-1;
+				}
+				player.startGame(i, pos);
+				i++;
+			}
+		});
 		$("#panel").animate({"top": "800px"}, function () {
 			$(".card").fadeIn();
 			$("#strikes").fadeIn();
-
-			$.each(players, function (key, player) {
-				if (player != null) {
-					player.startGame();
-				}
-			});
-
 		});
 	}
 
@@ -201,12 +269,12 @@ var game = new function () {
 	var start = function () {
 		// TODO: bitte warten anzeigen
 		if (playersCount < 2) {
-		//	alert("Zu wenig Spieler!");
-		//	return;
+			alert("Zu wenig Spieler!");
+			return;
 		}
 		$.getJSON("ajax.php?action=startGame&id=" + gameid, function (data) {
-			if (data.result == "ok") {
-				finishStart();
+			if (data.result != "ok") {
+				alert("Fehler!");
 			}
 		});
 	}
