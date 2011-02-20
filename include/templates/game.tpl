@@ -10,19 +10,31 @@
 				<div class="bottom">&nbsp;</div>
 			</div>
 			<div class="players">
-				<div class="bottom">
+				<div class="bottom horizontal">
+					<div class="actions">
+						<div class="fold"><img src="/gfx/game/fold.png" alt="rausgehen" title="rausgehen" /></div>
+						<div class="knock"><img src="/gfx/game/knock.png" alt="klopfen" title="klopfen" /></div>
+						<div class="call"><img src="/gfx/game/call.png" alt="mitgehen" title="mitgehen" /></div>
+					</div>
 					<div class="stack"></div>
 					<div class="hand"></div>
 				</div>
-				<div class="left">
+				<div class="left vertical">
+					<div class="name">
+						<div></div>
+					</div>
 					<div class="stack"></div>
 					<div class="hand"></div>
 				</div>
-				<div class="top">
+				<div class="top horizontal">
+					<div class="name"></div>
 					<div class="stack"></div>
 					<div class="hand"></div>
 				</div>
-				<div class="right">
+				<div class="right vertical">
+					<div class="name">
+						<div></div>
+					</div>
 					<div class="stack"></div>
 					<div class="hand"></div>
 				</div>
@@ -30,7 +42,7 @@
 		</div>
 		<div id="panel">
 			<div class="box" id="overview">
-				<div class="head">Überblick</div>
+				<div class="head">Übersicht</div>
 				<div class="space">
 					<table>
 						<tr>
@@ -72,13 +84,6 @@
 							<td style="width: 20%;"></td>
 							<td style="width: 20%;"></td>
 							<td style="width: 20%;"></td>
-						</tr>
-						<tr>
-							<td>1</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
 						</tr>
 					</table>
 				</div>

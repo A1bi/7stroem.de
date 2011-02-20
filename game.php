@@ -1,6 +1,7 @@
 <?php
 include('include/main.php');
 // TODO: error messages for user
+// TODO: non public access
 // no game id given -> kick back to games overview
 if (empty($_GET['id']))	redirectTo("games.php");
 kickGuests();
@@ -42,6 +43,4 @@ $_tpl->assign(array(
 $jsvars = $_tpl->fetch("game_js.tpl");
 $_tpl->assign("js", $jsvars);
 $_tpl->display("game.tpl");
-
-echo "ok";
 ?>

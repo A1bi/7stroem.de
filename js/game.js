@@ -3,7 +3,10 @@ var game = new function () {
 	var _this = this;
 	var players = [];
 	var playersCount = 0;
+	var rounds = 0;
+	var queue = [];
 	this.turn = -1;
+	var processing = false;
 
 	var direction = [];
 	direction[0] = "left";
@@ -24,12 +27,25 @@ var game = new function () {
 		this.name = n;
 		var strikes = 0;
 		var place = 0;
+		var placeTable = 0;
 		var dom;
 
 		this.startGame = function (i, p) {
 			place = p;
+			placeTable = i + 1;
 			dom = $(".players > div").eq(place);
-			$("#strikes .top > td").eq(i+1).html(this.name);
+			// add player to strikes table
+			// +1 because first cell is for round number
+			$("#strikes .top > td").eq(placeTable).html(this.name);
+			// set player's name on the table
+			// -1 because we have no name at the bottom so the first name box is missing
+			namebox = $(".players .name").eq(place-1);
+			if (place == 2) {
+				namebox.html(this.name);
+			// vertical players have an inner div
+			} else if (place-1 > 0) {
+				$("div", namebox).html(this.name);
+			}
 		}
 
 		var getCard = function (card) {
@@ -104,9 +120,20 @@ var game = new function () {
 			}
 		}
 
-		// current round has ended -> clear stack
-		this.roundStarted = function () {
-			$(".stack", dom).empty();
+		// update the players entry in strikes table
+		this.updateStrikes = function (strikes) {
+			$("#strikes table tr:last td").eq(placeTable).html(strikes);
+		}
+
+		// 
+		this.smallRoundStarted = function () {
+			
+		}
+
+		this.smallRoundEnded = function () {
+			$(".card", dom).fadeOut("fast", function () {
+				$(this).remove();
+			});
 		}
 
 		// add player to list
@@ -140,6 +167,103 @@ var game = new function () {
 		// register an action
 		this.registerAction = function (action, content) {
 			makeRequest("registerAction", "action=" + action + "&content=" + content);
+		}
+
+	}
+
+	var processQueue = function (next) {
+		if (processing && !next) {
+			return;
+		}
+		processing = true;
+		if (queue.length == 0) {
+			processing = false;
+			return;
+		}
+		wait = 0;
+		waitFunction = null;
+
+		action = queue[0];
+		queue.shift();
+		
+		switch (action.action) {
+
+			case "giveCards":
+				$.each(players, function (key, player) {
+					if (player != null) {
+						if (player.id == userid) {
+							player.giveCards(action.content);
+						} else {
+							player.giveCards();
+						}
+					}
+				});
+				break;
+
+			case "turn":
+				// set turn
+				_this.turn = action.player;
+				// show knock button
+				if (action.player == userid) {
+					$(".actions .knock").fadeIn("fast");
+				} else {
+					$(".actions .knock").fadeOut("fast");
+				}
+				break;
+
+			// some player has laid on of his cards on his stack
+			case "laidStack":
+				players[action.player].laidStack(action.content);
+				break;
+
+			case "smallRoundStarted":
+				$(".bottom .actions").fadeIn("fast");
+				$.each(players, function (key, player) {
+					if (player != null) {
+						player.smallRoundStarted();
+					}
+				});
+				wait = 500;
+				break;
+
+			case "roundStarted":
+				rounds++;
+				row = $("<tr>");
+				for (i = 0; i < 5; i++) {
+					cell = $("<td>");
+					// add first cell for round number
+					if (i == 0) {
+						cell.html(rounds);
+					}
+					row.append(cell);
+				}
+				$("#strikes table").append(row);
+				break;
+
+			case "smallRoundEnded":
+				$(".bottom .actions").fadeOut("fast");
+				wait = 2000;
+				waitFunction = function () {
+					$.each(players, function (key, player) {
+						if (player != null) {
+							player.smallRoundEnded();
+						}
+					});
+					processQueue(true);
+				};
+				break;
+
+		}
+
+		if (wait != 0) {
+			if (waitFunction == null) {
+				waitFunction = function () {
+					processQueue(true);
+				};
+			}
+			setTimeout(waitFunction, wait);
+		} else {
+			processQueue(true);
 		}
 
 	}
@@ -193,43 +317,26 @@ var game = new function () {
 					finishStart();
 					break;
 
-				// cards given
-				case "giveCards":
-					$.each(players, function (key, player) {
-						if (player != null) {
-							if (player.id == userid) {
-								player.giveCards(action.content);
-							} else {
-								player.giveCards();
-							}
-						}
-					});
+				// got updated number of strikes for user
+				case "strikes":
+					players[action.player].updateStrikes(action.content);
 					break;
 
-				case "turn":
-					// set turn
-					_this.turn = action.player;
-					break;
-
-				// some player has laid on of his cards on his stack
-				case "laidStack":
-					players[action.player].laidStack(action.content);
-					break;
-
-				case "roundStarted":
-					$.each(players, function (key, player) {
-						if (player != null) {
-							player.roundStarted();
-						}
-					});
-					break;
-					
 				// received new chat message
 				case "chat":
 					logChat(action.player, action.content);
 					break;
+
+				// everything else has to be queued
+				default:
+					queue.push(action);
+					break;
+					
 			}
+
 		});
+
+		processQueue(false);
 
 		// next request
 		butler.getActions();
@@ -260,7 +367,6 @@ var game = new function () {
 			}
 		});
 		$("#panel").animate({"top": "800px"}, function () {
-			$(".card").fadeIn();
 			$("#strikes").fadeIn();
 		});
 	}
@@ -303,6 +409,14 @@ var game = new function () {
 		$(window).bind("beforeunload", function() {
 			return "Achtung! Wenn du diese Seite verlässt, beendest du damit auch dieses Spiel und verlierst deinen Einsatz! Möchtest du dieses Spiel wirklich beenden?";
 		});
+		// user actions
+		actionsBox = $(".bottom .actions");
+		actions = ["fold", "call", "knock"];
+		$.each(actions, function (key, action) {
+			$("."+action, actionsBox).click(function () {
+				butler.registerAction(action);
+			});
+		});
 
 		// start game box
 		if (host == userid) {
@@ -316,6 +430,7 @@ var game = new function () {
 
 		// initiate butler
 		butler.getActions();
+		//setTimeout(finishStart, 1300);
 
 	}
 
