@@ -8,11 +8,19 @@ var game = new function () {
 	this.turn = -1;
 	var processing = false;
 
-	var direction = [];
-	direction[0] = "left";
-	direction[1] = "top";
-	direction[2] = "left";
-	direction[3] = "top";
+	var positions = [];
+	positions[0] = [];
+	positions[1] = [];
+	positions[2] = [];
+	positions[3] = [];
+	positions[0]['hand'] = {left: 0, bottom: 0};
+	positions[1]['hand'] = {top: 0, left: 0};
+	positions[2]['hand'] = {left: 0, top: 0};
+	positions[3]['hand'] = {top: 0, right: 0};
+	positions[0]['stack'] = {bottom: 200, left: 100};
+	positions[1]['stack'] = {left: 260, top: 90};
+	positions[2]['stack'] = {top: 200, left: 100};
+	positions[3]['stack'] = {right: 260, top: 90};
 	var suits = []
 	suits['h'] = 0;
 	suits['d'] = 1;
@@ -20,37 +28,14 @@ var game = new function () {
 	suits['c'] = 3;
 
 
-	// player
-	function Player(i, n) {
+	function Card(p, i) {
 
-		this.id = i;
-		this.name = n;
-		var strikes = 0;
-		var place = 0;
-		var placeTable = 0;
-		var dom;
+		var place = p;
+		var id;
 
-		this.startGame = function (i, p) {
-			place = p;
-			placeTable = i + 1;
-			dom = $(".players > div").eq(place);
-			// add player to strikes table
-			// +1 because first cell is for round number
-			$("#strikes .top > td").eq(placeTable).html(this.name);
-			// set player's name on the table
-			// -1 because we have no name at the bottom so the first name box is missing
-			namebox = $(".players .name").eq(place-1);
-			if (place == 2) {
-				namebox.html(this.name);
-			// vertical players have an inner div
-			} else if (place-1 > 0) {
-				$("div", namebox).html(this.name);
-			}
-		}
-
-		var getCard = function (card) {
-			suit = suits[card.substr(0, 1)];
-			number = card.substr(1);
+		var getBackground = function () {
+			suit = suits[id.substr(0, 1)];
+			number = id.substr(1);
 
 			switch (place) {
 				case 0:
@@ -74,49 +59,88 @@ var game = new function () {
 			return "-" + x + "px -" + y + "px";
 		}
 
-		this.giveCards = function (cards) {
-			if (cards != null) {
-				newCards = cards.split(",");
+		this.flip = function (i) {
+			id = i;
+			// set correct background and fade in
+			$(".front", card).css("background-position", getBackground()).delay(100).fadeIn();
+			if (place == 0) {
+				// register click and hover events only for this player
+				card.click(function () {
+					if (_this.turn == userid) {
+						butler.registerAction("layStack", id);
+					} else {
+						alert("Du bist nicht am Zug!");
+					}
+				// highlight card on mouseover
+				}).hover(function () {
+					$(this).toggleClass("highlight");
+				});
 			}
+		}
 
-			for (i = 0; i < 4; i++) {
-				card = $("<div>").addClass("card");
-				// back for other players
-				if (cards == null) {
-					card = card.addClass("back");
-				// front for this player
-				} else {
-					// append an invisible container to later get the card id from
-					cardid = $("<div>").addClass(newCards[i]).html(newCards[i]);
-					// set correct background and click and hover events
-					card = card.append(cardid).css("background-position", getCard(newCards[i])).click(function () {
-						if (_this.turn == userid) {
-							butler.registerAction("layStack", $("div", this).first().html());
-						} else {
-							alert("Du bist nicht am Zug!");
-						}
-					}).hover(function () {
-						$(this).toggleClass("highlight");
-					});
-				}
-				// add it to the players hand
-				$(".hand", dom).append(card.css(direction[place], i*70+"px").delay(i*100).fadeIn());
+		this.layStack = function () {
+			// delete from own hand
+			card.removeClass("hand").addClass("stack");
+			pos = positions[place]['stack'];
+			card.animate(pos);
+		}
+
+		var card = $("<div>").addClass("card hand").append($("<div>").addClass("back"), $("<div>").addClass("front"));
+
+		// add it to the players hand
+		pos = positions[place]['hand'];
+		$.each(pos, function (key, value) {
+			eval("pos."+key+" = i*70");
+			return false;
+		});
+		card.appendTo($(".players > div").eq(place).find(".cards")).css(pos).delay(i*100).fadeIn();
+
+	}
+
+
+	// player
+	function Player(i, n) {
+
+		this.id = i;
+		this.name = n;
+		var strikes = 0;
+		var place = 0;
+		var placeTable = 0;
+		var dom;
+		var cards = new Array(8);
+
+		this.startGame = function (i, p) {
+			place = p;
+			placeTable = i + 1;
+			dom = $(".players > div").eq(place);
+			// add player to strikes table
+			// +1 because first cell is for round number
+			$("#strikes .top > td").eq(placeTable).html(this.name);
+			// set player's name on the table
+			// -1 because we have no name at the bottom so the first name box is missing
+			namebox = $(".players .name").eq(place-1);
+			if (place == 2) {
+				namebox.html(this.name);
+			// vertical players have an inner div
+			} else if (place-1 > -1) {
+				$("div", namebox).html(this.name);
 			}
 		}
 
 		// user has laid a card on his stack
 		this.laidStack = function (cardid) {
-			// delete from own hand
 			if (place == 0) {
-				$(".hand .card > ."+cardid, dom).parent().remove();
-			// delete a randomly selected card from other player's hand
+				cards[cardid].layStack();
 			} else {
-				randomcard = Math.round(Math.random() * ($(".hand .card", dom).length-1));
-				$(".hand .card", dom).eq(randomcard).remove();
-			}
-			card = $("<div>").addClass("card").css("background-position", getCard(cardid)).css(direction[place], $(".stack .card", dom).length*20+"px").css("display", "block");
-			if (card != null) {
-				$(".stack", dom).append(card);
+				randomcard = Math.round(Math.random() * ($(".card.hand", dom).length-1));
+				i = 0;
+				$.each(cards, function (key, card) {
+					if (i == randomcard) {
+						card.flip(cardid);
+						card.layStack();
+					}
+					i++;
+				})
 			}
 		}
 
@@ -125,9 +149,18 @@ var game = new function () {
 			$("#strikes table tr:last td").eq(placeTable).html(strikes);
 		}
 
+		// show cards in hand
+		this.flipHand = function (i, cardid) {
+			cards[i].flip(cardid);
+			cards[cardid] = cards[i];
+		}
+
 		// 
 		this.smallRoundStarted = function () {
-			
+			// give cards
+			for (i = 0; i < 4; i++) {
+				cards[i] = new Card(place, i);
+			}
 		}
 
 		this.smallRoundEnded = function () {
@@ -148,7 +181,7 @@ var game = new function () {
 	var butler = new function () {
 
 		// the butler's address to connect to
-		var addr = "192.168.10.10:4926";
+		var addr = "127.0.0.1:4926";
 		// number of last action we got from the butler
 		this.lastAction = 0;
 
@@ -166,6 +199,7 @@ var game = new function () {
 
 		// register an action
 		this.registerAction = function (action, content) {
+			if (content == null) content = "";
 			makeRequest("registerAction", "action=" + action + "&content=" + content);
 		}
 
@@ -188,18 +222,6 @@ var game = new function () {
 		
 		switch (action.action) {
 
-			case "giveCards":
-				$.each(players, function (key, player) {
-					if (player != null) {
-						if (player.id == userid) {
-							player.giveCards(action.content);
-						} else {
-							player.giveCards();
-						}
-					}
-				});
-				break;
-
 			case "turn":
 				// set turn
 				_this.turn = action.player;
@@ -218,6 +240,7 @@ var game = new function () {
 
 			case "smallRoundStarted":
 				$(".bottom .actions").fadeIn("fast");
+				$(".bottom .flipHand").fadeIn("fast");
 				$.each(players, function (key, player) {
 					if (player != null) {
 						player.smallRoundStarted();
@@ -251,6 +274,12 @@ var game = new function () {
 					});
 					processQueue(true);
 				};
+				break;
+
+			case "folded":
+				if (action.player == userid) {
+					$(".bottom .actions").fadeOut("fast");
+				}
 				break;
 
 		}
@@ -291,13 +320,11 @@ var game = new function () {
 	}
 
 	// register all actions (is called by the script we got from the butler)
-	this.registerActions = function (actions) {
-		// set new lastAction
-		butler.lastAction = actions.lastAction;
+	var registerActions = function (actions) {
 		playersJoined = 0;
 
 		// go through all actions
-		$.each(actions.actions, function (key, action) {
+		$.each(actions, function (key, action) {
 			// which action is it ?
 			switch (action.action) {
 
@@ -341,6 +368,37 @@ var game = new function () {
 		// next request
 		butler.getActions();
 
+	}
+
+	// process the response we got from the butler
+	this.processResponse = function (response) {
+		// everything went okay ?
+		if (response.result == "ok") {
+
+			// we received actions
+			if (response.actions != null) {
+				// set new lastAction
+				butler.lastAction = response.lastAction;
+				registerActions(response.actions);
+			// we received the player's cards'
+			} else if (response.cards != null) {
+				$(".flipHand").fadeOut("fast");
+				// show player his cards
+				for (i = 0; i < 4; i++) {
+					players[userid].flipHand(i, response.cards[i]);
+				}
+			}
+
+		// an error occurred ?
+		} else if (response.result == "error") {
+			switch (response.error.id) {
+				case "admit":
+					alert("Du musst bekennen!");
+					break;
+				default:
+					alert("unknown error");
+			}
+		}
 	}
 
 	var finishStart = function () {
@@ -411,9 +469,9 @@ var game = new function () {
 		});
 		// user actions
 		actionsBox = $(".bottom .actions");
-		actions = ["fold", "call", "knock"];
+		actions = ["fold", "call", "knock", "flipHand"];
 		$.each(actions, function (key, action) {
-			$("."+action, actionsBox).click(function () {
+			$("."+action).click(function () {
 				butler.registerAction(action);
 			});
 		});
@@ -430,7 +488,29 @@ var game = new function () {
 
 		// initiate butler
 		butler.getActions();
-		//setTimeout(finishStart, 1300);
+
+		/* testing
+		players[1] = new Player(1, "Albi");
+		players[2] = new Player(2, "Bla");
+		players[3] = new Player(3, "Bla2");
+		players[4] = new Player(4, "Bla3");
+		setTimeout(finishStart, 1000);
+		players[1].startGame(0, 0);
+		players[2].startGame(1, 1);
+		players[3].startGame(2, 2);
+		players[4].startGame(3, 3);
+		players[1].smallRoundStarted();
+		players[2].smallRoundStarted();
+		players[3].smallRoundStarted();
+		players[4].smallRoundStarted();
+		setTimeout(function () {
+			players[1].flipHand(1, "c10");
+			players[1].laidStack("c10");
+			players[2].laidStack("d8");
+			players[3].laidStack("h5");
+			players[4].laidStack("d7");
+		}, 2000);
+		*/
 
 	}
 

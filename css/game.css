@@ -5,6 +5,8 @@
 	top: -20px;
 }
 #game div {
+	width: 100%;
+	height: 100%;
 	position: absolute;
 }
 
@@ -25,6 +27,9 @@
 #game .card div {
 	display: none;
 }
+#game .card .back {
+	display: block;
+}
 #game .players .name {
 	font-size: 20px;
 	color: #ffffff;
@@ -42,28 +47,24 @@
 
 /** horizontal **/
 #game .players .horizontal {
+	height: 50%;
 	width: 100%;
 }
-#game .players .horizontal .stack {
-	left: 44%;
-	height: 131px;
-	width: 184px;
-}
-#game .players .horizontal .hand {
-	left: 34%;
+#game .players .horizontal .cards {
+	width: 400px;
+	left: 350px;
 }
 #game .players .horizontal .card {
 	width: 111px;
 	height: 164px;
 }
-#game .players .horizontal .card.back {
+#game .players .horizontal .card .back {
 	background-position: 0px -656px;
 }
 
 /** bottom **/
 #game .players .bottom {
 	bottom: 0px;
-	height: 46%;
 	z-index: 10;
 }
 #game .players .bottom .actions {
@@ -79,32 +80,22 @@
 	display: none;
 	cursor: pointer;
 }
-#game .players .bottom .actions .fold {
-	display: block;
-}
-#game .players .bottom .stack {
-	top: 0px;
-}
-#game .players .bottom .hand {
-	bottom: 20px;
-	left: 34%;
-	height: 164px;
+#game .players .bottom .flipHand {
+	left: 80px;
+	top: 40px;
+	display: none;
+	z-index: 5;
 }
 /* cards */
-#game .bottom .card {
+#game .bottom .card div {
 	background: url(/gfx/game/cards_bottom.png);
+}
+#game .bottom .card .front {
 	cursor: pointer;
 }
 
 /** top **/
 #game .players .top {
-	top: 0px;
-	height: 38%;
-}
-#game .players .top .stack {
-	bottom: 0px;
-}
-#game .players .top .hand {
 	top: 0px;
 }
 #game .players .top .name {
@@ -114,7 +105,7 @@
 	text-align: right;
 }
 /* cards */
-#game .top .card {
+#game .top .card div {
 	background: url(/gfx/game/cards_top.png);
 }
 
@@ -124,14 +115,10 @@
 	width: 42%;
 	height: 100%;
 }
-#game .players .vertical .stack {
-	height: 131px;
-	width: 184px;
-	top: 9%;
-}
-#game .players .vertical .hand {
-	top: 6%;
-	width: 164px;
+#game .players .vertical .cards {
+	top: 30px;
+	width: 100%;
+	height: 300px;
 }
 #game .players .vertical .card {
 	width: 164px;
@@ -142,14 +129,8 @@
 #game .players .left {
 	left: 0px;
 }
-#game .players .left .stack {
-	right: 0px;
-}
-#game .players .left .hand {
-	left: 0px;
-}
 /* cards */
-#game .left .card {
+#game .left .card div {
 	background: url(/gfx/game/cards_left.png);
 }
 
@@ -157,20 +138,14 @@
 #game .players .right {
 	right: 0px;
 }
-#game .players .right .stack {
-	left: 0px;
-}
-#game .players .right .hand {
-	right: 0px;
-}
 #game .players .right .name {
 	right: 0px;
 }
 /* cards */
-#game .right .card {
+#game .right .card div {
 	background: url(/gfx/game/cards_right.png);
 }
-#game .right .card.back {
+#game .right .card .back {
 	background-position: -660px -781px;
 }
 

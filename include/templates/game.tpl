@@ -16,27 +16,25 @@
 						<div class="knock"><img src="/gfx/game/knock.png" alt="klopfen" title="klopfen" /></div>
 						<div class="call"><img src="/gfx/game/call.png" alt="mitgehen" title="mitgehen" /></div>
 					</div>
-					<div class="stack"></div>
-					<div class="hand"></div>
+					<div class="cards">
+						<div class="flipHand">umdrehen</div>
+					</div>
 				</div>
 				<div class="left vertical">
 					<div class="name">
 						<div></div>
 					</div>
-					<div class="stack"></div>
-					<div class="hand"></div>
+					<div class="cards"></div>
 				</div>
 				<div class="top horizontal">
 					<div class="name"></div>
-					<div class="stack"></div>
-					<div class="hand"></div>
+					<div class="cards"></div>
 				</div>
 				<div class="right vertical">
 					<div class="name">
 						<div></div>
 					</div>
-					<div class="stack"></div>
-					<div class="hand"></div>
+					<div class="cards"></div>
 				</div>
 			</div>
 		</div>
