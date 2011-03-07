@@ -6,6 +6,7 @@ var game = new function () {
 	var rounds = 0;
 	var queue = [];
 	this.turn = -1;
+	var blockExit = false;
 	var processing = false;
 
 	var positions = [];
@@ -250,6 +251,7 @@ var game = new function () {
 				break;
 
 			case "roundStarted":
+				blockExit = true;
 				rounds++;
 				row = $("<tr>");
 				for (i = 0; i < 5; i++) {
@@ -465,7 +467,9 @@ var game = new function () {
 		});
 		// warn user before leaving this page
 		$(window).bind("beforeunload", function() {
-			return "Achtung! Wenn du diese Seite verlässt, beendest du damit auch dieses Spiel und verlierst deinen Einsatz! Möchtest du dieses Spiel wirklich beenden?";
+			if (blockExit) {
+				return "Achtung! Wenn du diese Seite verlässt, beendest du damit auch dieses Spiel und verlierst deinen Einsatz! Möchtest du dieses Spiel wirklich beenden?";
+			}
 		});
 		// user actions
 		actionsBox = $(".bottom .actions");

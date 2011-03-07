@@ -17,22 +17,28 @@ if ($game['started']) redirectTo("games.php");
 if ($game['players'] >= $game['maxplayers']) redirectTo("games.php");
 
 // check if player has not already joined this game
-$result = $_db->query('SELECT user FROM games_players WHERE game = ? AND user = ?', array($game['id'], $_user['id']));
+$result = $_db->query('SELECT user, authcode FROM games_players WHERE game = ? AND user = ?', array($game['id'], $_user['id']));
 $user = $result->fetch();
-if (!empty($user['user'])) redirectTo("games.php");
+// player can rejoin the lobby before game has started
+if (!empty($user['user']) && $game['started']) redirectTo("games.php");
 
 // initiate butler connection
 loadComponent("butler");
 $butler = new butler;
 
-// join game
-$authcode = createId(6);
-if ($butler->registerPlayer($game['id'], $_user['id'], $authcode)) {
-	$_db->query('INSERT INTO games_players VALUES (?, ?)', array($game['id'], $_user['id']));
-	$_db->query('UPDATE games SET players = players+1 WHERE id = ?', array($game['id']));
-// some error occurred while trying to registerPlayer with butler
+// TODO: authcode nicht mehr speichern sondern neu generieren und beim butler registrieren
+if (empty($user['user'])) {
+	// join game
+	$authcode = createId(6);
+	if ($butler->registerPlayer($game['id'], $_user['id'], $authcode)) {
+		$_db->query('INSERT INTO games_players VALUES (?, ?, ?)', array($game['id'], $_user['id'], $authcode));
+		$_db->query('UPDATE games SET players = players+1 WHERE id = ?', array($game['id']));
+	// some error occurred while trying to registerPlayer with butler
+	} else {
+		redirectTo("games.php");
+	}
 } else {
-	redirectTo("games.php");
+	$authcode = $user['authcode'];
 }
 
 // prepare templates
