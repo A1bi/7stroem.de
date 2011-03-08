@@ -33,6 +33,7 @@ var game = new function () {
 
 		var place = p;
 		var id;
+		var dom;
 
 		var getBackground = function () {
 			suit = suits[id.substr(0, 1)];
@@ -61,9 +62,10 @@ var game = new function () {
 		}
 
 		this.flip = function (i) {
+			if (id != undefined) return false;
 			id = i;
 			// set correct background and fade in
-			$(".front", card).css("background-position", getBackground()).delay(100).fadeIn();
+			$(".front", card).css("background-position", getBackground()).delay(100).fadeIn("fast");
 			if (place == 0) {
 				// register click and hover events only for this player
 				card.click(function () {
@@ -77,13 +79,14 @@ var game = new function () {
 					$(this).toggleClass("highlight");
 				});
 			}
+			return true;
 		}
 
 		this.layStack = function () {
 			// delete from own hand
 			card.removeClass("hand").addClass("stack");
 			pos = positions[place]['stack'];
-			card.animate(pos);
+			card.css({"z-index": $(".stack", dom).length+6}).animate(pos);
 		}
 
 		var card = $("<div>").addClass("card hand").append($("<div>").addClass("back"), $("<div>").addClass("front"));
@@ -94,7 +97,8 @@ var game = new function () {
 			eval("pos."+key+" = i*70");
 			return false;
 		});
-		card.appendTo($(".players > div").eq(place).find(".cards")).css(pos).delay(i*100).fadeIn();
+		dom = $(".players > div").eq(place).find(".cards");
+		card.appendTo(dom).css(pos).delay(i*100).fadeIn();
 
 	}
 
@@ -104,11 +108,12 @@ var game = new function () {
 
 		this.id = i;
 		this.name = n;
+		var _this = this;
 		var strikes = 0;
 		var place = 0;
 		var placeTable = 0;
 		var dom;
-		var cards = new Array(8);
+		var cards = [];
 
 		this.startGame = function (i, p) {
 			place = p;
@@ -133,15 +138,16 @@ var game = new function () {
 			if (place == 0) {
 				cards[cardid].layStack();
 			} else {
-				randomcard = Math.round(Math.random() * ($(".card.hand", dom).length-1));
-				i = 0;
-				$.each(cards, function (key, card) {
-					if (i == randomcard) {
-						card.flip(cardid);
-						card.layStack();
+				// flip a randomly selected card
+				i = Math.round(Math.random() * 3);
+				while (true) {
+					// check if not already flipped
+					if (cards[i].flip(cardid)) {
+						cards[i].layStack();
+						break;
 					}
-					i++;
-				})
+					i = (i >= 3) ? 0 : i+1;
+				}
 			}
 		}
 
@@ -170,6 +176,18 @@ var game = new function () {
 			});
 		}
 
+		this.quit = function () {
+			// remove player from list
+			$("#overview ul li").each(function () {
+				if ($(this).html() == _this.name) {
+					$(this).remove();
+				}
+			});
+
+			// increase player counter
+			$("#maxplayers").html(parseInt($("#maxplayers").html())+1);
+		}
+
 		// add player to list
 		$("#overview ul").append($("<li>").html(n));
 		// decrease player counter
@@ -182,7 +200,7 @@ var game = new function () {
 	var butler = new function () {
 
 		// the butler's address to connect to
-		var addr = "127.0.0.1:4926";
+		var addr = "192.168.10.10:4926";
 		// number of last action we got from the butler
 		this.lastAction = 0;
 
@@ -314,7 +332,7 @@ var game = new function () {
 		$.getJSON("ajax.php?action=getUserInfo&game=" + gameid, function (data) {
 			$.each(data, function (key, user) {
 				// only add player if he does not exist yet
-				if (players[user.id] == null) {
+				if (players[user.id] == 0) {
 					players[user.id] = new Player(user.id, user.name);
 				}
 			});
@@ -332,13 +350,21 @@ var game = new function () {
 
 				// a player joined
 				case "playerJoined":
+					players[action.player] = 0;
 					// only update players once
 					if (playersJoined == 0) {
 						updatePlayerInfo();
 						playersJoined = 1;
 					}
-
 					playersCount++;
+					break;
+
+				// a player left
+				case "playerQuit":
+					players[action.player].quit();
+					// remove from list
+					delete players[action.player];
+					players.splice(players.indexOf(action.player), 1);
 					break;
 
 				// game has started
