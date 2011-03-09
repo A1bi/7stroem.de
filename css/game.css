@@ -21,7 +21,7 @@
 #game .card {
 	display: none;
 }
-#game .card.highlight {
+#game .card.hand:hover {
 	z-index: 10;
 }
 #game .card div {
@@ -29,6 +29,11 @@
 }
 #game .card .back {
 	display: block;
+}
+#game .card.stack {
+	-webkit-animation-duration: 400ms;
+	-webkit-animation-timing-function: ease-in-out;
+	-webkit-animation-fill-mode: forwards;
 }
 #game .players .name {
 	font-size: 20px;
@@ -90,8 +95,15 @@
 #game .bottom .card div {
 	background: url(/gfx/game/cards_bottom.png);
 }
-#game .bottom .card .front {
+#game .bottom .hand .front {
 	cursor: pointer;
+}
+@-webkit-keyframes stack_bottom {
+	0% { }
+	100% { bottom: 200px; left: 100px; }
+}
+#game .bottom .card.stack {
+	-webkit-animation-name: stack_bottom;
 }
 
 /** top **/
@@ -107,6 +119,13 @@
 /* cards */
 #game .top .card div {
 	background: url(/gfx/game/cards_top.png);
+}
+@-webkit-keyframes stack_top {
+	0% { }
+	100% { top: 200px; left: 100px; }
+}
+#game .top .card.stack {
+	-webkit-animation-name: stack_top;
 }
 
 /** vertical **/
@@ -133,6 +152,13 @@
 #game .left .card div {
 	background: url(/gfx/game/cards_left.png);
 }
+@-webkit-keyframes stack_left {
+	0% { }
+	100% { left: 260px; top: 90px; }
+}
+#game .left .card.stack {
+	-webkit-animation-name: stack_left;
+}
 
 /** right **/
 #game .players .right {
@@ -147,6 +173,13 @@
 }
 #game .right .card .back {
 	background-position: -660px -781px;
+}
+@-webkit-keyframes stack_right {
+	0% { }
+	100% { right: 260px; top: 90px; }
+}
+#game .right .card.stack {
+	-webkit-animation-name: stack_right;
 }
 
 

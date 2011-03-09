@@ -65,7 +65,12 @@ var game = new function () {
 			if (id != undefined) return false;
 			id = i;
 			// set correct background and fade in
-			$(".front", card).css("background-position", getBackground()).delay(100).fadeIn("fast");
+			$(".front", card).css("background-position", getBackground());
+			if (!$.browser.webkit) {
+				$(".front", card).delay(100).fadeIn("fast");
+			} else {
+				$(".front", card).show();
+			}
 			if (place == 0) {
 				// register click and hover events only for this player
 				card.click(function () {
@@ -74,19 +79,21 @@ var game = new function () {
 					} else {
 						alert("Du bist nicht am Zug!");
 					}
-				// highlight card on mouseover
-				}).hover(function () {
-					$(this).toggleClass("highlight");
 				});
 			}
 			return true;
 		}
 
 		this.layStack = function () {
-			// delete from own hand
+			// increase z to lay the card on top of the other cards
+			card.css({"z-index": $(".stack", dom).length+6});
 			card.removeClass("hand").addClass("stack");
-			pos = positions[place]['stack'];
-			card.css({"z-index": $(".stack", dom).length+6}).animate(pos);
+			// remove click events
+			card.unbind("click");
+			if (!$.browser.webkit) {
+				pos = positions[place]['stack'];
+				card.animate(pos);
+			}
 		}
 
 		var card = $("<div>").addClass("card hand").append($("<div>").addClass("back"), $("<div>").addClass("front"));
