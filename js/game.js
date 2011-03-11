@@ -65,12 +65,7 @@ var game = new function () {
 			if (id != undefined) return false;
 			id = i;
 			// set correct background and fade in
-			$(".front", card).css("background-position", getBackground());
-			if (!$.browser.webkit) {
-				$(".front", card).delay(100).fadeIn("fast");
-			} else {
-				$(".front", card).show();
-			}
+			front = $("div", card).eq(1).css("background-position", getBackground()).delay(100).fadeIn("fast");
 			if (place == 0) {
 				// register click and hover events only for this player
 				card.click(function () {
@@ -90,9 +85,11 @@ var game = new function () {
 			card.removeClass("hand").addClass("stack");
 			// remove click events
 			card.unbind("click");
+			pos = positions[place]['stack'];
 			if (!$.browser.webkit) {
-				pos = positions[place]['stack'];
-				card.animate(pos);
+				card.animate(pos, 400);
+			} else {
+				card.css(pos);
 			}
 		}
 
@@ -532,22 +529,23 @@ var game = new function () {
 		players[3] = new Player(3, "Bla2");
 		players[4] = new Player(4, "Bla3");
 		setTimeout(finishStart, 1000);
-		players[1].startGame(0, 0);
-		players[2].startGame(1, 1);
-		players[3].startGame(2, 2);
-		players[4].startGame(3, 3);
-		players[1].smallRoundStarted();
-		players[2].smallRoundStarted();
-		players[3].smallRoundStarted();
-		players[4].smallRoundStarted();
+		setTimeout(function () {
+			players[1].startGame(0, 0);
+			players[2].startGame(1, 1);
+			players[3].startGame(2, 2);
+			players[4].startGame(3, 3);
+			players[1].smallRoundStarted();
+			players[2].smallRoundStarted();
+			players[3].smallRoundStarted();
+			players[4].smallRoundStarted();
+		}, 1500);
 		setTimeout(function () {
 			players[1].flipHand(1, "c10");
 			players[1].laidStack("c10");
 			players[2].laidStack("d8");
 			players[3].laidStack("h5");
 			players[4].laidStack("d7");
-		}, 2000);
-		*/
+		}, 2000);*/
 
 	}
 
