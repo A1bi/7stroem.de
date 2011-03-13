@@ -43,4 +43,9 @@
 		<div class="shadow_right">&nbsp;</div>
 		<div class="shadow_bottom">&nbsp;</div>
 	</div>
-	<div class="content">
+	<div class="pspace">
+		<div class="bg">&nbsp;</div>
+		<div class="foot">
+			<div class="copyright">&copy; Albisigns 2011 - Impressum</div>
+		</div>
+		<div class="content">

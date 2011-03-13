@@ -16,6 +16,9 @@
 	padding-top: 300px;
 	z-index: 99;
 }
+.pspace .content {
+	height: 1000px;
+}
 
 
 /*** players ***/
