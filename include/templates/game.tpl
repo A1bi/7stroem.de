@@ -1,38 +1,40 @@
 {include file="head.tpl" cssfile="game" jsfile="game"}
 		<div id="game">
-			<div class="table">
-				<div class="top">&nbsp;</div>
-				<div class="middle">
-					<div class="left">&nbsp;</div>
-					<div class="center">&nbsp;</div>
-					<div class="right">&nbsp;</div>
-				</div>
-				<div class="bottom">&nbsp;</div>
-			</div>
+			<div class="table">&nbsp;</div>
 			<div class="players">
 				<div class="bottom horizontal">
+					<div class="area"></div>
 					<div class="actions">
-						<div class="fold"><img src="/gfx/game/fold.png" alt="rausgehen" title="rausgehen" /></div>
-						<div class="knock"><img src="/gfx/game/knock.png" alt="klopfen" title="klopfen" /></div>
-						<div class="call"><img src="/gfx/game/call.png" alt="mitgehen" title="mitgehen" /></div>
+						<div class="call action"><img src="/gfx/game/call.png" alt="mitgehen" title="mitgehen" /></div>
+						<div class="fold action"><img src="/gfx/game/fold.png" alt="rausgehen" title="rausgehen" /></div>
+						<div class="knock action"><img src="/gfx/game/knock.png" alt="klopfen" title="klopfen" /></div>
+						<div class="blindKnock action">
+							<div class="number">
+								<select name="knocks"><option>1</option><option>2</option></select>
+							</div>
+							<div class="btn">
+								<img src="/gfx/game/blind_knock.png" alt="blind klopfen" title="blind klopfen" />
+							</div>
+						</div>
+						<div class="flipHand action"><img src="/gfx/game/flip.png" alt="umdrehen" title="umdrehen" /></div>
 					</div>
-					<div class="cards">
-						<div class="flipHand">umdrehen</div>
-					</div>
+					<div class="cards"></div>
 				</div>
 				<div class="left vertical">
-					<div class="name">
-						<div></div>
+					<div class="area">
+						<div class="name"></div>
 					</div>
 					<div class="cards"></div>
 				</div>
 				<div class="top horizontal">
-					<div class="name"></div>
+					<div class="area">
+						<div class="name"></div>
+					</div>
 					<div class="cards"></div>
 				</div>
 				<div class="right vertical">
-					<div class="name">
-						<div></div>
+					<div class="area">
+						<div class="name"></div>
 					</div>
 					<div class="cards"></div>
 				</div>

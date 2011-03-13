@@ -10,19 +10,11 @@ var game = new function () {
 	var processing = false;
 
 	var positions = [];
-	positions[0] = [];
-	positions[1] = [];
-	positions[2] = [];
-	positions[3] = [];
-	positions[0]['hand'] = {left: 0, bottom: 0};
-	positions[1]['hand'] = {top: 0, left: 0};
-	positions[2]['hand'] = {left: 0, top: 0};
-	positions[3]['hand'] = {top: 0, right: 0};
-	positions[0]['stack'] = {bottom: 200, left: 100};
-	positions[1]['stack'] = {left: 260, top: 90};
-	positions[2]['stack'] = {top: 200, left: 100};
-	positions[3]['stack'] = {right: 260, top: 90};
-	var suits = []
+	positions[0] = {left: 0};
+	positions[1] = {top: 0};
+	positions[2] = {left: 0};
+	positions[3] = {top: 0};
+	var suits = [];
 	suits['h'] = 0;
 	suits['d'] = 1;
 	suits['s'] = 2;
@@ -37,24 +29,24 @@ var game = new function () {
 
 		var getBackground = function () {
 			suit = suits[id.substr(0, 1)];
-			number = id.substr(1);
+			number = id.substr(1)-3;
 
 			switch (place) {
 				case 0:
-					x = (number-3) * 111;
-					y = suit * 164;
+					x = number * 87;
+					y = suit * 129;
 					break;
 				case 1:
-					x = 824 - (suit+1) * 164;
-					y = (number-3) * 111;
+					x = 647 - (suit+1) * 129;
+					y = number * 87;
 					break;
 				case 2:
-					x = 890 - (number-2) * 111;
-					y = suit * 164;
+					x = 700 - (number+1) * 87;
+					y = 647 - (suit+1) * 129;
 					break;
 				case 3:
-					x = suit * 164;
-					y = 892 - (number-2) * 111;
+					x = suit * 129;
+					y = (7-number) * 87 + 4;
 					break;
 			}
 
@@ -65,7 +57,9 @@ var game = new function () {
 			if (id != undefined) return false;
 			id = i;
 			// set correct background and fade in
-			front = $("div", card).eq(1).css("background-position", getBackground()).delay(100).fadeIn("fast");
+			front = $(".front", card).css("background-position", getBackground()).delay(animationTime(200)).fadeIn(animationTime(400));
+			// hide back
+			$(".back", card).delay(300).fadeOut(animationTime(100));
 			if (place == 0) {
 				// register click and hover events only for this player
 				card.click(function () {
@@ -80,29 +74,23 @@ var game = new function () {
 		}
 
 		this.layStack = function () {
-			// increase z to lay the card on top of the other cards
-			card.css({"z-index": $(".stack", dom).length+6});
-			card.removeClass("hand").addClass("stack");
 			// remove click events
 			card.unbind("click");
-			pos = positions[place]['stack'];
-			if (!$.browser.webkit) {
-				card.animate(pos, 400);
-			} else {
-				card.css(pos);
-			}
+			// increase z to lay the card on top of the other cards
+			card.css({"z-index": $(".stack", dom).length+6});
+			card.switchClass("hand", "stack", animationTime(500, true));
 		}
 
 		var card = $("<div>").addClass("card hand").append($("<div>").addClass("back"), $("<div>").addClass("front"));
 
 		// add it to the players hand
-		pos = positions[place]['hand'];
+		pos = positions[place];
 		$.each(pos, function (key, value) {
-			eval("pos."+key+" = i*70");
+			eval("pos."+key+" = i*50");
 			return false;
 		});
 		dom = $(".players > div").eq(place).find(".cards");
-		card.appendTo(dom).css(pos).delay(i*100).fadeIn();
+		card.appendTo(dom).css(pos).delay(i*100).fadeIn(animationTime(400));
 
 	}
 
@@ -128,13 +116,14 @@ var game = new function () {
 			$("#strikes .top > td").eq(placeTable).html(this.name);
 			// set player's name on the table
 			// -1 because we have no name at the bottom so the first name box is missing
-			namebox = $(".players .name").eq(place-1);
-			if (place == 2) {
-				namebox.html(this.name);
-			// vertical players have an inner div
-			} else if (place-1 > -1) {
-				$("div", namebox).html(this.name);
-			}
+			$(".name", dom).html(this.name);
+			// pull out player area
+			$(".area", dom).addClass("shown", animationTime(500, true));
+		}
+
+		// set or unset that it is this player's turn
+		this.toggleTurn = function () {
+			$(".name", dom).toggleClass("turn", animationTime(500, true));
 		}
 
 		// user has laid a card on his stack
@@ -228,6 +217,14 @@ var game = new function () {
 
 	}
 
+	var toggleActionBtn = function (action, show) {
+		if (show) {
+			$(".actions ."+action).fadeIn(animationTime(400));
+		} else {
+			$(".actions ."+action).fadeOut(animationTime(400));
+		}
+	}
+
 	var processQueue = function (next) {
 		if (processing && !next) {
 			return;
@@ -245,14 +242,26 @@ var game = new function () {
 		
 		switch (action.action) {
 
+			// game has started
+			case "started":
+				finishStart();
+				wait = 1000;
+				break;
+
 			case "turn":
 				// set turn
-				_this.turn = action.player;
+				if (_this.turn != action.player) {
+					if (_this.turn > -1) players[_this.turn].toggleTurn();
+					_this.turn = action.player;
+					players[_this.turn].toggleTurn();
+				}
 				// show knock button
-				if (action.player == userid) {
-					$(".actions .knock").fadeIn("fast");
-				} else {
-					$(".actions .knock").fadeOut("fast");
+				if ($(".blindKnock").is(":hidden")) {
+					if (action.player == userid) {
+						toggleActionBtn("knock", true);
+					} else {
+						toggleActionBtn("knock", false);
+					}
 				}
 				break;
 
@@ -262,8 +271,8 @@ var game = new function () {
 				break;
 
 			case "smallRoundStarted":
-				$(".bottom .actions").fadeIn("fast");
-				$(".bottom .flipHand").fadeIn("fast");
+				toggleActionBtn("flipHand", true);
+				toggleActionBtn("blindKnock", true);
 				$.each(players, function (key, player) {
 					if (player != null) {
 						player.smallRoundStarted();
@@ -288,7 +297,7 @@ var game = new function () {
 				break;
 
 			case "smallRoundEnded":
-				$(".bottom .actions").fadeOut("fast");
+				$(".actions > div").fadeOut(animationTime(400));
 				wait = 2000;
 				waitFunction = function () {
 					$.each(players, function (key, player) {
@@ -302,7 +311,8 @@ var game = new function () {
 
 			case "folded":
 				if (action.player == userid) {
-					$(".bottom .actions").fadeOut("fast");
+					toggleActionBtn("knock", false);
+					toggleActionBtn("fold", false);
 				}
 				break;
 
@@ -371,11 +381,6 @@ var game = new function () {
 					players.splice(players.indexOf(action.player), 1);
 					break;
 
-				// game has started
-				case "started":
-					finishStart();
-					break;
-
 				// got updated number of strikes for user
 				case "strikes":
 					players[action.player].updateStrikes(action.content);
@@ -414,7 +419,8 @@ var game = new function () {
 				registerActions(response.actions);
 			// we received the player's cards'
 			} else if (response.cards != null) {
-				$(".flipHand").fadeOut("fast");
+				toggleActionBtn("flipHand", false);
+				toggleActionBtn("blindKnock", false);
 				// show player his cards
 				for (i = 0; i < 4; i++) {
 					players[userid].flipHand(i, response.cards[i]);
@@ -434,7 +440,7 @@ var game = new function () {
 	}
 
 	var finishStart = function () {
-		$("#overview").fadeOut();
+		$("#overview").fadeOut(animationTime(400));
 		i = 0;
 		$.each(players, function (key, player) {
 			if (player != null) {
@@ -456,9 +462,8 @@ var game = new function () {
 				i++;
 			}
 		});
-		$("#panel").animate({"top": "800px"}, function () {
-			$("#strikes").fadeIn();
-		});
+		$("#panel").addClass("down", animationTime(500, true));
+		$("#strikes").delay(500).fadeIn(animationTime(400));
 	}
 
 
@@ -518,7 +523,7 @@ var game = new function () {
 		}
 
 		// show panel
-		$("#panel").delay(200).fadeIn();
+		$("#panel").delay(200).fadeIn(animationTime(400));
 
 		// initiate butler
 		butler.getActions();
@@ -540,12 +545,13 @@ var game = new function () {
 			players[4].smallRoundStarted();
 		}, 1500);
 		setTimeout(function () {
-			players[1].flipHand(1, "c10");
-			players[1].laidStack("c10");
-			players[2].laidStack("d8");
-			players[3].laidStack("h5");
-			players[4].laidStack("d7");
-		}, 2000);*/
+			players[1].flipHand(1, "c9");
+			players[1].laidStack("c9");
+			players[2].laidStack("h5");
+			players[3].laidStack("s7");
+			players[4].laidStack("d5");
+			players[4].toggleTurn();
+		}, 3000);*/
 
 	}
 

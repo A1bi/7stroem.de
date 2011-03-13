@@ -15,6 +15,8 @@
 	<link rel="stylesheet" type="text/css" href="/css/{$cssfile}.css{fileVersion file="/css/{$cssfile}.css"}" />
 {/if}
 	<script type="text/javascript" src="/js/fw/jquery.js"></script>
+	<script type="text/javascript" src="/js/fw/jquery-ui.js"></script>
+	<script type="text/javascript" src="/js/main.js"></script>
 {if $jsfile != ""}
 	<script type="text/javascript" src="/js/{$jsfile}.js{fileVersion file="/js/{$jsfile}.js"}"></script>
 {/if}
