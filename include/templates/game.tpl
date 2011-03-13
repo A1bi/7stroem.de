@@ -1,5 +1,6 @@
 {include file="head.tpl" cssfile="game" jsfile="game"}
 		<div id="game">
+			<div id="loading">Spiel wird geladen...</div>
 			<div class="table">&nbsp;</div>
 			<div class="players">
 				<div class="bottom horizontal">

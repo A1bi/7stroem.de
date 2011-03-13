@@ -8,6 +8,14 @@
 #game div {
 	position: absolute;
 }
+#game #loading {
+	background: #ffffff;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	padding-top: 300px;
+	z-index: 99;
+}
 
 
 /*** players ***/
@@ -126,8 +134,16 @@
 	vertical-align: middle;
 }
 #game .players .bottom .flipHand {
-	left: 280px;
-	bottom: 50px;
+	left: 241px;
+	bottom: 5px;
+	width: 236px;
+	height: 84px;
+	text-align: center;
+	padding-top: 45px;
+}
+#game .players .bottom .flipHand:active {
+	left: 242px;
+	bottom: 4px;
 }
 /* cards */
 #game .bottom .card div {
@@ -148,6 +164,10 @@
 }
 #game .bottom .card.hand {
 	bottom: 0px;
+}
+#game .bottom .card.folded {
+	bottom: 0px;
+	left: 21px !important;
 }
 
 /** top **/
@@ -183,6 +203,9 @@
 	top: 160px;
 	left: 24px !important;
 }
+#game .top .card.folded {
+	left: 24px !important;
+}
 
 /** vertical **/
 #game .players .vertical {
@@ -201,6 +224,9 @@
 	height: 87px;
 }
 #game .players .vertical .card.stack {
+	top: 60px !important;
+}
+#game .players .vertical .card.folded {
 	top: 60px !important;
 }
 #game .players .vertical .name {
@@ -259,6 +285,9 @@
 #game .right .card.stack {
 	right: 230px;
 	top: 200px;
+}
+#game .right .card.folded {
+	right: 0px;
 }
 #game .right .card.hand {
 	right: 0px;
@@ -335,8 +364,12 @@
 	width: 360px;
 	overflow: auto;
 }
-#panel .chat .log .message {
+#panel .chat .log div {
 	position: relative;
+	color: #999999;
+}
+#panel .chat .log .message {
+	color: #000000;
 }
 #panel .chat .input {
 	bottom: 30px;

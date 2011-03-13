@@ -6,6 +6,7 @@ var game = new function () {
 	var rounds = 0;
 	var queue = [];
 	this.turn = -1;
+	var knocked = false;
 	var blockExit = false;
 	var processing = false;
 
@@ -26,6 +27,7 @@ var game = new function () {
 		var place = p;
 		var id;
 		var dom;
+		var laid = false;
 
 		var getBackground = function () {
 			suit = suits[id.substr(0, 1)];
@@ -63,17 +65,14 @@ var game = new function () {
 			if (place == 0) {
 				// register click and hover events only for this player
 				card.click(function () {
-					if (_this.turn == userid) {
-						butler.registerAction("layStack", id);
-					} else {
-						alert("Du bist nicht am Zug!");
-					}
+					_this.layStack(id);
 				});
 			}
 			return true;
 		}
 
 		this.layStack = function () {
+			laid = true;
 			// remove click events
 			card.unbind("click");
 			// increase z to lay the card on top of the other cards
@@ -81,10 +80,22 @@ var game = new function () {
 			card.switchClass("hand", "stack", animationTime(500, true));
 		}
 
+		this.fold = function () {
+			if (laid) {
+				remove = "stack";
+				$(".front", card).fadeOut(animationTime(300));
+				$(".back", card).fadeIn(animationTime(400));
+			} else {
+				remove = "hand";
+			}
+			card.switchClass(remove, "folded", animationTime(500, true));
+		}
+
 		var card = $("<div>").addClass("card hand").append($("<div>").addClass("back"), $("<div>").addClass("front"));
 
 		// add it to the players hand
 		pos = positions[place];
+		// TODO: den kram hier weg
 		$.each(pos, function (key, value) {
 			eval("pos."+key+" = i*50");
 			return false;
@@ -107,6 +118,12 @@ var game = new function () {
 		var dom;
 		var cards = [];
 
+		var removeCards = function () {
+			$(".card", dom).fadeOut(animationTime(400), function () {
+				$(this).remove();
+			});
+		}
+
 		this.startGame = function (i, p) {
 			place = p;
 			placeTable = i + 1;
@@ -117,8 +134,6 @@ var game = new function () {
 			// set player's name on the table
 			// -1 because we have no name at the bottom so the first name box is missing
 			$(".name", dom).html(this.name);
-			// pull out player area
-			$(".area", dom).addClass("shown", animationTime(500, true));
 		}
 
 		// set or unset that it is this player's turn
@@ -155,6 +170,18 @@ var game = new function () {
 			cards[cardid] = cards[i];
 		}
 
+		this.roundStarted = function () {
+			strikes = 0;
+			dom.removeClass("out");
+			// pull out player area
+			$(".area", dom).addClass("shown", animationTime(500, true));
+		}
+
+		this.roundEnded = function () {
+			// pull back player area
+			$(".area", dom).removeClass("shown", animationTime(500, true));
+		}
+
 		// 
 		this.smallRoundStarted = function () {
 			// give cards
@@ -164,21 +191,36 @@ var game = new function () {
 		}
 
 		this.smallRoundEnded = function () {
-			$(".card", dom).fadeOut("fast", function () {
-				$(this).remove();
-			});
+			removeCards();
+		}
+
+		this.folded = function () {
+			for (i = 0; i < 4; i++) {
+				cards[i].fold();
+			}
+		}
+
+		this.out = function () {
+			dom.addClass("out");
 		}
 
 		this.quit = function () {
-			// remove player from list
-			$("#overview ul li").each(function () {
-				if ($(this).html() == _this.name) {
-					$(this).remove();
-				}
-			});
+			if (!$(".area", dom).is(".shown")) {
+				// remove player from list
+				$("#overview ul li").each(function () {
+					if ($(this).html() == _this.name) {
+						$(this).remove();
+					}
+				});
+				
+				// increase player counter
+				$("#maxplayers").html(parseInt($("#maxplayers").html())+1);
 
-			// increase player counter
-			$("#maxplayers").html(parseInt($("#maxplayers").html())+1);
+			} else {
+				removeCards();
+				this.roundEnded();
+			}
+
 		}
 
 		// add player to list
@@ -245,21 +287,31 @@ var game = new function () {
 			// game has started
 			case "started":
 				finishStart();
-				wait = 1000;
+				wait = 700;
 				break;
 
 			case "turn":
 				// set turn
 				if (_this.turn != action.player) {
-					if (_this.turn > -1) players[_this.turn].toggleTurn();
+					if (_this.turn > -1 && players[_this.turn] != null) players[_this.turn].toggleTurn();
 					_this.turn = action.player;
 					players[_this.turn].toggleTurn();
 				}
 				// show knock button
 				if ($(".blindKnock").is(":hidden")) {
 					if (action.player == userid) {
-						toggleActionBtn("knock", true);
+						if (knocked) {
+							knocked = false;
+							toggleActionBtn("call", true);
+							toggleActionBtn("fold", true);
+						} else {
+							toggleActionBtn("knock", true);
+						}
 					} else {
+						if (!$(".call").is(":hidden")) {
+							toggleActionBtn("call", false);
+							toggleActionBtn("fold", false);
+						}
 						toggleActionBtn("knock", false);
 					}
 				}
@@ -274,9 +326,7 @@ var game = new function () {
 				toggleActionBtn("flipHand", true);
 				toggleActionBtn("blindKnock", true);
 				$.each(players, function (key, player) {
-					if (player != null) {
-						player.smallRoundStarted();
-					}
+					if (player != null) player.smallRoundStarted();
 				});
 				wait = 500;
 				break;
@@ -294,6 +344,20 @@ var game = new function () {
 					row.append(cell);
 				}
 				$("#strikes table").append(row);
+				$.each(players, function (key, player) {
+					if (player != null) player.roundStarted();
+				});
+				wait = 700;
+				break;
+
+			case "roundEnded":
+				logAction(players[action.player].name + " hat diese Runde gewonnen.");
+				$("#panel").removeClass("down", animationTime(500, true));
+				break;
+
+			case "out":
+				logAction(players[action.player].name + " ist raus.");
+				players[action.player].out();
 				break;
 
 			case "smallRoundEnded":
@@ -301,9 +365,7 @@ var game = new function () {
 				wait = 2000;
 				waitFunction = function () {
 					$.each(players, function (key, player) {
-						if (player != null) {
-							player.smallRoundEnded();
-						}
+						if (player != null) player.smallRoundEnded();
 					});
 					processQueue(true);
 				};
@@ -313,6 +375,13 @@ var game = new function () {
 				if (action.player == userid) {
 					toggleActionBtn("knock", false);
 					toggleActionBtn("fold", false);
+				}
+				players[action.player].folded();
+				break;
+
+			case "knocked":
+				if (action.player != userid) {
+					knocked = true;
 				}
 				break;
 
@@ -336,7 +405,16 @@ var game = new function () {
 		message = message.replace(/\{038;\}/g, "&amp;");
 		message = message.replace(/\{063;\}/g, "?");
 		message = message.replace(/\{035;\}/g, "#");
-		$(".chat .log").append($("<div>").addClass("message").html(players[player].name + ": " + decodeURI(message)));
+		message = players[player].name + ": " + decodeURI(message);
+		logAction(message, "message");
+	}
+
+	var logAction = function (content, style) {
+		dom = $("<div>").html(content);
+		if (style != undefined) {
+			dom.addClass(style);
+		}
+		$(".chat .log").append(dom);
 		$(".chat .log").attr({scrollTop: $(".chat .log").attr("scrollHeight")});
 	}
 
@@ -348,9 +426,21 @@ var game = new function () {
 				// only add player if he does not exist yet
 				if (players[user.id] == 0) {
 					players[user.id] = new Player(user.id, user.name);
+					logAction(user.name + " hat das Spiel betreten.");
 				}
 			});
 		});
+	}
+
+	// user wants to lay a card on stack
+	this.layStack = function (cardid) {
+		if (this.turn != userid) {
+			alert("Du bist nicht am Zug!");
+		} else if (knocked) {
+			alert("Du musst erst entscheiden, ob du mitgehst oder rausgehst!");
+		} else {
+			butler.registerAction("layStack", cardid);
+		}
 	}
 
 	// register all actions (is called by the script we got from the butler)
@@ -375,10 +465,11 @@ var game = new function () {
 
 				// a player left
 				case "playerQuit":
+					logAction(players[action.player].name + " hat das Spiel verlassen.");
 					players[action.player].quit();
 					// remove from list
 					delete players[action.player];
-					players.splice(players.indexOf(action.player), 1);
+					players[action.player] = null;
 					break;
 
 				// got updated number of strikes for user
@@ -421,6 +512,9 @@ var game = new function () {
 			} else if (response.cards != null) {
 				toggleActionBtn("flipHand", false);
 				toggleActionBtn("blindKnock", false);
+				if (this.turn == userid) {
+					toggleActionBtn("knock", true);
+				}
 				// show player his cards
 				for (i = 0; i < 4; i++) {
 					players[userid].flipHand(i, response.cards[i]);
@@ -480,8 +574,19 @@ var game = new function () {
 		});
 	}
 
-	// initializes game
-	this.init = function () {
+	// hide loading sign and initiate butler connection
+	$(window).load(function () {
+		$("#loading").hide();
+
+		// show panel
+		$("#panel").delay(200).fadeIn(animationTime(400));
+		
+		// initiate butler
+		butler.getActions();
+	});
+
+	// initialize game
+	$(function () {
 
 		// register events
 		$("#startGameBtn").click(start);
@@ -522,12 +627,6 @@ var game = new function () {
 			$("#startGame > div").first().show();
 		}
 
-		// show panel
-		$("#panel").delay(200).fadeIn(animationTime(400));
-
-		// initiate butler
-		butler.getActions();
-
 		/* testing
 		players[1] = new Player(1, "Albi");
 		players[2] = new Player(2, "Bla");
@@ -539,6 +638,7 @@ var game = new function () {
 			players[2].startGame(1, 1);
 			players[3].startGame(2, 2);
 			players[4].startGame(3, 3);
+			toggleActionBtn("flipHand", true);
 			players[1].smallRoundStarted();
 			players[2].smallRoundStarted();
 			players[3].smallRoundStarted();
@@ -551,11 +651,11 @@ var game = new function () {
 			players[3].laidStack("s7");
 			players[4].laidStack("d5");
 			players[4].toggleTurn();
-		}, 3000);*/
+		}, 3000);
+		setTimeout(function () {
+			players[2].folded();
+		}, 4000);*/
 
-	}
+	});
 
 }
-
-// initiate
-$(window).load(game.init);
