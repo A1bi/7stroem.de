@@ -6,7 +6,7 @@ var game = new function () {
 	var rounds = 0;
 	var queue = [];
 	this.turn = -1;
-	var knocked = false;
+	var knocked = -1;
 	var blockExit = false;
 	var processing = false;
 
@@ -192,6 +192,23 @@ var game = new function () {
 
 		this.smallRoundEnded = function () {
 			removeCards();
+			this.knockFinished();
+		}
+
+		this.knocked = function () {
+			knockDom = $(".knocked", dom);
+			$("div", knockDom).removeClass("down");
+			knockDom.removeClass("down").fadeIn(animationTime(200));
+			setTimeout(function () {
+				$("div", knockDom).addClass("down", animationTime(100, true), "easeInQuint");
+			}, 0);
+			setTimeout(function () {
+				knockDom.addClass("down", animationTime(400, true));
+			}, 1000);
+		}
+
+		this.knockFinished = function () {
+			$(".knocked", dom).fadeOut(animationTime(400));
 		}
 
 		this.folded = function () {
@@ -297,11 +314,14 @@ var game = new function () {
 					_this.turn = action.player;
 					players[_this.turn].toggleTurn();
 				}
+				if (knocked == action.player) {
+					players[action.player].knockFinished();
+					knocked = -1;
+				}
 				// show knock button
-				if ($(".blindKnock").is(":hidden")) {
+				if ($(".blindKnock").is(":hidden") || knocked != -1) {
 					if (action.player == userid) {
-						if (knocked) {
-							knocked = false;
+						if (knocked != -1) {
 							toggleActionBtn("call", true);
 							toggleActionBtn("fold", true);
 						} else {
@@ -361,6 +381,7 @@ var game = new function () {
 				break;
 
 			case "smallRoundEnded":
+				knocked = -1;
 				$(".actions > div").fadeOut(animationTime(400));
 				wait = 2000;
 				waitFunction = function () {
@@ -380,9 +401,11 @@ var game = new function () {
 				break;
 
 			case "knocked":
-				if (action.player != userid) {
-					knocked = true;
+				if (!$(".blindKnock").is(":hidden")) {
+					$(".blindKnock").fadeOut(animationTime(400));
 				}
+				knocked = action.player;
+				players[action.player].knocked();
 				break;
 
 		}
@@ -436,7 +459,7 @@ var game = new function () {
 	this.layStack = function (cardid) {
 		if (this.turn != userid) {
 			alert("Du bist nicht am Zug!");
-		} else if (knocked) {
+		} else if (knocked != -1) {
 			alert("Du musst erst entscheiden, ob du mitgehst oder rausgehst!");
 		} else {
 			butler.registerAction("layStack", cardid);
@@ -643,6 +666,10 @@ var game = new function () {
 			players[2].smallRoundStarted();
 			players[3].smallRoundStarted();
 			players[4].smallRoundStarted();
+			players[4].roundStarted();
+			players[3].roundStarted();
+			players[1].roundStarted();
+			players[2].roundStarted();
 		}, 1500);
 		setTimeout(function () {
 			players[1].flipHand(1, "c9");
@@ -653,8 +680,11 @@ var game = new function () {
 			players[4].toggleTurn();
 		}, 3000);
 		setTimeout(function () {
-			players[2].folded();
-		}, 4000);*/
+			players[2].knocked();
+		}, 4000);
+		setTimeout(function () {
+			players[2].knocked();
+		}, 6000);*/
 
 	});
 

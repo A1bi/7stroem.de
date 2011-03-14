@@ -20,24 +20,28 @@
 						<div class="flipHand action"><img src="/gfx/game/flip.png" alt="umdrehen" title="umdrehen" /></div>
 					</div>
 					<div class="cards"></div>
+					<div class="knocked"><div></div></div>
 				</div>
 				<div class="left vertical">
 					<div class="area">
 						<div class="name"></div>
 					</div>
 					<div class="cards"></div>
+					<div class="knocked"><div></div></div>
 				</div>
 				<div class="top horizontal">
 					<div class="area">
 						<div class="name"></div>
 					</div>
 					<div class="cards"></div>
+					<div class="knocked"><div></div></div>
 				</div>
 				<div class="right vertical">
 					<div class="area">
 						<div class="name"></div>
 					</div>
 					<div class="cards"></div>
+					<div class="knocked"><div></div></div>
 				</div>
 			</div>
 		</div>
