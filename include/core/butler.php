@@ -49,8 +49,8 @@ class butler {
 	 * @param int $id
 	 * @return bool
 	 */
-	function createGame($id) {
-		return $this->makeRequest("createGame", array("id" => $id));
+	function createGame($id, $host) {
+		return $this->makeRequest("createGame", array("id" => $id, "host" => $host));
 	}
 
 	/**

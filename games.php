@@ -22,7 +22,7 @@ if ($_GET['action'] == "create") {
 	$_db->query('INSERT INTO games VALUES (null, ?, 0, ?, ?, 0, ?, ?)', array($public, $maxplayers, $bet, time(), $_user['id']));
 	$id = $_db->id();
 	// create game on server
-	if (!$butler->createGame($id)) {
+	if (!$butler->createGame($id, $_user['id'])) {
 		// could not create -> remove entry from db
 		$_db->query('DELETE FROM games WHERE id = ?', array($id));
 		redirectTo("games.php");
@@ -43,7 +43,8 @@ if ($_GET['action'] == "create") {
 							WHERE g.host = uf.friend
 							  AND uf.user = ?
 							  AND uf.friend = u.id
-							  AND g.public = 0',
+							  AND g.public = 0
+							  AND g.started = 0',
 						array($_user['id']));
 
 	$i = 1;
@@ -61,6 +62,7 @@ if ($_GET['action'] == "create") {
 								  users AS u
 							WHERE g.host = u.id
 							  AND public = 1
+							  AND AND g.started = 0
 							  AND host != ?',
 						array($_user['id']));
 

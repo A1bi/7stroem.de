@@ -87,6 +87,22 @@ switch ($request['request']) {
 			$response['error'] = "player not found";
 		}
 		break;
+		
+	case "changeHost":
+		$_db->query('UPDATE games SET host = ? WHERE id = ?', array($request['host'], $game['id']));
+		break;
+
+	case "startGame":
+		// get all players of this game
+		$_db->query('UPDATE games SET started = 1 WHERE id = ?', array($game['id']));
+		$response['result'] = "ok";
+		break;
+
+	case "finishGame":
+		// get all players of this game
+		$_db->query('DELETE FROM games WHERE id = ? AND started = 0', array($game['id']));
+		$response['result'] = "ok";
+		break;
 
 	default:
 		$response['error'] = "unknown request";

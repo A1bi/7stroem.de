@@ -274,6 +274,11 @@ var game = new function () {
 			makeRequest("registerAction", "action=" + action + "&content=" + content);
 		}
 
+		// start the game
+		this.startGame = function () {
+			makeRequest("start");
+		}
+
 	}
 
 	var toggleActionBtn = function (action, show) {
@@ -443,13 +448,16 @@ var game = new function () {
 
 	// get new player info and add those players
 	// avoids too many ajax request at a time
-	var updatePlayerInfo = function () {
+	var updatePlayerInfo = function (log) {
 		$.getJSON("ajax.php?action=getUserInfo&game=" + gameid, function (data) {
 			$.each(data, function (key, user) {
 				// only add player if he does not exist yet
-				if (players[user.id] == 0) {
+				if (players[user.id] == null) {
 					players[user.id] = new Player(user.id, user.name);
-					logAction(user.name + " hat das Spiel betreten.");
+					playersCount++;
+					if (log || user.id == username) {
+						logAction(user.name + " hat das Spiel betreten.");
+					}
 				}
 			});
 		});
@@ -468,7 +476,8 @@ var game = new function () {
 
 	// register all actions (is called by the script we got from the butler)
 	var registerActions = function (actions) {
-		playersJoined = 0;
+		playersJoined = false;
+		finished = false;
 
 		// go through all actions
 		$.each(actions, function (key, action) {
@@ -477,13 +486,11 @@ var game = new function () {
 
 				// a player joined
 				case "playerJoined":
-					players[action.player] = 0;
 					// only update players once
-					if (playersJoined == 0) {
-						updatePlayerInfo();
-						playersJoined = 1;
+					if (!playersJoined) {
+						updatePlayerInfo(true);
+						playersJoined = true;
 					}
-					playersCount++;
 					break;
 
 				// a player left
@@ -505,6 +512,20 @@ var game = new function () {
 					logChat(action.player, action.content);
 					break;
 
+				// host has changed to another player
+				case "hostChanged":
+					host = action.player;
+					logAction(players[host].name + " ist der neue Leiter des Spiels.");
+					hostChanged();
+					break;
+
+				// game has finished because only this player is left
+				case "finished":
+					finished = true;
+					blockExit = false;
+					alert("Spiel ist beendet!");
+					break;
+
 				// everything else has to be queued
 				default:
 					queue.push(action);
@@ -517,7 +538,7 @@ var game = new function () {
 		processQueue(false);
 
 		// next request
-		butler.getActions();
+		if (!finished) butler.getActions();
 
 	}
 
@@ -528,9 +549,16 @@ var game = new function () {
 
 			// we received actions
 			if (response.actions != null) {
+				old = butler.lastAction;
 				// set new lastAction
 				butler.lastAction = response.lastAction;
-				registerActions(response.actions);
+				// first connection to server -> just update player info
+				if (old == 0) {
+					updatePlayerInfo(false);
+					butler.getActions();
+				} else {
+					registerActions(response.actions);
+				}
 			// we received the player's cards'
 			} else if (response.cards != null) {
 				toggleActionBtn("flipHand", false);
@@ -553,6 +581,17 @@ var game = new function () {
 				default:
 					alert("unknown error");
 			}
+		}
+	}
+
+	var hostChanged = function () {
+		dom = $("#startGame > div");
+		if (host == userid) {
+			dom.last().show();
+			dom.first().hide();
+		} else {
+			dom.last().hide();
+			dom.first().show();
 		}
 	}
 
@@ -590,11 +629,7 @@ var game = new function () {
 			alert("Zu wenig Spieler!");
 			return;
 		}
-		$.getJSON("ajax.php?action=startGame&id=" + gameid, function (data) {
-			if (data.result != "ok") {
-				alert("Fehler!");
-			}
-		});
+		butler.startGame();
 	}
 
 	// hide loading sign and initiate butler connection
@@ -644,11 +679,7 @@ var game = new function () {
 		});
 
 		// start game box
-		if (host == userid) {
-			$("#startGame > div").last().show();
-		} else {
-			$("#startGame > div").first().show();
-		}
+		hostChanged();
 
 		/* testing
 		players[1] = new Player(1, "Albi");
