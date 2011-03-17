@@ -6,11 +6,13 @@ include('include/main.php');
 $authcode = "kqecbi50PLZvDkyp";
 
 // parse json request
-$request = json_decode($_GET['request'], true);
+$request = json_decode(urldecode($_POST['request']), true);
 if (!$request) exit("error: bad request");
 
 // check if authcode is correct
 if ($request['authcode'] != $authcode) exit("error: authentication failed");
+
+$response = array();
 
 // get game info
 $result = $_db->query('SELECT id, players, bet FROM games WHERE id = ?', array($request['game']));
@@ -21,7 +23,8 @@ switch ($request['request']) {
 	case "roundEnded":
 		// check number of player - minimum 2, maximum 4
 		if ($request['players'] > 4 || $request['players'] < 2) {
-			exit("error: invalid number of players");
+			$response['error'] = "invalid number of players";
+			break;
 		}
 		// reward winner
 		$result = $_db->query('	UPDATE	users AS u,
@@ -32,11 +35,11 @@ switch ($request['request']) {
 								AND		gp.user = u.id',
 				array($game['bet']*$request['players'], $request['game'], $request['winner']));
 		if ($result->rowCount() < 1) {
-			echo "error: not allowed";
+			$response['error'] = "not allowed";
 		} else {
 			// add transaction to database
 			$_db->query('INSERT INTO users_transactions VALUES (?, ?, ?, 1, ?)', array($request['winner'], $game['bet'], time(), $game['id']));
-			echo "ok";
+			$response['result'] = "ok";
 		}
 		break;
 
@@ -50,26 +53,45 @@ switch ($request['request']) {
 								AND		gp.user = u.id',
 				array($game['id']));
 		$players = 0;
+		// array for the players who have to be kicked because they don't have the money for the bet
+		$response['kick'] = array();
 		while ($user = $result->fetch()) {
 			$newCredit = $user['credit']-$game['bet'];
 			if ($newCredit >= 0) {
 				$_db->query('UPDATE users SET credit = ? WHERE id = ?', array($newCredit, $user['id']));
-			// TODO: falls user keine kohle mehr hat, was dann ???
 			} else {
-
+				$response['kick'][] = $user['id'];
 			}
 			$players++;
 		}
 		// check if any players were affected
 		if ($players == $game['players']) {
-			echo "ok";
+			$response['result'] = "ok";
 		} else {
-			echo "error: no players";
+			$response['error'] = "no players";
+		}
+		break;
+
+	case "playerQuit":
+		// get all players of this game
+		$result = $_db->query('	DELETE FROM		games_players
+								WHERE			game = ?
+								AND				user = ?',
+				array($game['id'], $request['player']));
+		// anyone deleted ?
+		if ($result->rowCount() > 0) {
+			// update players counter
+			$_db->query('UPDATE games SET players = players-1 WHERE id = ?', array($game['id']));
+			$response['result'] = "ok";
+		} else {
+			$response['error'] = "player not found";
 		}
 		break;
 
 	default:
-		echo "error: request unknown";
+		$response['error'] = "unknown request";
 }
+
+echo json_encode($response);
 
 ?>
