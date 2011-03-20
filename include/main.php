@@ -72,11 +72,12 @@ function kickGuests() {
 
 $_base = $_SERVER['DOCUMENT_ROOT'];
 
-// load template engine
-loadComponent("templates");
-
-// database
-loadComponent("database");
+// components to load
+$comps = array("templates", "format", "database");
+foreach ($comps as $comp) {
+	loadComponent($comp);
+}
+// initiate database object
 $_db = new database;
 
 /*
@@ -91,7 +92,7 @@ if (preg_match("#MSIE [1-6]#", $_SERVER['HTTP_USER_AGENT'])) {
  * user session management
  */
 
-if (!defined(NO_SESSION)) {
+if (!defined("NO_SESSION")) {
 	// start session
 	ini_set("session.use_only_cookies", 1);
 	session_name("7stroem_sess");

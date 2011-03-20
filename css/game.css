@@ -31,12 +31,12 @@
 	z-index: 2;
 	display: none;
 }
+#game .card div {
+	-webkit-transition-property: top, left;
+	-webkit-transition-duration: .4s;
+}
 #game .card .front {
 	display: none;
-}
-#game .card .front, #game .card .back {
-	width: 100%;
-	height: 100%;
 }
 #game .card {
 	-webkit-transition-property: -webkit-transform, top, left, right, bottom;
@@ -57,6 +57,13 @@
 }
 #game .players .area .name.turn {
 	color: #ff0000;
+}
+#game .players .out .area .name {
+	text-decoration: line-through;
+}
+#game .players .area .flag {
+	font-size: 12px;
+	color: #ffffff;
 }
 #game .players .area {
 	z-index: 1;
@@ -92,6 +99,10 @@
 	width: 100%;
 }
 #game .players .horizontal .card {
+	width: 127px;
+	height: 169px;
+}
+#game .players .horizontal .card div {
 	width: 87px;
 	height: 129px;
 }
@@ -107,6 +118,12 @@
 	left: 370px;
 	bottom: 7px;
 	height: 100%;
+}
+#game .players .bottom .card {
+	left: 0px;
+}
+#game .players .bottom .card div {
+	bottom: 0px;
 }
 #game .players .bottom .knocked {
 	bottom: 160px;
@@ -191,7 +208,7 @@
 	cursor: pointer;
 }
 #game .bottom .card.stack {
-	bottom: 150px;
+	bottom: 130px;
 	left: 21px !important;
 }
 #game .bottom .card.hand {
@@ -232,6 +249,11 @@
 	top: 8px;
 	width: 118px;
 }
+#game .players .top .area .flag {
+	top: 30px;
+	width: 118px;
+	left: 13px;
+}
 /* cards */
 #game .top .card div {
 	background: url(/gfx/game/cards_top.png);
@@ -240,7 +262,7 @@
 	background-position: -614px 0px;
 }
 #game .top .card.stack {
-	top: 160px;
+	top: 140px;
 	left: 24px !important;
 }
 #game .top .card.folded {
@@ -259,24 +281,31 @@
 }
 #game .players .vertical .area {
 	width: 148px;
-	height: 285px;
+	height: 296px;
 	top: 189px;
 }
 #game .players .vertical .cards {
-	top: 230px;
+	top: 240px;
 }
 #game .players .vertical .card {
+	width: 169px;
+	height: 127px;
+}
+#game .vertical .card div {
 	width: 129px;
 	height: 87px;
 }
 #game .players .vertical .card.stack {
-	top: 60px !important;
+	top: 40px !important;
 }
 #game .players .vertical .card.folded {
 	top: 60px !important;
 }
 #game .players .vertical .name {
 	top: 7px;
+}
+#game .players .vertical .flag {
+	top: 30px;
 }
 
 /** left **/
@@ -301,6 +330,9 @@
 #game .players .left .area .name {
 	left: 8px;
 }
+#game .players .left .area .flag {
+	left: 12px;
+}
 /* cards */
 #game .left .card div {
 	background: url(/gfx/game/cards_left.png);
@@ -322,6 +354,9 @@
 #game .players .right .cards {
 	right: 6px;
 }
+#game .players .right .card div {
+	right: 0px;
+}
 #game .players .right .area {
 	right: 100px;
 	background-position: -148px 0px;
@@ -329,9 +364,14 @@
 #game .players .right .area.shown {
 	right: 0px;
 }
+#game .players .right .area div {
+	text-align: right;
+}
 #game .players .right .area .name {
 	right: 8px;
-	text-align: right;
+}
+#game .players .right .area .flag {
+	right: 12px;
 }
 /* cards */
 #game .right .card div {
@@ -341,7 +381,7 @@
 	background-position: -516px -614px;
 }
 #game .right .card.stack {
-	right: 230px;
+	right: 190px;
 	top: 200px;
 }
 #game .right .card.folded {

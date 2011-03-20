@@ -25,6 +25,7 @@
 				<div class="left vertical">
 					<div class="area">
 						<div class="name"></div>
+						<div class="flag">legt auf</div>
 					</div>
 					<div class="cards"></div>
 					<div class="knocked"><div></div></div>
@@ -32,6 +33,7 @@
 				<div class="top horizontal">
 					<div class="area">
 						<div class="name"></div>
+						<div class="flag">legt auf</div>
 					</div>
 					<div class="cards"></div>
 					<div class="knocked"><div></div></div>
@@ -39,6 +41,7 @@
 				<div class="right vertical">
 					<div class="area">
 						<div class="name"></div>
+						<div class="flag">legt auf</div>
 					</div>
 					<div class="cards"></div>
 					<div class="knocked"><div></div></div>

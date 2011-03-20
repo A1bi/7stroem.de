@@ -62,7 +62,7 @@ if ($_GET['action'] == "create") {
 								  users AS u
 							WHERE g.host = u.id
 							  AND public = 1
-							  AND AND g.started = 0
+							  AND g.started = 0
 							  AND host != ?',
 						array($_user['id']));
 

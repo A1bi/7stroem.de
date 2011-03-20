@@ -13,25 +13,13 @@ switch ($_GET['action']) {
 								WHERE g.game = ?
 								  AND g.user = u.id',
 				array($_GET['game']));
+		$response['game'] = format::single($_GET['game'], array("esc"));
+		$response['users'] = array();
 		while ($user = $result->fetch()) {
-			// TODO: escape
-			$response[] = array("id" => $user['id'], "name" => $user['name']);
+			$user = format::complete($user, array("esc"));
+			$response['users'][] = array("id" => $user['id'], "name" => $user['name']);
 		}
 
-		break;
-
-	// start a game
-	// TODO: security !!! check if permitted!!!
-	case "startGame":
-		// initiate butler
-		loadComponent("butler");
-		$butler = new butler;
-
-		if ($butler->startGame($_GET['id'])) {
-			$response['result'] = "ok";
-		} else {
-			$response['result'] = "error";
-		}
 		break;
 
 	default:

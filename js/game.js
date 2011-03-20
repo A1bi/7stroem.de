@@ -3,18 +3,20 @@ var game = new function () {
 	var _this = this;
 	var players = [];
 	var playersCount = 0;
+	var playersSmallRound = 0;
 	var rounds = 0;
 	var queue = [];
 	this.turn = -1;
-	var knocked = -1;
+	var whoKnocked = -1;
+	var activeKnock = 0;
 	var blockExit = false;
 	var processing = false;
 
 	var positions = [];
-	positions[0] = {left: 0};
-	positions[1] = {top: 0};
-	positions[2] = {left: 0};
-	positions[3] = {top: 0};
+	positions[0] = "left";
+	positions[1] = "top";
+	positions[2] = "left";
+	positions[3] = "top";
 	var suits = [];
 	suits['h'] = 0;
 	suits['d'] = 1;
@@ -77,7 +79,16 @@ var game = new function () {
 			card.unbind("click");
 			// increase z to lay the card on top of the other cards
 			card.css({"z-index": $(".stack", dom).length+6});
+			// add switch class so the card will move onto stack
 			card.switchClass("hand", "stack", animationTime(500, true));
+			// also move the front to a random position inside the card container
+			pos = {"left": Math.round(Math.random() * 40), "top": Math.round(Math.random() * 40)};
+			if ($.browser.webkit) {
+				// webkit browser will animate on their own
+				card.find("div").css(pos);
+			} else {
+				card.find("div").animate(pos, {queue: false});
+			}
 		}
 
 		this.fold = function () {
@@ -94,14 +105,8 @@ var game = new function () {
 		var card = $("<div>").addClass("card hand").append($("<div>").addClass("back"), $("<div>").addClass("front"));
 
 		// add it to the players hand
-		pos = positions[place];
-		// TODO: den kram hier weg
-		$.each(pos, function (key, value) {
-			eval("pos."+key+" = i*50");
-			return false;
-		});
 		dom = $(".players > div").eq(place).find(".cards");
-		card.appendTo(dom).css(pos).delay(i*100).fadeIn(animationTime(400));
+		card.appendTo(dom).css(positions[place], i*50).delay(i*100).fadeIn(animationTime(400));
 
 	}
 
@@ -122,6 +127,18 @@ var game = new function () {
 			$(".card", dom).fadeOut(animationTime(400), function () {
 				$(this).remove();
 			});
+		}
+
+		var setFlag = function (flag) {
+			if (!flag) flag = "";
+			flagDom = $(".flag", dom);
+			if (flag == "") {
+				if (!flagDom.is(":hidden")) {
+					flagDom.fadeIn(animationTime(100));
+				}
+			} else {
+				flagDom.html(flag).fadeIn(animationTime(100));
+			}
 		}
 
 		this.startGame = function (i, p) {
@@ -173,6 +190,7 @@ var game = new function () {
 		this.roundStarted = function () {
 			strikes = 0;
 			dom.removeClass("out");
+			setFlag();
 			// pull out player area
 			$(".area", dom).addClass("shown", animationTime(500, true));
 		}
@@ -207,6 +225,11 @@ var game = new function () {
 			}, 1000);
 		}
 
+		this.blindKnocked = function () {
+			this.knocked();
+			alert("blind");
+		}
+
 		this.knockFinished = function () {
 			$(".knocked", dom).fadeOut(animationTime(400));
 		}
@@ -219,6 +242,7 @@ var game = new function () {
 
 		this.out = function () {
 			dom.addClass("out");
+			setFlag("raus");
 		}
 
 		this.quit = function () {
@@ -289,6 +313,23 @@ var game = new function () {
 		}
 	}
 
+	var decreaseKnock = function () {
+		//alert(activeKnock);
+		if (activeKnock == 1) {
+			players[whoKnocked].knockFinished();
+			whoKnocked = -1;
+		}
+		activeKnock--;
+	}
+
+	var knocked = function (player) {
+		if (!$(".blindKnock").is(":hidden")) {
+			$(".blindKnock").fadeOut(animationTime(400));
+		}
+		activeKnock = playersSmallRound-1;
+		whoKnocked = player;
+	}
+
 	var processQueue = function (next) {
 		if (processing && !next) {
 			return;
@@ -319,14 +360,11 @@ var game = new function () {
 					_this.turn = action.player;
 					players[_this.turn].toggleTurn();
 				}
-				if (knocked == action.player) {
-					players[action.player].knockFinished();
-					knocked = -1;
-				}
+				
 				// show knock button
-				if ($(".blindKnock").is(":hidden") || knocked != -1) {
+				if ($(".blindKnock").is(":hidden") || activeKnock > 0) {
 					if (action.player == userid) {
-						if (knocked != -1) {
+						if (activeKnock > 0) {
 							toggleActionBtn("call", true);
 							toggleActionBtn("fold", true);
 						} else {
@@ -350,8 +388,12 @@ var game = new function () {
 			case "smallRoundStarted":
 				toggleActionBtn("flipHand", true);
 				toggleActionBtn("blindKnock", true);
+				playersSmallRound = 0;
 				$.each(players, function (key, player) {
-					if (player != null) player.smallRoundStarted();
+					if (player != null) {
+						playersSmallRound++;
+						player.smallRoundStarted();
+					}
 				});
 				wait = 500;
 				break;
@@ -378,6 +420,7 @@ var game = new function () {
 			case "roundEnded":
 				logAction(players[action.player].name + " hat diese Runde gewonnen.");
 				$("#panel").removeClass("down", animationTime(500, true));
+				wait = 2000;
 				break;
 
 			case "out":
@@ -386,7 +429,7 @@ var game = new function () {
 				break;
 
 			case "smallRoundEnded":
-				knocked = -1;
+				activeKnock = 0;
 				$(".actions > div").fadeOut(animationTime(400));
 				wait = 2000;
 				waitFunction = function () {
@@ -402,15 +445,34 @@ var game = new function () {
 					toggleActionBtn("knock", false);
 					toggleActionBtn("fold", false);
 				}
+				decreaseKnock();
 				players[action.player].folded();
+				playersSmallRound--;
+				break;
+
+			case "called":
+				decreaseKnock();
 				break;
 
 			case "knocked":
-				if (!$(".blindKnock").is(":hidden")) {
-					$(".blindKnock").fadeOut(animationTime(400));
-				}
-				knocked = action.player;
+				knocked(action.player);
 				players[action.player].knocked();
+				break;
+
+			case "blindKnocked":
+				knocked(action.player);
+				players[action.player].blindKnocked();
+				break;
+
+			// a player left
+			case "playerQuit":
+				logAction(players[action.player].name + " hat das Spiel verlassen.");
+				players[action.player].quit();
+				// remove from list
+				delete players[action.player];
+				players[action.player] = null;
+				playersSmallRound--;
+				decreaseKnock();
 				break;
 
 		}
@@ -430,10 +492,7 @@ var game = new function () {
 
 	// received a chat message -> write it into chat box
 	var logChat = function (player, message) {
-		message = message.replace(/\{038;\}/g, "&amp;");
-		message = message.replace(/\{063;\}/g, "?");
-		message = message.replace(/\{035;\}/g, "#");
-		message = players[player].name + ": " + decodeURI(message);
+		message = players[player].name + ": " + decodeURIComponent(message);
 		logAction(message, "message");
 	}
 
@@ -450,7 +509,7 @@ var game = new function () {
 	// avoids too many ajax request at a time
 	var updatePlayerInfo = function (log) {
 		$.getJSON("ajax.php?action=getUserInfo&game=" + gameid, function (data) {
-			$.each(data, function (key, user) {
+			$.each(data.users, function (key, user) {
 				// only add player if he does not exist yet
 				if (players[user.id] == null) {
 					players[user.id] = new Player(user.id, user.name);
@@ -467,7 +526,7 @@ var game = new function () {
 	this.layStack = function (cardid) {
 		if (this.turn != userid) {
 			alert("Du bist nicht am Zug!");
-		} else if (knocked != -1) {
+		} else if (activeKnock > 0) {
 			alert("Du musst erst entscheiden, ob du mitgehst oder rausgehst!");
 		} else {
 			butler.registerAction("layStack", cardid);
@@ -491,15 +550,6 @@ var game = new function () {
 						updatePlayerInfo(true);
 						playersJoined = true;
 					}
-					break;
-
-				// a player left
-				case "playerQuit":
-					logAction(players[action.player].name + " hat das Spiel verlassen.");
-					players[action.player].quit();
-					// remove from list
-					delete players[action.player];
-					players[action.player] = null;
 					break;
 
 				// got updated number of strikes for user
@@ -654,12 +704,9 @@ var game = new function () {
 			}
 		});
 		$(".chat form").submit(function () {
-			message = $(this).find("input").val();
+			message = encodeURIComponent($(this).find("input").val());
+			if (message == "") return false;
 			$(this).find("input").val("");
-			// escape ? and & so they won't end the get argument
-			message = message.replace(/&/g, "{038;}");
-			message = message.replace(/\?/g, "{063;}");
-			message = message.replace(/#/g, "{035;}");
 			butler.registerAction("chat", message);
 			return false;
 		});
@@ -676,6 +723,9 @@ var game = new function () {
 			$("."+action).click(function () {
 				butler.registerAction(action);
 			});
+		});
+		$(".blindKnock .btn").click(function () {
+			butler.registerAction("blindKnock", $(".blindKnock select").val());
 		});
 
 		// start game box
@@ -705,16 +755,20 @@ var game = new function () {
 		setTimeout(function () {
 			players[1].flipHand(1, "c9");
 			players[1].laidStack("c9");
-			players[2].laidStack("h5");
+			players[3].laidStack("h5");
 			players[3].laidStack("s7");
-			players[4].laidStack("d5");
+			players[3].laidStack("d5");
+			players[3].laidStack("d6");
 			players[4].toggleTurn();
 		}, 3000);
 		setTimeout(function () {
-			players[2].knocked();
+			players[4].smallRoundEnded();
 		}, 4000);
 		setTimeout(function () {
-			players[2].knocked();
+			players[4].smallRoundStarted();
+		}, 5000);
+		setTimeout(function () {
+			players[4].laidStack("d6");
 		}, 6000);*/
 
 	});
