@@ -104,10 +104,7 @@
 						</table>
 					</div>
 					<div class="actions">
-						<div class="waiting">
-							<div>Du kannst nun eine neue Runde starten.</div>
-							<div>Bitte warte, bis der Spielleiter eine neue Runde startet.</div>
-						</div>
+						<div class="waiting">Bitte warte, bis der Spielleiter eine neue Runde startet.</div>
 						<div class="newRound action">&nbsp;</div>
 					</div>
 				</div>
