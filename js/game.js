@@ -7,9 +7,10 @@ var game = new function () {
 	var rounds = 0;
 	var queue = [];
 	this.turn = -1;
-	var whoKnocked = -1;
-	var activeKnock = 0;
+	var activeKnock = -1;
+	var knockPossible = true;
 	var poor = false;
+	var flipped = false;
 	var blockExit = false;
 	var processing = false;
 
@@ -316,7 +317,7 @@ var game = new function () {
 
 	}
 
-	var toggleActionBtn = function (action, show, time) {
+	var fadeActionBtn = function (action, show, time) {
 		if (time == undefined) time = 400;
 		if (show) {
 			$(".actions ."+action).fadeIn(animationTime(time));
@@ -325,20 +326,36 @@ var game = new function () {
 		}
 	}
 
-	var decreaseKnock = function () {
-		if (activeKnock == 1 && !poor) {
-			players[whoKnocked].knockFinished();
-			whoKnocked = -1;
+	var toggleActionBtn = function (action, show, time) {
+		if ((action == "knock" && !poor && knockPossible && flipped) || action != "knock") {
+			fadeActionBtn(action, show, time);
 		}
-		activeKnock--;
+		if (action == "call") {
+			fadeActionBtn("fold", show, time);
+			if (show) {
+				fadeActionBtn("knock", false, time);
+			}
+		}
+	}
+
+	var setTurn = function (player) {
+		// set turn
+		if (_this.turn != player) {
+			if (_this.turn > -1 && players[_this.turn] != null) players[_this.turn].toggleTurn();
+			_this.turn = player;
+			players[_this.turn].toggleTurn();
+		}
 	}
 
 	var knocked = function (player) {
-		if (!$(".blindKnock").is(":hidden") && !poor) {
-			$(".blindKnock").fadeOut(animationTime(400));
+		fadeActionBtn("blindKnock", false);
+		toggleActionBtn("knock", false);
+		activeKnock = player;
+		if (action.player == userid) {
+			knockPossible = false;
+		} else {
+			knockPossible = true;
 		}
-		activeKnock = playersSmallRound-1;
-		whoKnocked = player;
 	}
 
 	var processQueue = function (next) {
@@ -364,31 +381,28 @@ var game = new function () {
 				break;
 
 			case "turn":
-				// set turn
-				if (_this.turn != action.player) {
-					if (_this.turn > -1 && players[_this.turn] != null) players[_this.turn].toggleTurn();
-					_this.turn = action.player;
-					players[_this.turn].toggleTurn();
-				}
+				setTurn(action.player);
 				
-				// show knock button
-				if ($(".blindKnock").is(":hidden") || activeKnock > 0) {
-					if (action.player == userid) {
-						if (activeKnock > 0) {
-							toggleActionBtn("call", true);
-							toggleActionBtn("fold", true);
-						// knocking only possible when nobody is poor
-						} else if (!poor) {
-							toggleActionBtn("knock", true);
-						}
-					} else {
-						if (!$(".call").is(":hidden")) {
-							toggleActionBtn("call", false);
-							toggleActionBtn("fold", false);
-						}
-						toggleActionBtn("knock", false);
-					}
+				// finish knock ?
+				if (activeKnock > -1) {
+					players[activeKnock].knockFinished();
+					activeKnock = -1;
+					toggleActionBtn("call", false);
 				}
+				knock = false;
+				if (action.player == userid) {
+					knock = true;
+				}
+				toggleActionBtn("knock", knock);
+				break;
+
+			case "knockTurn":
+				setTurn(action.player);
+				call = false;
+				if (action.player == userid) {
+					call = true;
+				}
+				toggleActionBtn("call", call);
 				break;
 
 			// some player has laid on of his cards on his stack
@@ -398,21 +412,25 @@ var game = new function () {
 
 			case "smallRoundStarted":
 				playersSmallRound = 0;
+				knockPossible = true;
+				flipped = false;
 				$.each(players, function (key, player) {
 					if (player != null) {
 						playersSmallRound++;
 						player.smallRoundStarted();
 					}
 				});
-				toggleActionBtn("flipHand", true);
+				fadeActionBtn("flipHand", true);
 				if (!poor) {
-					toggleActionBtn("blindKnock", true);
+					fadeActionBtn("blindKnock", true);
 				} else {
 					knocked(-1);
 				}
 				break;
 
 			case "roundStarted":
+				// hide new round button
+				$("#strikes .newRound").hide();
 				blockExit = true;
 				rounds++;
 				row = $("<tr>");
@@ -439,6 +457,7 @@ var game = new function () {
 
 			case "roundEnded":
 				logAction(players[action.player].name + " hat diese Runde gewonnen.");
+				fadeActionBtn("knock", false, 100);
 				$.each(players, function (key, player) {
 					if (player != null) player.roundEnded();
 				});
@@ -463,7 +482,6 @@ var game = new function () {
 				break;
 
 			case "smallRoundEnded":
-				activeKnock = 0;
 				poor = false;
 				$(".actions > div").fadeOut(animationTime(400));
 				wait = 2000;
@@ -477,16 +495,16 @@ var game = new function () {
 
 			case "folded":
 				if (action.player == userid) {
-					toggleActionBtn("knock", false);
-					toggleActionBtn("fold", false);
+					toggleActionBtn("call", false);
 				}
-				decreaseKnock();
 				players[action.player].folded();
 				playersSmallRound--;
 				break;
 
 			case "called":
-				decreaseKnock();
+				if (action.player == userid) {
+					toggleActionBtn("call", false);
+				}
 				break;
 
 			case "knocked":
@@ -497,6 +515,7 @@ var game = new function () {
 			case "blindKnocked":
 				knocked(action.player);
 				players[action.player].blindKnocked(action.content);
+				fadeActionBtn("blindKnock", false);
 				break;
 
 			case "poor":
@@ -512,7 +531,6 @@ var game = new function () {
 				delete players[action.player];
 				players[action.player] = null;
 				playersSmallRound--;
-				decreaseKnock();
 				break;
 
 		}
@@ -651,9 +669,10 @@ var game = new function () {
 				}
 			// we received the player's cards'
 			} else if (response.cards != null) {
-				toggleActionBtn("flipHand", false, 200);
-				toggleActionBtn("blindKnock", false, 200);
-				if (this.turn == userid && !poor) {
+				fadeActionBtn("flipHand", false, 200);
+				fadeActionBtn("blindKnock", false, 200);
+				flipped = true;
+				if (this.turn == userid) {
 					toggleActionBtn("knock", true);
 				}
 				// show player his cards
@@ -668,8 +687,11 @@ var game = new function () {
 				case "admit":
 					alert("Du musst bekennen!");
 					break;
+				case "auth":
+					alert("Authentifizierung fehlgeschlagen!");
+					break;
 				default:
-					alert("unknown error");
+					alert("Es ist ein Fehler bei dieser Aktion aufgetreten. Versuchs noch mal :)");
 			}
 		}
 	}
@@ -773,7 +795,7 @@ var game = new function () {
 		// start game box
 		hostChanged();
 
-		/* testing
+		/* testing*/
 		players[1] = new Player(1, "Albi");
 		players[2] = new Player(2, "Bla");
 		players[3] = new Player(3, "Bla2");
@@ -793,10 +815,10 @@ var game = new function () {
 			players[3].laidStack("d6");
 		}, 3000);
 		setTimeout(function () {
-			queue.push({"player":"1", "action": "smallRoundEnded", "content": ""});
-			queue.push({"player":"1", "action": "roundEnded", "content": ""});
+			//queue.push({"player":"1", "action": "smallRoundEnded", "content": ""});
+			//queue.push({"player":"1", "action": "roundEnded", "content": ""});
 			processQueue(true);
-		}, 4000);*/
+		}, 4000);
 
 	});
 
