@@ -152,6 +152,28 @@
 #game .players .bottom .area.shown {
 	bottom: 0px;
 }
+#game .players .bottom .area .name {
+	bottom: 60px;
+	left: 490px;
+	font-size: 19px;
+}
+#game .players .bottom .area .flag {
+	bottom: 47px;
+	left: 493px;
+}
+#game .players .bottom .area .chat {
+	bottom: 14px;
+	right: 6px;
+}
+#game .players .bottom .area .chat input {
+	width: 108px;
+	height: 22px;
+	background-position: 0px -343px;
+	border: none;
+	padding-left: 20px;
+	padding-right: 6px;
+	padding-top: 2px;
+}
 #game .players .bottom .actions {
 	bottom: 0px;
 	left: 128px;
@@ -161,16 +183,32 @@
 	cursor: pointer;
 	display: none;
 }
-#game .players .bottom .fold {
-	bottom: 3px;
-	width: 167px;
-	height: 39px;
+#game .players .bottom .activeKnock {
+	bottom: 18px;
+	width: 240px;
+	height: 60px;
+	cursor: auto !important;
 }
-#game .players .bottom .call {
-	left: 10px;
-	bottom: 45px;
+#game .players .bottom .activeKnock div {
+	display: block;
+}
+#game .players .bottom .activeKnock .info {
+	left: 5px;
+	color: #e9e9e9;
+	font-size: 14px;
+	cursor: auto;
+}
+#game .players .bottom .activeKnock .fold {
+	bottom: 0px;
+	width: 120px;
+	height: 39px;
+	left: 0px;
+}
+#game .players .bottom .activeKnock .call {
+	left: 130px;
+	bottom: 0px;
 	background-position: 0px -167px;
-	width: 136px;
+	width: 100px;
 	height: 40px;
 }
 #game .players .bottom .knock {
@@ -495,7 +533,7 @@
 #panel .chat .input input {
 	width: 361px;
 }
-#panel .chat .input .inactive {
+.chat input.inactive {
 	font-style: italic;
 	color: #cccccc;
 }

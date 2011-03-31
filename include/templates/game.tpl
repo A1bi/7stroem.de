@@ -4,10 +4,21 @@
 			<div class="table">&nbsp;</div>
 			<div class="players">
 				<div class="bottom horizontal">
-					<div class="area"></div>
+					<div class="area">
+						<div class="name"></div>
+						<div class="flag"></div>
+						<div class="chat">
+							<form action="game.php" method="post">
+								<input type="text" name="message" value="Chat" class="action inactive" />
+							</form>
+						</div>
+					</div>
 					<div class="actions">
-						<div class="call action" title="mitgehen">&nbsp;</div>
-						<div class="fold action" title="rausgehen">&nbsp;</div>
+						<div class="activeKnock">
+							<div class="info"></div>
+							<div class="call action" title="mitgehen">&nbsp;</div>
+							<div class="fold action" title="rausgehen">&nbsp;</div>
+						</div>
 						<div class="knock action" title="klopfen">&nbsp;</div>
 						<div class="blindKnock">
 							<div class="number" title="Anzahl an Strichen, die du klopfst">
@@ -25,7 +36,7 @@
 				<div class="left vertical">
 					<div class="area">
 						<div class="name"></div>
-						<div class="flag">legt auf</div>
+						<div class="flag"></div>
 					</div>
 					<div class="cards"></div>
 					<div class="knocked"><div class="action"></div></div>
@@ -33,7 +44,7 @@
 				<div class="top horizontal">
 					<div class="area">
 						<div class="name"></div>
-						<div class="flag">legt auf</div>
+						<div class="flag"></div>
 					</div>
 					<div class="cards"></div>
 					<div class="knocked"><div class="action"></div></div>
@@ -41,7 +52,7 @@
 				<div class="right vertical">
 					<div class="area">
 						<div class="name"></div>
-						<div class="flag">legt auf</div>
+						<div class="flag"></div>
 					</div>
 					<div class="cards"></div>
 					<div class="knocked"><div class="action"></div></div>
@@ -119,4 +130,8 @@
 				</form>
 			</div>
 		</div>
+		<audio preload="auto" id="knockSfx">
+			<source src="/sfx/knock.ogg">
+			<source src="/sfx/knock.mp3">
+		</audio>
 {include file="foot.tpl"}
