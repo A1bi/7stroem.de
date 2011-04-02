@@ -96,10 +96,13 @@ var game = new function () {
 		}
 
 		this.fold = function () {
-			if (laid) {
-				remove = "stack";
+			if (laid || place == 0) {
 				$(".front", card).fadeOut(animationTime(300));
 				$(".back", card).fadeIn(animationTime(400));
+			}
+			if (laid) {
+				remove = "stack";
+				
 			} else {
 				remove = "hand";
 			}
@@ -149,11 +152,11 @@ var game = new function () {
 
 		this.startGame = function (i, p) {
 			place = p;
-			placeTable = i + 1;
+			placeTable = i;
 			dom = $(".players > div").eq(place);
 			// add player to strikes table
 			// +1 because first cell is for round number
-			tableDom = $("#strikes .top td").eq(placeTable);
+			tableDom = $("#strikes .top td").eq(placeTable+1);
 			tableDom.html(this.name);
 			// set player's name on the table
 			$(".name", dom).html(this.name);
@@ -183,8 +186,19 @@ var game = new function () {
 		}
 
 		// update the players entry in strikes table
-		this.updateStrikes = function (strikes) {
-			$("#strikes .sTable tr:last td").eq(placeTable).html(strikes);
+		this.updateStrikes = function (newState) {
+			for (i = strikes+1; i <= newState; i++) {
+				sDom = $("<div>").addClass("strike action");
+				if (i % 5 == 0) {
+					sDom.addClass("cross");
+				} else {
+					pos = 100 + Math.round(Math.random() * 7) * 5;
+					alert(i);
+					sDom.css("background-position", "-"+pos+"px -207px").css("left", i*6+"px");
+				}
+				$("#strikes .sTable tr:last td div").eq(placeTable).append(sDom);
+			}
+			strikes = newState;
 		}
 
 		// show cards in hand
@@ -444,6 +458,8 @@ var game = new function () {
 					// add first cell for round number
 					if (i == 0) {
 						cell.html(rounds);
+					} else {
+						cell.append($("<div>"));
 					}
 					row.append(cell);
 				}
@@ -617,7 +633,7 @@ var game = new function () {
 
 				// got updated number of strikes for user
 				case "strikes":
-					players[action.player].updateStrikes(action.content);
+					players[action.player].updateStrikes(parseInt(action.content));
 					break;
 
 				// received new chat message
@@ -833,7 +849,8 @@ var game = new function () {
 		}, 3000);
 		setTimeout(function () {
 			//queue.push({"player":"2", "action": "poor", "content": ""});
-			queue.push({"player":"1", "action": "knockTurn", "content": ""});
+			//queue.push({"player":"1", "action": "knockTurn", "content": ""});
+			players[1].updateStrikes("7");
 			//queue.push({"player":"1", "action": "smallRoundEnded", "content": ""});
 			//queue.push({"player":"1", "action": "roundEnded", "content": ""});
 			processQueue(true);

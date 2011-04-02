@@ -121,7 +121,7 @@
 				</div>
 			</div>
 			<div class="chat">
-				<div class="head">Chat</div>
+				<div class="head">Spielprotokoll</div>
 				<div class="log"></div>
 				<form action="game.php" method="post">
 				<div class="input">

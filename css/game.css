@@ -548,6 +548,15 @@
 #panel #strikes table td {
 	text-align: center;
 	border-left: 2px #363636 solid;
+	padding: 0px;
+}
+#panel #strikes .sTable table td {
+	height: 27px;
+}
+#panel #strikes .sTable table div {
+	height: 25px;
+	margin-top: 1px;
+	margin-left: 7px;
 }
 #panel #strikes table td.quit {
 	text-decoration: line-through;
@@ -573,6 +582,15 @@
 }
 #panel #strikes .sTable.smaller {
 	height: 75%;
+}
+#panel #strikes .strike {
+	position: absolute;
+	width: 5px;
+	height: 25px;
+}
+#panel #strikes .strike.cross {
+	width: 33px;
+	background-position: -143px -207px;
 }
 #panel #strikes .actions {
 	margin-top: 6px;
