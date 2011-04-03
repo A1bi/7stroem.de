@@ -590,6 +590,7 @@
 }
 #panel #strikes .strike.cross {
 	width: 33px;
+	left: 1px;
 	background-position: -143px -207px;
 }
 #panel #strikes .actions {

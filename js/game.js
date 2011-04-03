@@ -124,7 +124,7 @@ var game = new function () {
 		this.id = i;
 		this.name = n;
 		var _this = this;
-		var strikes = 0;
+		this.strikes = 0;
 		var place = 0;
 		var placeTable = 0;
 		var dom;
@@ -187,18 +187,17 @@ var game = new function () {
 
 		// update the players entry in strikes table
 		this.updateStrikes = function (newState) {
-			for (i = strikes+1; i <= newState; i++) {
+			for (i = this.strikes+1; i <= newState; i++) {
 				sDom = $("<div>").addClass("strike action");
 				if (i % 5 == 0) {
 					sDom.addClass("cross");
 				} else {
 					pos = 100 + Math.round(Math.random() * 7) * 5;
-					alert(i);
 					sDom.css("background-position", "-"+pos+"px -207px").css("left", i*6+"px");
 				}
-				$("#strikes .sTable tr:last td div").eq(placeTable).append(sDom);
+				$("#strikes .sTable tr:last td > div").eq(placeTable).append(sDom);
 			}
-			strikes = newState;
+			this.strikes = newState;
 		}
 
 		// show cards in hand
@@ -208,7 +207,7 @@ var game = new function () {
 		}
 
 		this.roundStarted = function () {
-			strikes = 0;
+			this.strikes = 0;
 			dom.removeClass("out");
 			setFlag();
 			// pull out player area
@@ -441,6 +440,12 @@ var game = new function () {
 				});
 				fadeActionBtn("flipHand", true);
 				if (!poor) {
+					// update strike selection
+					knockDom = $(".blindKnock select");
+					knockDom.empty();
+					for (i = 1; i <= 7-players[userid].strikes; i++) {
+						knockDom.append($("<option>").html(i));
+					}
 					fadeActionBtn("blindKnock", true);
 				} else {
 					knocked(-1);

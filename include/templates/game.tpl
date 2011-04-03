@@ -22,7 +22,7 @@
 						<div class="knock action" title="klopfen">&nbsp;</div>
 						<div class="blindKnock">
 							<div class="number" title="Anzahl an Strichen, die du klopfst">
-								<select name="knocks"><option>1</option><option>2</option></select>
+								<select name="knocks"></select>
 							</div>
 							<div class="btn action" title="blind klopfen">
 								&nbsp;
