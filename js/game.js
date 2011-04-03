@@ -131,6 +131,7 @@ var game = new function () {
 		var listDom;
 		var tableDom;
 		var cards = [];
+		var bubble = new Bubble;
 
 		var removeCards = function () {
 			$(".card", dom).fadeOut(animationTime(400), function () {
@@ -159,7 +160,33 @@ var game = new function () {
 			tableDom = $("#strikes .top td").eq(placeTable+1);
 			tableDom.html(this.name);
 			// set player's name on the table
-			$(".name", dom).html(this.name);
+			nameDom = $(".name", dom);
+			nameDom.html(this.name);
+			// position info bubble
+			switch (place) {
+				case 0:
+					at = "left top";
+					my = "right bottom";
+					tri = "bottom r";
+					break;
+				case 1:
+					at = "right center";
+					my = "left top";
+					tri = "left t";
+					break;
+				case 2:
+					at = "bottom center";
+					my = "left top";
+					tri = "top l";
+					break;
+				case 3:
+					at = "left center";
+					my = "right top";
+					tri = "right t";
+					break;
+			}
+			bubble.setPosition(nameDom, at, my, tri);
+			bubble.autoHide = 3000;
 		}
 
 		// set or unset that it is this player's turn
@@ -287,6 +314,14 @@ var game = new function () {
 				this.roundEnded();
 			}
 
+		}
+
+		this.chat = function (msg) {
+			if (!$(".area", dom).is(".shown")) return;
+			bubble.setContent(msg);
+			bubble.setType("info");
+			bubble.setIcon("chat");
+			bubble.show();
 		}
 
 		// add player to list
@@ -576,7 +611,7 @@ var game = new function () {
 
 	// received a chat message -> write it into chat box
 	var logChat = function (player, message) {
-		message = players[player].name + ": " + decodeURIComponent(message);
+		message = players[player].name + ": " + message;
 		logAction(message, "message");
 	}
 
@@ -643,7 +678,10 @@ var game = new function () {
 
 				// received new chat message
 				case "chat":
-					logChat(action.player, action.content);
+					// make sure to decode and escape to prevent XSS
+					decoded = $("<div>").text(decodeURIComponent(action.content)).html();
+					logChat(action.player, decoded);
+					players[action.player].chat(decoded);
 					break;
 
 				// host has changed to another player

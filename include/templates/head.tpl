@@ -43,6 +43,7 @@
 		<div class="shadow_right">&nbsp;</div>
 		<div class="shadow_bottom">&nbsp;</div>
 	</div>
+	<div class="bubbles"></div>
 	<div class="pspace">
 		<div class="bg">&nbsp;</div>
 		<div class="foot">

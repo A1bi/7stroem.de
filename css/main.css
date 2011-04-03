@@ -156,3 +156,107 @@ p {
 	background: url(/gfx/box1_bottom.png) no-repeat;
 	height: 82px;
 }
+
+/* info and error bubbles */
+.bubbles {
+	position: absolute;
+	z-index: 90;
+}
+.bubbles .bubble {
+	position: absolute;
+	visibility: hidden;
+}
+.bubbles .bubble.info .space {
+	background: #ffffff;
+	color: #000000;
+}
+.bubbles .bubble.error .space {
+	background: #ff0000;
+	color: #ffffff;
+}
+.bubbles .bubble .space {
+	position: relative;
+	border-radius: 8px;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	box-shadow: 0px 0px 5px 1px #767676;
+	-moz-box-shadow: 0px 0px 5px 1px #767676;
+	-webkit-box-shadow: 0px 0px 5px 1px #767676;
+	min-height: 40px;
+	min-width: 130px;
+}
+.bubbles .bubble .space .icon {
+	position: absolute;
+	top: 5px;
+	left: 6px;
+	width: 33px;
+	height: 29px;
+	background: url(/gfx/bubbles_icons.png) no-repeat;
+}
+.bubbles .bubble .space .text {
+	white-space: nowrap;
+	padding: 10px 10px 10px 10px;
+}
+.bubbles .bubble .space.i .text {
+	margin-left: 30px;
+}
+.bubbles .bubble .triangle {
+	border-style: solid;
+	height: 0px;
+	width: 0px;
+	position: absolute;
+	border-color: transparent;
+	z-index: 91;
+}
+.bubbles .bubble.top .triangle {
+	border-width: 15px;
+	top: -30px;
+}
+.bubbles .bubble.bottom .triangle {
+	border-width: 15px;
+	bottom: -30px;
+}
+.bubbles .bubble.right .triangle {
+	border-width: 12px;
+	right: -24px;
+}
+.bubbles .bubble.left .triangle {
+	border-width: 12px;
+	left: -24px;
+}
+.bubbles .bubble.l .triangle {
+	left: 20px;
+}
+.bubbles .bubble.r .triangle {
+	right: 20px;
+}
+.bubbles .bubble.t .triangle {
+	top: 8px;
+}
+.bubbles .bubble.b .triangle {
+	bottom: 6px;
+}
+.bubbles .bubble.top.info .triangle {
+	border-bottom-color: #ffffff;
+}
+.bubbles .bubble.top.error .triangle {
+	border-bottom-color: #ff0000;
+}
+.bubbles .bubble.bottom.info .triangle {
+	border-top-color: #ffffff;
+}
+.bubbles .bubble.bottom.error .triangle {
+	border-top-color: #ff0000;
+}
+.bubbles .bubble.left.info .triangle {
+	border-right-color: #ffffff;
+}
+.bubbles .bubble.left.error .triangle {
+	border-right-color: #ff0000;
+}
+.bubbles .bubble.right.info .triangle {
+	border-left-color: #ffffff;
+}
+.bubbles .bubble.right.error .triangle {
+	border-left-color: #ff0000;
+}
