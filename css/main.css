@@ -57,6 +57,17 @@ p {
 	padding-right: 10px;
 	font-size: 14px;
 }
+.header .right .userbox .credit {
+	-webkit-transition-property: background;
+	-webkit-transition-duration: .4s;
+	-webkit-transition-timing-function: ease-out;
+	-moz-transition-property: background;
+	-moz-transition-duration: .4s;
+	-moz-transition-timing-function: ease-out;
+}
+.header .right .userbox .credit.updating {
+	background: #ff0000;
+}
 .header .shadow_left {
 	position: absolute;
 	left: -46px;

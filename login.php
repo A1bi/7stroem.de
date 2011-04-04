@@ -4,6 +4,7 @@ include('include/main.php');
 // logout
 if ($_GET['action'] == "logout") {
 	unset($_SESSION['user']);
+	showInfo("Du hast dich erfolgreich ausgeloggt!<br />Schau nochmal rein :)<br />Bis dann!");
 
 // login
 } else {
@@ -19,7 +20,12 @@ if ($_GET['action'] == "logout") {
 		if (!empty($user['id'])) {
 			// store in session
 			$_SESSION['user'] = array("id" => $user['id'], "pass" => $hash);
+			showInfo("Grüß dich, ".htmlspecialchars($_POST['name'])."!");
 			redirectTo("games.php");
+
+		// not found - login incorrect
+		} else {
+			showError("Benutzername oder Passwort stimmt nicht!<br />Versuchs einfach nochmal.", ".login table td:first", "left center", "right top", "right t");
 		}
 	}
 }

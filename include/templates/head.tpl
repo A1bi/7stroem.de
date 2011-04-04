@@ -16,14 +16,21 @@
 {/if}
 	<script type="text/javascript" src="/js/fw/jquery.js"></script>
 	<script type="text/javascript" src="/js/fw/jquery-ui.js"></script>
+	<script type="text/javascript" src="/js/fw/modernizr.js"></script>
 	<script type="text/javascript" src="/js/main.js"></script>
 {if $jsfile != ""}
 	<script type="text/javascript" src="/js/{$jsfile}.js{fileVersion file="/js/{$jsfile}.js"}"></script>
 {/if}
-{if $js != ""}
+{if $js != "" || $bubble != ""}
 	<script type="text/javascript">
 {$js}
+{if $bubble != ""}
+		var bubble = [];
+		bubble['msg'] = "{$bubble.msg}";
+		bubble['type'] = "{$bubble.type}";
+		{if $bubble.pos != ""}bubble['pos'] = {$bubble.pos};{/if}
 
+{/if}
 	</script>
 {/if}
 </head>

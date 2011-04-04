@@ -22,6 +22,11 @@ switch ($_GET['action']) {
 
 		break;
 
+	// get user credit
+	case "getCredit":
+		$response['credit'] = formatCredit($_user['credit']);
+		break;
+
 	default:
 		$response['error'] = "unknown action";
 		break;

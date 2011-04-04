@@ -70,6 +70,27 @@ function kickGuests() {
 	}
 }
 
+function createBubble($msg, $type, $of = "", $at = "", $my = "", $tri = "", $off = "") {
+	$_SESSION['bubble'] = array();
+	$_SESSION['bubble']['msg'] = $msg;
+	$_SESSION['bubble']['type'] = $type;
+	if (!empty($of)) {
+		$pos = array("of" => $of, "at" => $at, "my" => $my, "tri" => $tri, "offset" => $off);
+		$_SESSION['bubble']['pos'] = json_encode($pos);
+	}
+}
+
+/**
+ * saves an error in the session and displays it on the next page
+ */
+function showError($msg, $of = "", $at = "", $my = "", $tri = "", $off = "") {
+	createBubble($msg, "error", $of, $at, $my, $tri, $off);
+}
+
+function showInfo($msg, $of = "", $at = "", $my = "", $tri = "", $off = "") {
+	createBubble($msg, "info", $of, $at, $my, $tri, $off);
+}
+
 $_base = $_SERVER['DOCUMENT_ROOT'];
 
 // components to load
@@ -118,6 +139,12 @@ if (!defined("NO_SESSION")) {
 			// not correct -> delete session
 			unset($_SESSION['user']);
 		}
+	}
+
+	// check if error present
+	if (is_array($_SESSION['bubble'])) {
+		$_tpl->assign("bubble", $_SESSION['bubble']);
+		unset($_SESSION['bubble']);
 	}
 }
 

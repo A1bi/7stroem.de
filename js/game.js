@@ -65,9 +65,9 @@ var game = new function () {
 			// add active class so hover event gets triggered
 			card.addClass("active");
 			// set correct background and fade in
-			front = $(".front", card).css("background-position", getBackground()).delay(200).fadeIn(animationTime(200));
+			front = $(".front", card).css("background-position", getBackground()).delay(200).fadeIn(main.animationTime(200));
 			// hide back
-			$(".back", card).delay(300).fadeOut(animationTime(100));
+			$(".back", card).delay(300).fadeOut(main.animationTime(100));
 			if (place == 0) {
 				// register click and hover events only for this player
 				card.click(function () {
@@ -80,14 +80,14 @@ var game = new function () {
 		this.layStack = function () {
 			laid = true;
 			// remove click events
-			card.unbind("click");
+			card.unbind("click").removeClass("active");
 			// increase z to lay the card on top of the other cards
 			card.css({"z-index": $(".stack", dom).length+6});
 			// add switch class so the card will move onto stack
-			card.switchClass("hand", "stack", animationTime(500, true));
+			card.switchClass("hand", "stack", main.animationTime(500, true));
 			// also move the front to a random position inside the card container
 			pos = {"left": Math.round(Math.random() * 40), "top": Math.round(Math.random() * 40)};
-			if ($.browser.webkit) {
+			if (Modernizr.csstransitions) {
 				// webkit browser will animate on their own
 				card.find("div").css(pos);
 			} else {
@@ -97,8 +97,8 @@ var game = new function () {
 
 		this.fold = function () {
 			if (laid || place == 0) {
-				$(".front", card).fadeOut(animationTime(300));
-				$(".back", card).fadeIn(animationTime(400));
+				$(".front", card).fadeOut(main.animationTime(300));
+				$(".back", card).fadeIn(main.animationTime(400));
 			}
 			if (laid) {
 				remove = "stack";
@@ -106,14 +106,14 @@ var game = new function () {
 			} else {
 				remove = "hand";
 			}
-			card.switchClass(remove, "folded", animationTime(500, true));
+			card.switchClass(remove, "folded", main.animationTime(500, true));
 		}
 
 		var card = $("<div>").addClass("card hand").append($("<div>").addClass("back"), $("<div>").addClass("front"));
 
 		// add it to the players hand
 		dom = $(".players > div").eq(place).find(".cards");
-		card.appendTo(dom).css(positions[place], i*50).delay(i*100).fadeIn(animationTime(400));
+		card.appendTo(dom).css(positions[place], i*50).delay(i*100).fadeIn(main.animationTime(400));
 
 	}
 
@@ -127,6 +127,7 @@ var game = new function () {
 		this.strikes = 0;
 		var place = 0;
 		var placeTable = 0;
+		var out;
 		var dom;
 		var listDom;
 		var tableDom;
@@ -134,7 +135,7 @@ var game = new function () {
 		var bubble = new Bubble;
 
 		var removeCards = function () {
-			$(".card", dom).fadeOut(animationTime(400), function () {
+			$(".card", dom).fadeOut(main.animationTime(400), function () {
 				$(this).remove();
 			});
 		}
@@ -144,10 +145,10 @@ var game = new function () {
 			flagDom = $(".flag", dom);
 			if (flag == "") {
 				if (!flagDom.is(":hidden")) {
-					flagDom.fadeIn(animationTime(100));
+					flagDom.fadeIn(main.animationTime(100));
 				}
 			} else {
-				flagDom.html(flag).fadeIn(animationTime(100));
+				flagDom.html(flag).fadeIn(main.animationTime(100));
 			}
 		}
 
@@ -185,13 +186,13 @@ var game = new function () {
 					tri = "right t";
 					break;
 			}
-			bubble.setPosition(nameDom, at, my, tri);
+			bubble.setPosition({of: nameDom, at: at, my: my, tri: tri});
 			bubble.autoHide = 3000;
 		}
 
 		// set or unset that it is this player's turn
 		this.toggleTurn = function () {
-			$(".name", dom).toggleClass("turn", animationTime(500, true));
+			$(".name", dom).toggleClass("turn", main.animationTime(500, true));
 		}
 
 		// user has laid a card on his stack
@@ -236,18 +237,20 @@ var game = new function () {
 		this.roundStarted = function () {
 			this.strikes = 0;
 			dom.removeClass("out");
+			out = false;
 			setFlag();
 			// pull out player area
-			$(".area", dom).addClass("shown", animationTime(500, true));
+			$(".area", dom).addClass("shown", main.animationTime(500, true));
 		}
 
 		this.roundEnded = function () {
 			// pull back player area
-			$(".area", dom).removeClass("shown", animationTime(500, true));
+			$(".area", dom).removeClass("shown", main.animationTime(500, true));
 		}
 
 		// 
 		this.smallRoundStarted = function () {
+			if (out) return;
 			// give cards
 			for (i = 0; i < 4; i++) {
 				cards[i] = new Card(place, i);
@@ -262,15 +265,15 @@ var game = new function () {
 		this.knocked = function () {
 			knockDom = $(".knocked", dom);
 			$("div", knockDom).removeClass("down");
-			knockDom.removeClass("down").fadeIn(animationTime(200));
+			knockDom.removeClass("down").fadeIn(main.animationTime(200));
 			setTimeout(function () {
-				$("div", knockDom).addClass("down", animationTime(100, true), "easeInQuint");
+				$("div", knockDom).addClass("down", main.animationTime(100, true), "easeInQuint");
 			}, 0);
 			setTimeout(function () {
 				$("#knockSfx").get(0).play();
 			}, 100);
 			setTimeout(function () {
-				knockDom.addClass("down", animationTime(400, true));
+				knockDom.addClass("down", main.animationTime(400, true));
 			}, 1000);
 		}
 
@@ -280,7 +283,7 @@ var game = new function () {
 		}
 
 		this.knockFinished = function () {
-			$(".knocked", dom).fadeOut(animationTime(400));
+			$(".knocked", dom).fadeOut(main.animationTime(400));
 			$(".knocked div", dom).html("");
 		}
 
@@ -295,6 +298,7 @@ var game = new function () {
 		}
 
 		this.out = function () {
+			out = true;
 			dom.addClass("out");
 			setFlag("raus");
 		}
@@ -370,9 +374,9 @@ var game = new function () {
 	var fadeActionBtn = function (action, show, time) {
 		if (time == undefined) time = 400;
 		if (show) {
-			$(".actions ."+action).fadeIn(animationTime(time));
+			$(".actions ."+action).fadeIn(main.animationTime(time));
 		} else {
-			$(".actions ."+action).fadeOut(animationTime(time));
+			$(".actions ."+action).fadeOut(main.animationTime(time));
 		}
 	}
 
@@ -503,10 +507,14 @@ var game = new function () {
 					}
 					row.append(cell);
 				}
-				$("#panel").addClass("down", animationTime(500, true));
+				$("#panel").addClass("down", main.animationTime(500, true));
 				strikesDom = $("#strikes");
 				$("actions", strikesDom).hide();
 				$(".sTable", strikesDom).removeClass("smaller").find("table").append(row);
+
+				// update user credit in userbox
+				main.userbox.updateCredit();
+				
 				wait = 700;
 				waitFunction = function () {
 					$.each(players, function (key, player) {
@@ -522,7 +530,7 @@ var game = new function () {
 				$.each(players, function (key, player) {
 					if (player != null) player.roundEnded();
 				});
-				$("#panel").removeClass("down", animationTime(500, true));
+				$("#panel").removeClass("down", main.animationTime(500, true));
 				strikesDom = $("#strikes");
 				actionsDom = $(".actions", strikesDom);
 				$(".sTable", strikesDom).addClass("smaller");
@@ -535,6 +543,12 @@ var game = new function () {
 				}
 				actionsDom.show();
 				blockExit = false;
+
+				// update user credit in userbox if this user has won
+				if (action.player == userid) {
+					main.userbox.updateCredit();
+				}
+
 				break;
 
 			case "out":
@@ -544,7 +558,7 @@ var game = new function () {
 
 			case "smallRoundEnded":
 				poor = false;
-				$(".actions > div").fadeOut(animationTime(400));
+				$(".actions > div").fadeOut(main.animationTime(400));
 				wait = 2000;
 				waitFunction = function () {
 					$.each(players, function (key, player) {
@@ -772,7 +786,7 @@ var game = new function () {
 	}
 
 	var finishStart = function () {
-		$("#overview").fadeOut(animationTime(400));
+		$("#overview").fadeOut(main.animationTime(400));
 		i = 0;
 		$.each(players, function (key, player) {
 			if (player != null) {
@@ -794,7 +808,7 @@ var game = new function () {
 				i++;
 			}
 		});
-		$("#strikes").delay(500).fadeIn(animationTime(400));
+		$("#strikes").delay(500).fadeIn(main.animationTime(400));
 	}
 
 
@@ -812,7 +826,7 @@ var game = new function () {
 		$("#loading").hide();
 
 		// show panel
-		$("#panel").delay(200).fadeIn(animationTime(400));
+		$("#panel").delay(200).fadeIn(main.animationTime(400));
 		
 		// initiate butler
 		butler.getActions();

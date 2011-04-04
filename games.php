@@ -25,6 +25,7 @@ if ($_GET['action'] == "create") {
 	if (!$butler->createGame($id, $_user['id'])) {
 		// could not create -> remove entry from db
 		$_db->query('DELETE FROM games WHERE id = ?', array($id));
+		showError("Da ist was schief gelaufen..<br />Wir konnten das Spiel nicht für dich eröffnen.<br />Versuchs einfach nochmal :)", ".create", "right bottom", "right top", "top r", "-40 -20");
 		redirectTo("games.php");
 	} else {
 		// redirect to game
