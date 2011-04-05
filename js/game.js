@@ -166,27 +166,31 @@ var game = new function () {
 			// position info bubble
 			switch (place) {
 				case 0:
-					at = "left top";
+					at = "right top";
 					my = "right bottom";
 					tri = "bottom r";
+					offset = "10 -35";
 					break;
 				case 1:
-					at = "right center";
+					at = "right top";
 					my = "left top";
 					tri = "left t";
+					offset = "0 0";
 					break;
 				case 2:
-					at = "bottom center";
+					at = "left bottom";
 					my = "left top";
 					tri = "top l";
+					offset = "0 10";
 					break;
 				case 3:
-					at = "left center";
+					at = "left top";
 					my = "right top";
 					tri = "right t";
+					offset = "0 0";
 					break;
 			}
-			bubble.setPosition({of: nameDom, at: at, my: my, tri: tri});
+			bubble.pos = {of: nameDom, at: at, my: my, tri: tri, offset: offset};
 			bubble.autoHide = 3000;
 		}
 
@@ -344,12 +348,17 @@ var game = new function () {
 		var addr = "192.168.10.10:4926";
 		// number of last action we got from the butler
 		this.lastAction = 0;
+		var requesting = false;
 
 		// connect to server and make a request
 		var makeRequest = function (request, arguments) {
 			// get javascript with data from butler
 			url = "http://" + addr + "/player?gId=" + gameid + "&pId=" + userid + "&authcode=" + authcode + "&request=" + request + "&" + arguments;
-			$.getScript(url);
+			$.getScript(url, function () {
+				if (request != "getActions") {
+					requesting = false;
+				}
+			});
 		}
 		
 		// receive all actions since lastAction
@@ -359,13 +368,16 @@ var game = new function () {
 
 		// register an action
 		this.registerAction = function (action, content) {
+			if (requesting) return;
 			if (content == null) content = "";
+			requesting = true;
 			makeRequest("registerAction", "action=" + action + "&content=" + content);
 		}
 
 		// register host action
 		this.registerHostAction = function (action) {
-			if (content == null) content = "";
+			if (requesting) return;
+			requesting = true;
 			makeRequest("registerHostAction", "action=" + action);
 		}
 
@@ -387,6 +399,10 @@ var game = new function () {
 		if (action == "activeKnock" && show) {
 			fadeActionBtn("knock", false, time);
 		}
+	}
+
+	var showError = function (msg) {
+		main.showBubble("error", msg, {of: $(".area"), at: "center top", my: "left bottom", tri: "bottom l"}, 4000);
 	}
 
 	var setTurn = function (player) {
@@ -482,7 +498,7 @@ var game = new function () {
 					// update strike selection
 					knockDom = $(".blindKnock select");
 					knockDom.empty();
-					for (i = 1; i <= 7-players[userid].strikes; i++) {
+					for (i = 1; i <= 6-players[userid].strikes; i++) {
 						knockDom.append($("<option>").html(i));
 					}
 					fadeActionBtn("blindKnock", true);
@@ -492,8 +508,8 @@ var game = new function () {
 				break;
 
 			case "roundStarted":
-				// hide new round button
-				$("#strikes .newRound").hide();
+				// hide new round actions
+				$("#strikes .actions").hide();
 				blockExit = true;
 				rounds++;
 				row = $("<tr>");
@@ -541,6 +557,7 @@ var game = new function () {
 					$(".newRound", actionsDom).hide();
 					$(".waiting", actionsDom).show();
 				}
+				$("#strikes .actions").show();
 				actionsDom.show();
 				blockExit = false;
 
@@ -658,9 +675,9 @@ var game = new function () {
 	// user wants to lay a card on stack
 	this.layStack = function (cardid) {
 		if (this.turn != userid) {
-			alert("Du bist nicht am Zug!");
+			showError("Du bist nicht am Zug!");
 		} else if (activeKnock > 0) {
-			alert("Du musst erst entscheiden, ob du mitgehst oder rausgehst!");
+			showError("Du musst erst entscheiden, ob du mitgehst oder rausgehst!");
 		} else {
 			butler.registerAction("layStack", cardid);
 		}
@@ -703,13 +720,19 @@ var game = new function () {
 					host = action.player;
 					logAction(players[host].name + " ist der neue Leiter des Spiels.");
 					hostChanged();
+					if (host == userid) {
+						msg = "Du bist nun Leiter des Spiels, da der bisherige Leiter das Spiel verlassen hat!";
+					} else {
+						msg = players[host].name + " ist nun Leiter des Spiels, da der bisherige Leiter das Spiel verlassen hat!";
+					}
+					main.showBubble("info", msg, "", 10000);
 					break;
 
 				// game has finished because only this player is left
 				case "finished":
 					finished = true;
 					blockExit = false;
-					alert("Spiel ist beendet!");
+					main.showBubble("error", "Du bist nun der letzte Spieler im Spiel und hast damit automatisch gewonnen!<br />Das Spiel ist hiermit beendet.", "", 0);
 					break;
 
 				// everything else has to be queued
@@ -724,7 +747,7 @@ var game = new function () {
 		processQueue(false);
 
 		// next request
-		if (!finished) butler.getActions();
+		butler.getActions();
 
 	}
 
@@ -763,13 +786,13 @@ var game = new function () {
 		} else if (response.result == "error") {
 			switch (response.error.id) {
 				case "admit":
-					alert("Du musst bekennen!");
+					showError("Du musst bekennen!");
 					break;
 				case "auth":
-					alert("Authentifizierung fehlgeschlagen!");
+					main.showBubble("error", "Authentifizierung fehlgeschlagen!", "", 0);
 					break;
 				default:
-					alert("Es ist ein Fehler bei dieser Aktion aufgetreten. Versuchs noch mal :)");
+					showError("Es ist ein Fehler bei dieser Aktion aufgetreten. Versuchs noch mal :)");
 			}
 		}
 	}
@@ -813,9 +836,8 @@ var game = new function () {
 
 
 	var start = function () {
-		// TODO: bitte warten anzeigen
 		if (playersCount < 2) {
-			alert("Zu wenig Spieler!");
+			main.showBubble("error", "Es müssen mindestens zwei Spieler anwesend sein.", {of: $(".startBtn"), at: "center bottom", my: "left top", tri: "top l", offset: "-30 -10"}, 4000);
 			return;
 		}
 		butler.registerHostAction("startGame");
@@ -897,20 +919,16 @@ var game = new function () {
 			processQueue(true);
 		}, 1500);
 		setTimeout(function () {
-			players[1].flipHand(1, "c9");
-			players[1].laidStack("c9");
-			players[3].laidStack("h5");
-			players[3].laidStack("s7");
-			players[3].laidStack("d5");
-			players[3].laidStack("d6");
+			players[4].chat("test");
 		}, 3000);
 		setTimeout(function () {
 			//queue.push({"player":"2", "action": "poor", "content": ""});
 			//queue.push({"player":"1", "action": "knockTurn", "content": ""});
-			players[1].updateStrikes("7");
+			//queue.push({"player":"1", "action": "turn", "content": ""});
+			showError("hallo!", ".area");
 			//queue.push({"player":"1", "action": "smallRoundEnded", "content": ""});
 			//queue.push({"player":"1", "action": "roundEnded", "content": ""});
-			processQueue(true);
+			//processQueue(true);
 		}, 4000);*/
 
 	});

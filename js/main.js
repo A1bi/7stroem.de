@@ -1,5 +1,7 @@
 var main = new function () {
 
+	var _this = this;
+
 	this.animationTime = function (time, dependend) {
 		if ((dependend && Modernizr.csstransitions) || navigator.platform.indexOf("iPhone") != -1 || navigator.platform.indexOf("iPod") != -1) {
 			time = 0;
@@ -11,10 +13,10 @@ var main = new function () {
 
 		this.updateCredit = function () {
 			$.getJSON("ajax.php?action=getCredit", function (data) {
-				dom = $(".userbox .credit").addClass("updating", main.animationTime(400, true));
+				dom = $(".userbox .credit").addClass("updating", _this.animationTime(400, true));
 				setTimeout(function () {
 					dom.html(data.credit);
-					dom.removeClass("updating", main.animationTime(400, true));
+					dom.removeClass("updating", _this.animationTime(400, true));
 				}, 405);
 			});
 
@@ -23,32 +25,34 @@ var main = new function () {
 	}
 
 	this.showBubble = function (type, content, pos, hide) {
+		if (hide == undefined) {
+			if (pos == undefined) {
+				hide = 4000;
+			} else {
+				hide = 0;
+			}
+		}
+		if (pos == undefined || pos == "") {
+			pos = {
+				of: $(".header .left"), at: "left bottom", my: "left top", tri: "top l", offset: "50 -24"
+			};
+		}
 		bubble = new Bubble;
 		bubble.setType(type);
 		bubble.setContent(content);
-		bubble.setPosition(pos);
+		bubble.pos = pos;
 		bubble.autoHide = hide;
+		bubble.destroy = true;
 		bubble.show();
 	}
 
 	$(function () {
 		// check if errors present
 		if (window.bubble != undefined) {
-			if (bubble['autoHide'] == undefined) {
-				if (bubble['pos'] == undefined) {
-					bubble['autoHide'] = 4000;
-				} else {
-					bubble['autoHide'] = 0;
-				}
-			}
-			if (bubble['pos'] == undefined) {
-				bubble['pos'] = {
-					of: $(".header .left"), at: "left bottom", my: "left top", tri: "top l", offset: "50 0"
-				};
-			} else {
+			if (bubble['pos'] != undefined) {
 				bubble['pos'].of = $(bubble['pos'].of);
 			}
-			main.showBubble(bubble['type'], bubble['msg'], bubble['pos'], bubble['autoHide']);
+			_this.showBubble(bubble['type'], bubble['msg'], bubble['pos'], bubble['autoHide']);
 		}
 	});
 
@@ -56,37 +60,68 @@ var main = new function () {
 
 function Bubble() {
 
+	var _this = this;
 	this.autoHide = 0;
+	this.pos = null;
+	var triSet = false;
 	var shown = false;
+	this.destroy = false;
 	var type = "";
 	var icon = "";
 	var aniDirection;
 	var timeout;
 
 	this.show = function () {
+		// disable collision detection
+		this.pos.collision = "none";
+
+		// set triangle if not yet done
+		if (!triSet) {
+			// set a default offset
+			if (this.pos.offset == undefined || this.pos.offset == "") this.pos.offset = "0 0";
+			// split x and y offset
+			offs = this.pos.offset.split(" ");
+
+			tri = this.pos.tri.split(" ");
+			aniDirection = tri[0];
+			if (aniDirection == "bottom" || aniDirection == "top") {
+				if (aniDirection == "bottom") {
+					aniDirection = "down";
+				} else if (aniDirection == "top") {
+					aniDirection = "up";
+				}
+				this.pos.offset = offs[0] + " " + ( parseInt(offs[1]) + ((tri[0] == "top") ? 24 : -24) );
+			} else {
+				this.pos.offset = ( parseInt(offs[0]) + ((tri[0] == "left") ? 24 : -24) ) + " " + offs[1];
+			}
+			bubble.addClass(this.pos.tri);
+			triSet = true;
+		}
+
+		bubble.position(this.pos);
+
 		if (shown) {
 			clearTimeout(timeout);
 		} else {
+			bubble.css("visibility", "visible").hide();
 			if (type == undefined) this.setType("info");
 			shown = true;
 			bubble.show("drop", {direction: aniDirection}, main.animationTime(600)).fadeTo(main.animationTime(400), 0.9);
 		}
+
+		// create timer for automatic hiding
 		if (this.autoHide > 0) {
 			timeout = setTimeout(function () {
-				bubble.fadeOut(main.animationTime(800));
+				bubble.fadeOut(main.animationTime(800), function () {
+					if (_this.destroy) {
+						bubble.remove();
+					} else {
+						bubble.css("visibility", "hidden").show();
+					}
+				});
 				shown = false;
 			}, this.autoHide);
 		}
-	}
-
-	this.setPosition = function (posObj) {
-
-		aniDirection = posObj.tri.split(" ")[0];
-		posObj.collision = "none";
-		if (aniDirection == "bottom") aniDirection = "down";
-		else if (aniDirection == "top") aniDirection = "up";
-
-		bubble.addClass(posObj.tri).position(posObj).css("visibility", "visible").hide();
 	}
 
 	this.setIcon = function (i) {

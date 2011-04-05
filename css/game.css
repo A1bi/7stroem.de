@@ -584,9 +584,6 @@
 	border-left: 2px #363636 solid;
 	padding: 0px;
 }
-#panel #strikes .sTable table td {
-	height: 29px;
-}
 #panel #strikes .sTable table div {
 	height: 25px;
 	margin-top: 1px;
@@ -600,7 +597,7 @@
 }
 #panel #strikes .sTable table tr {
 	border-top: 2px #363636 solid;
-	height: 25px;
+	height: 34px;
 }
 #panel #strikes table tr:first-child {
 	border-top: none;

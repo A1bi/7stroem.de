@@ -101,13 +101,6 @@ foreach ($comps as $comp) {
 // initiate database object
 $_db = new database;
 
-/*
-// exclude internet explorer browsers < 7.0
-if (preg_match("#MSIE [1-6]#", $_SERVER['HTTP_USER_AGENT'])) {
-	echo 'Der Internet Explorer wird von PVshowcase nicht unterst&uuml;tzt. Bitte laden Sie sich kostenlos <a href="http://mozilla-europe.org">Mozilla Firefox</a> herunter.';
-	exit();
-}
-*/
 
 /**
  * user session management
@@ -139,6 +132,20 @@ if (!defined("NO_SESSION")) {
 			// not correct -> delete session
 			unset($_SESSION['user']);
 		}
+	}
+
+	if (empty($_SESSION['browserIsIE'])) {
+		$_SESSION['browserIsIE'] = 1;
+		// check for internet explorer browsers < 7.0
+		if (preg_match("#MSIE [1-6]#", $_SERVER['HTTP_USER_AGENT'])) {
+			$_SESSION['browserIsIE'] = 2;
+		}
+	}
+	// exclude if matched as IE < 7
+	if ($_SESSION['browserIsIE'] == 2) {
+		$_tpl->caching = true;
+		$_tpl->display("iefail.tpl");
+		exit();
 	}
 
 	// check if error present
