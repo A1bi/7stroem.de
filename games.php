@@ -80,7 +80,7 @@ if ($_GET['action'] == "create") {
 	// bets
 	$bet = 10;
 	$bets = array();
-	$bets[0] = 0;
+	$bets[0] = "keiner";
 	while ($bet <= $_user['credit']) {
 		$bets[$bet] = formatCredit($bet);
 		if ($bet >= 100) {

@@ -589,6 +589,7 @@ var game = new function () {
 				if (action.player == userid) {
 					toggleActionBtn("activeKnock", false);
 				}
+				fadeActionBtn("flipHand", false);
 				players[action.player].folded();
 				playersSmallRound--;
 				break;
@@ -843,13 +844,14 @@ var game = new function () {
 		butler.registerHostAction("startGame");
 	}
 
+	// contact ajax api to keep session alive
+	var pollSession = function () {
+		$.get("ajax.php?action=pollSession");
+		setTimeout(pollSession, 300000);
+	}
+
 	// hide loading sign and initiate butler connection
 	$(window).load(function () {
-		$("#loading").hide();
-
-		// show panel
-		$("#panel").delay(200).fadeIn(main.animationTime(400));
-		
 		// initiate butler
 		butler.getActions();
 	});
@@ -862,6 +864,7 @@ var game = new function () {
 		$("#strikes .newRound").click(function () {
 			butler.registerHostAction("newRound");
 		});
+
 		// chat
 		// user focused message field
 		$(".chat form input").focus(function () {
@@ -883,13 +886,15 @@ var game = new function () {
 			if (event.which == 67 && !field.is(":focus")) {
 				field.focus();
 			}
-		})
+		});
+
 		// warn user before leaving this page
 		$(window).bind("beforeunload", function() {
 			if (blockExit) {
 				return "Achtung! Wenn du diese Seite verlässt, beendest du damit auch dieses Spiel und verlierst deinen Einsatz! Möchtest du dieses Spiel wirklich beenden?";
 			}
 		});
+
 		// user actions
 		actionsBox = $(".bottom .actions");
 		actions = ["fold", "call", "knock", "flipHand"];
@@ -902,8 +907,26 @@ var game = new function () {
 			butler.registerAction("blindKnock", $(".blindKnock select").val());
 		});
 
+		// session polling
+		pollSession();
+
 		// start game box
 		hostChanged();
+
+		// preload images
+		imgs = ["actions", "areas", "box", "cards_bottom", "cards_top", "cards_left", "cards_right", "chat", "table"];
+		i = imgs.length;
+		$.each(imgs, function (key, val) {
+			img = new Image();
+			$(img).attr("src", "/gfx/game/"+val+".png").load(function () {
+				i--;
+				if (i < imgs.length) {
+					$("#loading").hide();
+					// show game
+					$("#panel, #game").fadeIn(main.animationTime(400));
+				}
+			});
+		});
 
 		/* testing
 		players[1] = new Player(1, "Albi");

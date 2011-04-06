@@ -1,9 +1,11 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html>
 <head>
 	<title>7ström{if $title != ""} - {$title}{/if}</title>
-	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+	<meta charset="utf-8" />
 	<meta name="viewport" content="width=1009" />
+	<link rel="shortcut icon" href="/gfx/favicon.ico" />
+	<link rel="apple-touch-icon" href="/gfx/ios_icon.png" />
 	<link rel="stylesheet" type="text/css" href="/css/main.css{fileVersion file="/css/main.css"}" />
 {if $css != ""}
 	<style type="text/css">
@@ -14,15 +16,15 @@
 {if $cssfile != ""}
 	<link rel="stylesheet" type="text/css" href="/css/{$cssfile}.css{fileVersion file="/css/{$cssfile}.css"}" />
 {/if}
-	<script type="text/javascript" src="/js/fw/jquery.js"></script>
-	<script type="text/javascript" src="/js/fw/jquery-ui.js"></script>
-	<script type="text/javascript" src="/js/fw/modernizr.js"></script>
-	<script type="text/javascript" src="/js/main.js"></script>
+	<script src="/js/fw/jquery.js"></script>
+	<script src="/js/fw/jquery-ui.js"></script>
+	<script src="/js/fw/modernizr.js"></script>
+	<script src="/js/main.js"></script>
 {if $jsfile != ""}
-	<script type="text/javascript" src="/js/{$jsfile}.js{fileVersion file="/js/{$jsfile}.js"}"></script>
+	<script src="/js/{$jsfile}.js{fileVersion file="/js/{$jsfile}.js"}"></script>
 {/if}
 {if $js != "" || $bubble != ""}
-	<script type="text/javascript">
+	<script>
 {$js}
 {if $bubble != ""}
 		var bubble = [];

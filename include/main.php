@@ -143,7 +143,6 @@ if (!defined("NO_SESSION")) {
 	}
 	// exclude if matched as IE < 7
 	if ($_SESSION['browserIsIE'] == 2) {
-		$_tpl->caching = true;
 		$_tpl->display("iefail.tpl");
 		exit();
 	}

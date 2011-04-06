@@ -27,6 +27,10 @@ switch ($_GET['action']) {
 		$response['credit'] = formatCredit($_user['credit']);
 		break;
 
+	case "pollSession":
+		$response['result'] = "ok";
+		break;
+
 	default:
 		$response['error'] = "unknown action";
 		break;

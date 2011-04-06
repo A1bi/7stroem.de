@@ -1,6 +1,9 @@
 {include file="head.tpl" cssfile="game" jsfile="game"}
+		<div id="loading">
+			Spiel wird geladen...
+			<p><img src="/gfx/game/loading.gif" alt="" /></p>
+		</div>
 		<div id="game">
-			<div id="loading">Spiel wird geladen...</div>
 			<div class="table">&nbsp;</div>
 			<div class="players">
 				<div class="bottom horizontal">

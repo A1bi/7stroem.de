@@ -4,7 +4,7 @@
 .pspace .content {
 	height: 500px;
 }
-.box1 {
+.cBox {
 	margin: auto;
 	margin-top: 50px;
 	width: 704px;

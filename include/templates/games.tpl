@@ -43,7 +43,7 @@
 				<p><strong>Einsatz:</strong>
 				<select name="bet" class="vcen">{html_options options=$bets selected=50}</select> &euro;</p>
 				<div class="hright">
-					<input type="image" src="/gfx/games/create_button.png" name="create" />
+					<input type="image" src="/gfx/games/create_button.png" name="create" alt="eröffnen" />
 				</div>
 				</form>
 			</div>
