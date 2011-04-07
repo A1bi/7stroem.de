@@ -21,26 +21,29 @@ if (empty($game['id'])) exit("error: game not found");
 
 switch ($request['request']) {
 	case "roundEnded":
-		// check number of player - minimum 2, maximum 4
-		if ($request['players'] > 4 || $request['players'] < 2) {
-			$response['error'] = "invalid number of players";
-			break;
+		// only update if bet is not zero
+		if ($game['bet'] > 0) {
+			// check number of player - minimum 2, maximum 4
+			if ($request['players'] > 4 || $request['players'] < 2) {
+				$response['error'] = "invalid number of players";
+				break;
+			}
+			// reward winner
+			$result = $_db->query('	UPDATE	users AS u,
+											games_players AS gp
+									SET		u.credit = u.credit + ?
+									WHERE	gp.game = ?
+									AND		gp.user = ?
+									AND		gp.user = u.id',
+					array($game['bet']*$request['players'], $request['game'], $request['winner']));
+			if ($result->rowCount() < 1) {
+				$response['error'] = "not allowed";
+			} else {
+				// add transaction to database
+				$_db->query('INSERT INTO users_transactions VALUES (?, ?, ?, 1, ?)', array($request['winner'], $game['bet'], time(), $game['id']));
+			}
 		}
-		// reward winner
-		$result = $_db->query('	UPDATE	users AS u,
-										games_players AS gp
-								SET		u.credit = u.credit + ?
-								WHERE	gp.game = ?
-								AND		gp.user = ?
-								AND		gp.user = u.id',
-				array($game['bet']*$request['players'], $request['game'], $request['winner']));
-		if ($result->rowCount() < 1) {
-			$response['error'] = "not allowed";
-		} else {
-			// add transaction to database
-			$_db->query('INSERT INTO users_transactions VALUES (?, ?, ?, 1, ?)', array($request['winner'], $game['bet'], time(), $game['id']));
-			$response['result'] = "ok";
-		}
+		$response['result'] = "ok";
 		break;
 
 	case "roundStarted":
@@ -100,7 +103,7 @@ switch ($request['request']) {
 
 	case "finishGame":
 		// get all players of this game
-		$_db->query('DELETE FROM games WHERE id = ? AND started = 0', array($game['id']));
+		$_db->query('UPDATE games SET finished = 1 WHERE id = ?', array($game['id']));
 		$response['result'] = "ok";
 		break;
 

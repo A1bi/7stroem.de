@@ -517,9 +517,9 @@ var game = new function () {
 					cell = $("<td>");
 					// add first cell for round number
 					if (i == 0) {
-						cell.html(rounds);
+						cell.html(rounds).addClass("round");
 					} else {
-						cell.append($("<div>"));
+						cell.append($("<div>")).addClass("player");
 					}
 					row.append(cell);
 				}
@@ -659,7 +659,7 @@ var game = new function () {
 	// get new player info and add those players
 	// avoids too many ajax request at a time
 	var updatePlayerInfo = function (log) {
-		$.getJSON("ajax.php?action=getUserInfo&game=" + gameid, function (data) {
+		$.getJSON("/ajax.php?action=getUserInfo&game=" + gameid, function (data) {
 			$.each(data.users, function (key, user) {
 				// only add player if he does not exist yet
 				if (players[user.id] == null) {
@@ -846,7 +846,7 @@ var game = new function () {
 
 	// contact ajax api to keep session alive
 	var pollSession = function () {
-		$.get("ajax.php?action=pollSession");
+		$.get("/ajax.php?action=pollSession");
 		setTimeout(pollSession, 300000);
 	}
 

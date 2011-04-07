@@ -35,7 +35,7 @@
 				<br />Dabei kannst du einstellen, wie viele Spieler maximal mitspielen dürfen und ob das Spiel öffentlich sein oder nur von deinen Freunden betreten werden soll.
 			</div>
 			<div>
-				<form action="games.php?action=create" method="post">
+				<form action="/games.php?action=create" method="post">
 				<p><strong>Spielart:</strong><br />
 				<input type="radio" name="public" value="1" checked="checked" /> öffentlich <input type="radio" name="public" value="0" /> nur gegen Freunde</p>
 				<p><strong>Max. Anzahl an Spielern:</strong>

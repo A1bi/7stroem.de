@@ -66,7 +66,7 @@ function formatCredit($credit) {
  */
 function kickGuests() {
 	if (empty($_SESSION['user']['id'])) {
-		redirectTo("index.php");
+		redirectTo("/");
 	}
 }
 

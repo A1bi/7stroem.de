@@ -21,7 +21,7 @@ if ($_GET['action'] == "logout") {
 			// store in session
 			$_SESSION['user'] = array("id" => $user['id'], "pass" => $hash);
 			showInfo("Grüß dich, ".htmlspecialchars($_POST['name'])."!");
-			redirectTo("games.php");
+			redirectTo("/games");
 
 		// not found - login incorrect
 		} else {
@@ -29,5 +29,5 @@ if ($_GET['action'] == "logout") {
 		}
 	}
 }
-redirectTo("index.php");
+redirectTo("/");
 ?>

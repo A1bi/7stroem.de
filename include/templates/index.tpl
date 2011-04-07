@@ -4,7 +4,7 @@
 				Spiele das beliebte Kartenspiel aus der Eifel online gegen deine Freunde!
 			</div>
 			<div class="signup">
-				<a href="signup.php"><img src="/gfx/index/join_signup.png" alt="jetzt anmelden!" title="jetzt anmelden!" /></a>
+				<a href="/signup"><img src="/gfx/index/join_signup.png" alt="jetzt anmelden!" title="jetzt anmelden!" /></a>
 			</div>
 		</div>
 		<div class="strike">
@@ -23,7 +23,7 @@
 						<td><input type="text" name="name" class="field" tabindex="1" /></td>
 					</tr>
 					<tr>
-						<td>Passwort:<div style="font-size: 12px;"><a href="forgotpass.php">vergessen?</a></div></td>
+						<td>Passwort:<div style="font-size: 12px;"><a href="/forgotpass">vergessen?</a></div></td>
 						<td><input type="password" name="pass" class="field" tabindex="2" /></td>
 					</tr>
 				</table>
@@ -40,7 +40,7 @@
 				Ein Anmeldung bei 7ström.de ist <strong>kostenlos</strong>, <strong>kinderleicht</strong> und <strong>schnell</strong>.<br />
 				Folge einfach den Schritten und in zwei Minuten kannst du bereits dein erstes Spiel beginnen.
 				<div class="hcen" style="margin: 13px;">
-					<a href="signup.php"><img src="/gfx/index/login_signup.png" alt="schnell anmelden" title="schnell anmelden" /></a>
+					<a href="/signup"><img src="/gfx/index/login_signup.png" alt="schnell anmelden" title="schnell anmelden" /></a>
 				</div>
 			</div>
 		</div>

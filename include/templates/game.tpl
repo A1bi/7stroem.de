@@ -99,23 +99,15 @@
 				<div class="space">
 					<table class="top head">
 							<tr>
-								<td style="width: 17%;">Runde</td>
-								<td style="width: 20%;"></td>
-								<td style="width: 20%;"></td>
-								<td style="width: 20%;"></td>
-								<td style="width: 20%;"></td>
+								<td class="round">Runde</td>
+								<td class="player"></td>
+								<td class="player"></td>
+								<td class="player"></td>
+								<td class="player"></td>
 							</tr>
 					</table>
 					<div class="sTable">
-						<table>
-							<colgroup>
-								<col style="width: 17%;" />
-								<col style="width: 20%;" />
-								<col style="width: 20%;" />
-								<col style="width: 20%;" />
-								<col style="width: 20%;" />
-							</colgroup>
-						</table>
+						<table></table>
 					</div>
 					<div class="actions">
 						<div class="waiting">Bitte warte, bis der Spielleiter eine neue Runde startet.</div>

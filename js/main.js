@@ -12,7 +12,7 @@ var main = new function () {
 	this.userbox = new function () {
 
 		this.updateCredit = function () {
-			$.getJSON("ajax.php?action=getCredit", function (data) {
+			$.getJSON("/ajax.php?action=getCredit", function (data) {
 				dom = $(".userbox .credit").addClass("updating", _this.animationTime(400, true));
 				setTimeout(function () {
 					dom.html(data.credit);

@@ -1,0 +1,6 @@
+RewriteEngine on
+RewriteRule ^games/([0-9]+)/?$ /game.php?id=$1
+RewriteRule ^logout$ /login.php?action=logout
+RewriteCond %{REQUEST_FILENAME} !-U
+RewriteRule ^([a-z]+)/([a-z]+)$ $1.php?action=$2
+RewriteRule ^([a-z]+)$ $1.php

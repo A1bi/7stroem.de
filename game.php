@@ -1,12 +1,12 @@
 <?php
 include('include/main.php');
 // no game id given -> kick back to games overview
-if (empty($_GET['id']))	redirectTo("games.php");
+if (empty($_GET['id']))	redirectTo("/games");
 kickGuests();
 
 function joinError($msg) {
 	showError($msg);
-	redirectTo("games.php");
+	redirectTo("/games");
 }
 
 // get game info from db

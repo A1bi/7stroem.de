@@ -19,17 +19,17 @@ if ($_GET['action'] == "create") {
 	$maxplayers = (intval($_POST['maxplayers']) < 2 || intval($_POST['maxplayers']) > 4) ? 4 : intval($_POST['maxplayers']);
 
 	// create db entry
-	$_db->query('INSERT INTO games VALUES (null, ?, 0, ?, ?, 0, ?, ?)', array($public, $maxplayers, $bet, time(), $_user['id']));
+	$_db->query('INSERT INTO games VALUES (null, ?, 0, ?, ?, 0, 0, ?, ?)', array($public, $maxplayers, $bet, time(), $_user['id']));
 	$id = $_db->id();
 	// create game on server
 	if (!$butler->createGame($id, $_user['id'])) {
 		// could not create -> remove entry from db
 		$_db->query('DELETE FROM games WHERE id = ?', array($id));
 		showError("Da ist was schief gelaufen..<br />Wir konnten das Spiel nicht für dich eröffnen.<br />Versuchs einfach nochmal :)", ".create", "right bottom", "right top", "top r", "-40 -20");
-		redirectTo("games.php");
+		redirectTo("/games");
 	} else {
 		// redirect to game
-		redirectTo("game.php?id=".$id);
+		redirectTo("/games/".$id);
 	}
 
 } else {
@@ -45,7 +45,8 @@ if ($_GET['action'] == "create") {
 							  AND uf.user = ?
 							  AND uf.friend = u.id
 							  AND g.public = 0
-							  AND g.started = 0',
+							  AND g.started = 0
+							  AND g.finished = 0',
 						array($_user['id']));
 
 	$i = 1;
@@ -64,6 +65,7 @@ if ($_GET['action'] == "create") {
 							WHERE g.host = u.id
 							  AND public = 1
 							  AND g.started = 0
+							  AND g.finished = 0
 							  AND host != ?',
 						array($_user['id']));
 
