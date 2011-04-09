@@ -94,7 +94,7 @@ function showInfo($msg, $of = "", $at = "", $my = "", $tri = "", $off = "") {
 $_base = $_SERVER['DOCUMENT_ROOT'];
 
 // components to load
-$comps = array("templates", "format", "database");
+$comps = array("templates", "format", "database", "facebook");
 foreach ($comps as $comp) {
 	loadComponent($comp);
 }
@@ -113,11 +113,21 @@ if (!defined("NO_SESSION")) {
 	session_set_cookie_params(0, "/");
 	session_start();
 
+	$_fb = new facebook;
+
 	// check if logged in
-	if (!empty($_SESSION['user']['id'])) {
-		// look in database for given user
-		$result = $_db->query('SELECT id, name, credit FROM users WHERE id = ? AND pass = ?', array($_SESSION['user']['id'], $_SESSION['user']['pass']));
-		$user = $result->fetch();
+	if (is_array($_SESSION['user'])) {
+		// logged in via facebook account ?
+		if ($_fb->isLoggedIn()) {
+			// look in database for facebook user
+			$result = $_db->query('SELECT id, name, credit FROM users WHERE fb = ?', array($_fb->getId()));
+			$user = $result->fetch();
+		// regular 7stroem account
+		} else {
+			// look in database for given user
+			$result = $_db->query('SELECT id, name, credit FROM users WHERE id = ? AND pass = ?', array($_SESSION['user']['id'], $_SESSION['user']['pass']));
+			$user = $result->fetch();
+		}
 
 		// found ?
 		if (!empty($user['id'])) {
@@ -130,7 +140,7 @@ if (!defined("NO_SESSION")) {
 			$_tpl->assign("_usercredit", $credit);
 		} else {
 			// not correct -> delete session
-			unset($_SESSION['user']);
+			unset($_SESSION['user']['id']);
 		}
 	}
 

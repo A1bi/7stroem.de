@@ -24,6 +24,15 @@ var main = new function () {
 
 	}
 
+	this.facebook = new function () {
+
+		this.showAuthDialog = function (uri) {
+			fb = window.open("https://www.facebook.com/dialog/oauth?client_id=211597832188896&display=popup&redirect_uri=http://"+window.location.host+"/"+uri, "fb", "dependent=yes,width=550px,height=320px,status=no,scrollbars=no,resizable=no");
+			fb.focus();
+			return false;
+		}
+	}
+
 	this.showBubble = function (type, content, pos, hide) {
 		if (hide == undefined) {
 			if (pos == undefined) {
@@ -44,6 +53,15 @@ var main = new function () {
 		bubble.autoHide = hide;
 		bubble.destroy = true;
 		bubble.show();
+	}
+
+	this.getGet = function (key) {
+		gets = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+		for (i = 0; i < gets.length; i++) {
+			parts = gets[i].split('=');
+			if (parts[0] != key) continue;
+			return parts[1];
+		}
 	}
 
 	$(function () {

@@ -1,0 +1,111 @@
+.pspace .content {
+	height: 620px;
+}
+.intro {
+	width: 90%;
+	color: #525252;
+	font-size: 20px;
+	margin: auto;
+	margin-bottom: 30px;
+}
+.steps {
+	width: 800px;
+	margin: auto;
+}
+.steps .step {
+	position: relative;
+	background: url(/gfx/signup/boxes.png) no-repeat;
+	background-position: 0px -311px;
+	width: 100%;
+}
+.steps .step:first-child {
+	background-position: 0px 0px;
+}
+.steps .step .head {
+	padding-top: 10px;
+	padding-left: 20px;
+	height: 29px;
+	font-size: 18px;
+}
+.steps .step:first-child .head {
+	padding-top: 15px;
+}
+.steps .step .head .finished {
+	height: 27px;
+	width: 31px;
+	position: absolute;
+	right: 15px;
+	top: 7px;
+	background: url(/gfx/signup/boxes.png) no-repeat;
+	background-position: 0px -640px;
+	display: none;
+}
+.steps .step:first-child .head .finished {
+	top: 12px;
+}
+.steps .step .contnt {
+	padding-left: 30px;
+	padding-top: 10px;
+	padding-right: 30px;
+	overflow: hidden;
+	font-size: 14px;
+	color: #525252;
+	height: 140px;
+	-webkit-transition-property: height, padding-top;
+	-webkit-transition-duration: .4s;
+	-webkit-transition-timing-function: ease-out;
+	-moz-transition-property: height, padding-top;
+	-moz-transition-duration: .4s;
+	-moz-transition-timing-function: ease-out;
+}
+.steps .step .contnt.collapsed {
+	padding-top: 0px;
+	height: 0px !important;
+}
+.steps .step .contnt p {
+	margin: 20px 0px;
+}
+.steps .step .contnt .next {
+	text-align: center;
+}
+.steps .step .contnt .next input {
+	width: 100px;
+	height: 28px;
+}
+.steps .step .contnt .next img {
+	display: none;
+}
+.steps .step .contnt .field, .steps .step .contnt .field td {
+	font-weight: bold;
+	font-size: 15px;
+}
+.steps .step .contnt .field {
+	margin: 25px 15px;
+}
+.steps .step .contnt .field input {
+	height: 20px;
+	width: 200px;
+	margin-left: 10px;
+}
+.steps .bottom {
+	background-position: 0px -619px;
+	height: 23px;
+}
+.steps .step iframe {
+	width: 90%;
+	border: none;
+}
+#email .contnt {
+	height: 220px;
+}
+#password .contnt {
+	height: 190px;
+}
+#facebook p img {
+	cursor: pointer;
+}
+#finish .contnt div:first-child {
+	padding: 10px;
+	font-size: 19px;
+	font-weight: bold;
+}

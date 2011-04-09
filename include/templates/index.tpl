@@ -27,8 +27,13 @@
 						<td><input type="password" name="pass" class="field" tabindex="2" /></td>
 					</tr>
 				</table>
-				<div class="hright" style="margin: 5px;">
-					<input type="image" src="/gfx/index/login_submit.png" alt="login" title="login" />
+				<div style="margin: 5px; height: 35px; width: 97%; position: relative;">
+					<div style="position: absolute; left: 10px; top: 2px;">
+						<a href="#" onclick="return main.facebook.showAuthDialog('login?fb=1');"><img src="/gfx/signup/fb_login.png" alt="Facebook" title="Ohne Registrierung über Facebook einloggen" /></a>
+					</div>
+					<div style="position: absolute; right: 0px;">
+						<input type="image" src="/gfx/index/login_submit.png" alt="login" title="login" />
+					</div>
 				</div>
 				</form>
 			</div>
