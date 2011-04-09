@@ -132,12 +132,10 @@ if (!defined("NO_SESSION")) {
 		// found ?
 		if (!empty($user['id'])) {
 			// mark as logged in for templates
-			$_tpl->assign("_username", $user['name']);
-			$_tpl->assign("_userid", $user['id']);
 			$_user = $user;
 			// format credit
-			$credit = formatCredit($user['credit']);
-			$_tpl->assign("_usercredit", $credit);
+			$user['credit'] = formatCredit($user['credit']);
+			$_tpl->assign("_user", $user);
 		} else {
 			// not correct -> delete session
 			unset($_SESSION['user']['id']);

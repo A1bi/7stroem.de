@@ -38,24 +38,31 @@
 </head>
 
 <body>
-	<div class="header">
-		<div class="left">
+	<div class="header{if $_user.id != ""} loggedIn{/if}">
+		<div class="hspace">
+			<a href="/" id="logo">7ström</a>
 			<div class="claim">
 				Siwweström, Siwweschräm, Sibbeschröm oder wie immer du es gerne nennst ;)
 			</div>
+			<ul class="navi">
+				<li><a href="/">Home</a></li>
+				<li><a href="/games">Spiele</a></li>
+				<li><a href="/player">Deine Spielerseite</a></li>
+				<li><a href="/settings">Einstellungen</a></li>
+			</ul>
+			<div class="userbox">
+				Hallo, {$_user.name|escape}!
+				<p>Guthaben: <span class="credit">{$_user.credit}</span> &euro;</p>
+				<div class="hright" style="font-size: 12px;"><a href="/logout">ausloggen</a></div>
+			</div>
 		</div>
-		<div class="right">
-{if $_userid != ""}{include file="head_userbox.tpl"}{/if}
-
-		</div>
-		<div class="shadow_left">&nbsp;</div>
-		<div class="shadow_right">&nbsp;</div>
-		<div class="shadow_bottom">&nbsp;</div>
+		<div class="shadow l">&nbsp;</div>
+		<div class="shadow r">&nbsp;</div>
 	</div>
 	<div class="bubbles"></div>
 	<div class="pspace">
-		<div class="bg">&nbsp;</div>
-		<div class="foot">
+		<div class="bg gradient">&nbsp;</div>
+		<div class="bg foot">
 			<div class="copyright">&copy; Albisigns 2011 - Impressum</div>
 		</div>
 		<div class="content">

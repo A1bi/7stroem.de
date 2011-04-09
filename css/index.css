@@ -4,6 +4,7 @@
 	width: 514px;
 	height: 456px;
 	top: 40px;
+	left: 15px;
 }
 .join .text {
 	position: absolute;
@@ -22,7 +23,7 @@
 .strike {
 	position: absolute;
 	top: 0px;
-	left: 535px;
+	left: 545px;
 	background: url(/gfx/index/strike.png) no-repeat;
 	width: 21px;
 	height: 579px;
@@ -72,5 +73,5 @@
 	font-size: 14px;
 }
 .pspace .content {
-	height: 700px;
+	height: 650px;
 }

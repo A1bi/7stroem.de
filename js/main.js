@@ -43,7 +43,7 @@ var main = new function () {
 		}
 		if (pos == undefined || pos == "") {
 			pos = {
-				of: $(".header .left"), at: "left bottom", my: "left top", tri: "top l", offset: "50 -24"
+				of: $("#logo"), at: "left bottom", my: "left top", tri: "top l", offset: "20 0"
 			};
 		}
 		bubble = new Bubble;

@@ -24,40 +24,71 @@ p {
 	color: #ffffff;
 	z-index: 89;
 	margin: auto;
+	background: url(/gfx/header.png) no-repeat -46px 0px;
 }
-.header .left {
+.header .hspace {
 	position: absolute;
 	top: 0px;
 	left: 0px;
-	background: url(/gfx/header_left.png) no-repeat;
-	width: 756px;
+	width: 100%;
 	height: 135px;
 }
-.header .left .claim {
+.header #logo {
+	position: absolute;
+	left: 10px;
+	top: 6px;
+	width: 320px;
+	height: 85px;
+	text-indent: -999px;
+}
+.header .claim {
 	position: absolute;
 	bottom: 29px;
 	left: 70px;
 }
-.header .right {
-	position: absolute;
-	top: 0px;
-	right: 0px;
-	background: url(/gfx/header_right.png) no-repeat;
-	width: 253px;
-	height: 135px;
+.header.loggedIn .claim {
+	display: none;
 }
-.header .right .userbox {
+.header .navi {
+	position: absolute;
+	left: 25px;
+	bottom: 20px;
+	margin: 0px;
+	text-align: center;
+	display: none;
+}
+.header.loggedIn .navi {
+	display: block;
+}
+.header .navi li {
+	display: inline;
+	list-style: none;
+	margin: 0px 10px;
+	text-shadow: #000000 1px 1px 3px;
+}
+.header .navi a {
+	text-decoration: none;
+}
+.header .navi a:hover {
+	text-decoration: underline;
+}
+.header .userbox {
 	position: absolute;
 	top: 5px;
-	background: url(/gfx/header_userbox.png) no-repeat;
+	right: 0px;
+	background: url(/gfx/header.png) no-repeat -1111px 0px;
 	width: 222px;
 	height: 100px;
 	padding-top: 15px;
 	padding-left: 18px;
 	padding-right: 10px;
 	font-size: 14px;
+	display: none;
 }
-.header .right .userbox .credit {
+.header.loggedIn .userbox {
+	display: block;
+}
+.header .userbox .credit {
 	-webkit-transition-property: background;
 	-webkit-transition-duration: .4s;
 	-webkit-transition-timing-function: ease-out;
@@ -65,29 +96,23 @@ p {
 	-moz-transition-duration: .4s;
 	-moz-transition-timing-function: ease-out;
 }
-.header .right .userbox .credit.updating {
+.header .userbox .credit.updating {
 	background: #ff0000;
 }
-.header .shadow_left {
+.header .shadow {
+	background: url(/gfx/header.png) no-repeat;
 	position: absolute;
+}
+.header .shadow.l {
 	left: -46px;
-	background: url(/gfx/header_shadow_left.png) no-repeat;
 	width: 46px;
 	height: 192px;
 }
-.header .shadow_right {
-	position: absolute;
+.header .shadow.r {
+	background-position: -1055px 0px;
 	right: -56px;
-	background: url(/gfx/header_shadow_right.png) no-repeat;
 	width: 56px;
 	height: 192px;
-}
-.header .shadow_bottom {
-	position: absolute;
-	top: 135px;
-	width: 1009px;
-	height: 57px;
-	background: url(/gfx/header_shadow_bottom.png) no-repeat;
 }
 .header a {
 	color: #ffffff;
@@ -109,13 +134,14 @@ p {
 .pspace .bg {
 	position: absolute;
 	background: url(/gfx/bg.png) repeat-x;
+}
+.pspace .bg.gradient {
 	width: 100%;
 	height: 1024px;
 	bottom: 50px;
 }
-.pspace .foot {
-	background: url(/gfx/bg_shadow.png) repeat-x;
-	position: absolute;
+.pspace .bg.foot {
+	background-position: 0px -1024px;
 	height: 50px;
 	width: 100%;
 	bottom: 0px;
