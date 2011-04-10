@@ -26,7 +26,6 @@ if ($_GET['action'] == "logout") {
 		// facebook user not found
 		} else {
 			$known = "false";
-			showInfo("Du hast dich erfolgreich mit deinem Facebook-Konto eingeloggt.<br />Da du zum ersten Mal hier bist, musst du dir jetzt noch einen Spielernamen aussuchen.");
 		}
 	}
 

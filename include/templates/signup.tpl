@@ -1,8 +1,10 @@
 {include file="head.tpl" cssfile="signup" jsfile="signup" title="Registrieren"}
-		<div class="intro">
+		<div class="intro">{if $smarty.get.fb == 1}
+			Du hast dich erfolgreich mit deinem Facebook-Konto eingeloggt.<br />
+			Da du zum ersten Mal hier bist, musst du dir jetzt nur noch einen Spielernamen aussuchen.{else}
 			Du willst mitmachen bei 7ström?<br />
-			Nimm dir zwei Minuten Zeit, folge diesen fünf Schritten und schon kanns los gehen!
-			Achja.. es ist alles garantiert <b>kostenlos</b>!
+			Nimm dir zwei Minuten Zeit, folge diesen fünf Schritten und schon kanns los gehen.{/if}
+			<br />Achja.. es ist alles garantiert <b>kostenlos</b>!
 		</div>
 		<div class="steps">
 			<div class="step" id="username">
@@ -25,7 +27,7 @@
 					Schritt 2: Facebook ?
 				</div>
 				<div class="contnt collapsed">
-					Wenn du ein Facebook-Konto hast, kannst du dich mit diesem bei 7ström einloggen. Die Registrierung wäre damit bereits abgeschlossen. Klicke dazu einfach auf den folgenden Button:
+					Wenn du ein Facebook-Konto hast, kannst du dich mit diesem bei 7ström einloggen. Die Anmeldung wäre damit bereits abgeschlossen. Klicke dazu einfach auf den folgenden Button:
 					<p class="hcen"><img src="/gfx/signup/fb_login.png" alt="Facebook" title="Über Facebook registrieren" /></p>
 					<div class="next">
 						<input type="submit" name="next" value="überspringen" />

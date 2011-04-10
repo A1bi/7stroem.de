@@ -1,10 +1,9 @@
 <?php
 include('include/main.php');
 
-if (!empty($_SESSION['user']['id'])) {
-	redirectTo("games.php");
+if (!empty($_user['id'])) {
+	redirectTo("/games");
 }
 
-$_tpl->assign("title", "Das Online-Kartenspiel aus der Eifel");
 $_tpl->display("index.tpl");
 ?>

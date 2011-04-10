@@ -1,4 +1,4 @@
-{include file="head.tpl" cssfile="index"}
+{include file="head.tpl" cssfile="index" title="Das Online-Kartenspiel aus der Eifel"}
 		<div class="join">
 			<div class="text">
 				Spiele das beliebte Kartenspiel aus der Eifel online gegen deine Freunde!

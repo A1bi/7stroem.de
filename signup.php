@@ -27,7 +27,7 @@ if ($_GET['ajax']) {
 			break;
 
 		case "save":
-			if (checkUsername($_POST['username']) && preg_match("/[a-zA-Z0-9._-]/", $_POST['username'])) {
+			if (checkUsername($_POST['username']) && preg_match("/^[a-zA-Z0-9._-]+$/", $_POST['username']) && strlen($_POST['username']) > 2) {
 				// check password and email only if facebook is not given
 				if (!$_fb->isLoggedIn() &&
 					(!preg_match("/^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z]){2,9}$/", $_POST['email']) || strlen($_POST['pass']) < 6)) {

@@ -12,22 +12,23 @@ var signup = new function () {
 		field = sBox.find("input").first();
 		if (field.val() == "") {
 			stepError(field, "Bitte gib einen Spielernamen ein.");
-			return;
-		} else if (field.val().match(/[a-zA-Z0-9._-]/) == null) {
+		} else if (!/^[a-zA-Z0-9._-]+$/.test(field.val())) {
 			stepError(field, "Bitte nur Buchstaben, Zahlen und . _ -");
-			return;
-		}
-		$.post("/signup.php?ajax=1", {action: "username", name: field.val()}, function (response) {
-			if (response.result == "ok") {
-				if (fb) {
-					save();
+		} else if (field.val().length < 3) {
+			stepError(field, "Der Name muss mindestens 3 Zeichen lang sein.");
+		} else {
+			$.post("/signup.php?ajax=1", {action: "username", name: field.val()}, function (response) {
+				if (response.result == "ok") {
+					if (fb) {
+						save();
+					} else {
+						nextStep();
+					}
 				} else {
-					nextStep();
+					stepError(field, "Dieser Spielername ist leider schon vergeben.<br />Versuchs mit einem anderen.");
 				}
-			} else {
-				stepError(field, "Dieser Spielername ist leider schon vergeben.<br />Versuchs mit einem anderen.");
-			}
-		}, "json");
+			}, "json");
+		}
 	}
 
 	var showFbAuth = function () {
@@ -39,7 +40,7 @@ var signup = new function () {
 			stepError($("#facebook p img"), "Anscheinend hast du abgelehnt..<br />Du kannst den Schritt auch überspringen.");
 		} else {
 			if (known) {
-				stepError($("#facebook p img"), "Dieses Facebook-Konto wurde bereits<br />mit einem anderen Benutzer verbunden.");
+				stepError($("#facebook p img"), "Dieses Facebook-Konto wurde bereits<br />mit einem anderen Spieler verbunden.");
 			} else {
 				finishStep($("#password"));
 				finishStep($("#email"));
