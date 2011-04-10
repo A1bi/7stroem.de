@@ -33,17 +33,20 @@ if ($_GET['ajax']) {
 					(!preg_match("/^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z]){2,9}$/", $_POST['email']) || strlen($_POST['pass']) < 6)) {
 					$result = "error";
 				} else {
-					$fb = "";
 					if ($_fb->isLoggedIn()) {
 						// generate random password for security reasons
-						$pass = createId(6);
+						$pass = createId(8);
 						$fb = $_fb->getId();
+						$info = $_fb->getInfo();
+						$realname = $info->name;
 					} else {
+						$realname = $_POST['name'];
 						$pass = $_POST['pass'];
+						$fb = 0;
 					}
 					$pass = md5($pass);
 					// insert into db
-					$result = $_db->query('INSERT INTO users VALUES (null, ?, ?, ?, ?, ?, 1000, ?)', array($_POST['username'], $_POST['name'], $_POST['email'], $pass, $fb, time()));
+					$result = $_db->query('INSERT INTO users VALUES (null, ?, ?, ?, ?, ?, ?, 1000, 0, 0, ?)', array($_POST['username'], $realname, $_POST['email'], $pass, $fb, time(), time()));
 					if ($result->rowCount() > 0) {
 						// login
 						$_SESSION['user']["id"] = $_db->id();

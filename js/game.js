@@ -11,8 +11,9 @@ var game = new function () {
 	var knockPossible = true;
 	var poor = false;
 	var flipped = false;
-	var blockExit = false;
 	var processing = false;
+	var started = false;
+	var roundStarted = false;
 
 	var positions = [];
 	positions[0] = "left";
@@ -309,7 +310,7 @@ var game = new function () {
 
 		this.quit = function () {
 			// check if game is not yet started by looking if area is pulled out
-			if (!$(".area", dom).is(".shown")) {
+			if (!started) {
 				// remove player from list
 				listDom.remove();
 				
@@ -393,11 +394,8 @@ var game = new function () {
 	}
 
 	var toggleActionBtn = function (action, show, time) {
-		if ((action == "knock" && !poor && knockPossible && flipped) || action != "knock") {
+		if ((action == "knock" && !poor && knockPossible && flipped) || action != "knock" || !show) {
 			fadeActionBtn(action, show, time);
-		}
-		if (action == "activeKnock" && show) {
-			fadeActionBtn("knock", false, time);
 		}
 	}
 
@@ -415,7 +413,10 @@ var game = new function () {
 	}
 
 	var knocked = function (player) {
-		if (player > -1) {
+		if (player > 0) {
+			if (player == userid) {
+				knockPossible = false;
+			}
 			info = players[player].name + " hat geklopft!";
 		} else {
 			info = "Jemand ist arm!";
@@ -424,11 +425,6 @@ var game = new function () {
 		fadeActionBtn("blindKnock", false);
 		toggleActionBtn("knock", false);
 		activeKnock = player;
-		if (player == userid) {
-			knockPossible = false;
-		} else {
-			knockPossible = true;
-		}
 	}
 
 	var processQueue = function (next) {
@@ -457,25 +453,18 @@ var game = new function () {
 				setTurn(action.player);
 				
 				// finish knock ?
-				if (activeKnock > -1) {
+				if (activeKnock > 0) {
 					players[activeKnock].knockFinished();
-					activeKnock = -1;
 					toggleActionBtn("activeKnock", false);
 				}
-				knock = false;
-				if (action.player == userid) {
-					knock = true;
-				}
-				toggleActionBtn("knock", knock);
+				activeKnock = -1;
+				toggleActionBtn("knock", (action.player == userid));
 				break;
 
 			case "knockTurn":
 				setTurn(action.player);
-				call = false;
-				if (action.player == userid) {
-					call = true;
-				}
-				toggleActionBtn("activeKnock", call);
+				toggleActionBtn("knock", false);
+				toggleActionBtn("activeKnock", (action.player == userid));
 				break;
 
 			// some player has laid on of his cards on his stack
@@ -503,14 +492,14 @@ var game = new function () {
 					}
 					fadeActionBtn("blindKnock", true);
 				} else {
-					knocked(-1);
+					knocked(0);
 				}
 				break;
 
 			case "roundStarted":
 				// hide new round actions
 				$("#strikes .actions").hide();
-				blockExit = true;
+				roundStarted = true;
 				rounds++;
 				row = $("<tr>");
 				for (i = 0; i < 5; i++) {
@@ -541,6 +530,7 @@ var game = new function () {
 				break;
 
 			case "roundEnded":
+				roundStarted = false;
 				logAction(players[action.player].name + " hat diese Runde gewonnen.");
 				fadeActionBtn("knock", false, 100);
 				$.each(players, function (key, player) {
@@ -559,7 +549,6 @@ var game = new function () {
 				}
 				$("#strikes .actions").show();
 				actionsDom.show();
-				blockExit = false;
 
 				// update user credit in userbox if this user has won
 				if (action.player == userid) {
@@ -597,6 +586,7 @@ var game = new function () {
 			case "called":
 				if (action.player == userid) {
 					toggleActionBtn("activeKnock", false);
+					knockPossible = true;
 				}
 				break;
 
@@ -677,7 +667,7 @@ var game = new function () {
 	this.layStack = function (cardid) {
 		if (this.turn != userid) {
 			showError("Du bist nicht am Zug!");
-		} else if (activeKnock > 0) {
+		} else if (activeKnock > -1) {
 			showError("Du musst erst entscheiden, ob du mitgehst oder rausgehst!");
 		} else {
 			butler.registerAction("layStack", cardid);
@@ -687,7 +677,6 @@ var game = new function () {
 	// register all actions (is called by the script we got from the butler)
 	var registerActions = function (actions) {
 		playersJoined = false;
-		finished = false;
 
 		// go through all actions
 		$.each(actions, function (key, action) {
@@ -731,9 +720,13 @@ var game = new function () {
 
 				// game has finished because only this player is left
 				case "finished":
-					finished = true;
-					blockExit = false;
-					main.showBubble("error", "Du bist nun der letzte Spieler im Spiel und hast damit automatisch gewonnen!<br />Das Spiel ist hiermit beendet.", "", 0);
+					if (roundStarted) {
+						roundStarted = false;
+						msg = "Du bist nun der letzte Spieler im Spiel und hast damit automatisch gewonnen!<br />Das Spiel ist hiermit beendet.";
+					} else {
+						msg = "Es ist kein weiterer Spieler mehr anwesend.<br />Das Spiel ist hiermit beendet.";
+					}
+					main.showBubble("error", msg, "", 0);
 					break;
 
 				// everything else has to be queued
@@ -810,6 +803,7 @@ var game = new function () {
 	}
 
 	var finishStart = function () {
+		started = true;
 		$("#overview").fadeOut(main.animationTime(400));
 		i = 0;
 		$.each(players, function (key, player) {
@@ -890,7 +884,7 @@ var game = new function () {
 
 		// warn user before leaving this page
 		$(window).bind("beforeunload", function() {
-			if (blockExit) {
+			if (roundStarted) {
 				return "Achtung! Wenn du diese Seite verlässt, beendest du damit auch dieses Spiel und verlierst deinen Einsatz! Möchtest du dieses Spiel wirklich beenden?";
 			}
 		});

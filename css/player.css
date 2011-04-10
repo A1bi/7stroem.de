@@ -1,0 +1,29 @@
+.infos {
+	position: relative;
+	background: url(/gfx/player/infos.png) no-repeat;
+	width: 460px;
+	height: 442px;
+}
+.infos .head {
+	position: absolute;
+	width: 100%;
+	text-align: center;
+	top: 37px;
+	font-size: 18px;
+}
+.infos .space {
+	position: absolute;
+	font-size: 14px;
+	top: 90px;
+	left: 45px;
+	width: 370px;
+}
+.infos .space table {
+	width: 100%;
+}
+.infos .space .subhead {
+	border-bottom: 1px solid #000000;
+	padding: 2px;
+	margin-bottom: 5px;
+	font-size: 17px;
+}

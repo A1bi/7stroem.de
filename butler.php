@@ -31,7 +31,8 @@ switch ($request['request']) {
 			// reward winner
 			$result = $_db->query('	UPDATE	users AS u,
 											games_players AS gp
-									SET		u.credit = u.credit + ?
+									SET		u.credit = u.credit + ?,
+											u.won = u.won+1
 									WHERE	gp.game = ?
 									AND		gp.user = ?
 									AND		gp.user = u.id',
@@ -61,7 +62,7 @@ switch ($request['request']) {
 		while ($user = $result->fetch()) {
 			$newCredit = $user['credit']-$game['bet'];
 			if ($newCredit >= 0) {
-				$_db->query('UPDATE users SET credit = ? WHERE id = ?', array($newCredit, $user['id']));
+				$_db->query('UPDATE users SET credit = ?, rounds = rounds+1 WHERE id = ?', array($newCredit, $user['id']));
 			} else {
 				$response['kick'][] = $user['id'];
 			}
