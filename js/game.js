@@ -446,7 +446,7 @@ var game = new function () {
 
 			// game has started
 			case "started":
-				finishStart();
+				finishStart(action.content);
 				break;
 
 			case "turn":
@@ -802,30 +802,22 @@ var game = new function () {
 		}
 	}
 
-	var finishStart = function () {
+	var finishStart = function (order) {
 		started = true;
+		order = order.split(",");
 		$("#overview").fadeOut(main.animationTime(400));
-		i = 0;
-		$.each(players, function (key, player) {
-			if (player != null) {
-				if (player.id == userid) {
-					me = i;
-					return false;
-				}
-				i++;
+		for (i = 0; i < order.length; i++) {
+			if (order[i] == userid) {
+				me = i;
 			}
-		});
-		i = 0;
-		$.each(players, function (key, player) {
-			if (player != null) {
-				pos = i - me;
-				if (pos < 0) {
-					pos = 4-pos*-1;
-				}
-				player.startGame(i, pos);
-				i++;
+		}
+		for (i = 0; i < order.length; i++) {
+			pos = i - me;
+			if (pos < 0) {
+				pos = order.length - pos * -1;
 			}
-		});
+			players[order[i]].startGame(i, pos);
+		}
 		$("#strikes").delay(500).fadeIn(main.animationTime(400));
 	}
 
