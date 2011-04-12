@@ -4,7 +4,7 @@
 	height: 664px;
 	top: -20px;
 	left: 58px;
-	display: none;
+	visibility: hidden;
 }
 #game div {
 	position: absolute;
@@ -30,8 +30,13 @@
 }
 /* common classes */
 #game .card {
-	z-index: 2;
 	display: none;
+	-webkit-transition-property: -webkit-transform, top, left, right, bottom;
+	-webkit-transition-duration: .3s, .4s, .4s, .4s, .4s;
+	-webkit-transition-timing-function: ease-out;
+	-moz-transition-property: top, left, right, bottom;
+	-moz-transition-duration: .4s;
+	-moz-transition-timing-function: ease-out;
 }
 #game .card div {
 	-webkit-transition-property: top, left;
@@ -42,14 +47,6 @@
 #game .card .front {
 	display: none;
 }
-#game .card {
-	-webkit-transition-property: -webkit-transform, top, left, right, bottom;
-	-webkit-transition-duration: .3s, .4s, .4s, .4s, .4s;
-	-webkit-transition-timing-function: ease-out;
-	-moz-transition-property: top, left, right, bottom;
-	-moz-transition-duration: .4s;
-	-moz-transition-timing-function: ease-out;
-}
 #game .card.stack {
 	/* -webkit-transform: rotate(180deg); */
 }
@@ -57,7 +54,6 @@
 	font-size: 18px;
 	color: #ffffff;
 	text-shadow: #000000 1px 1px 4px;
-	z-index: 4;
 	font-weight: bold;
 	-webkit-transition-property: color;
 	-webkit-transition-duration: .5s;
@@ -74,7 +70,11 @@
 	font-size: 12px;
 	color: #ffffff;
 }
+#game .players .cards {
+	z-index: 3;
+}
 #game .players .area {
+	display: none;
 	z-index: 1;
 	background: url(/gfx/game/areas.png) no-repeat;
 	-webkit-transition-property: top, left, right, bottom;
@@ -176,22 +176,25 @@
 	left: 493px;
 }
 #game .players .bottom .area .chat {
-	bottom: 14px;
+	bottom: 8px;
 	right: 6px;
+	width: 134px;
+	height: 26px;
+	background-position: 0px -343px;
 }
 #game .players .bottom .area .chat input {
 	width: 108px;
-	height: 22px;
-	background-position: 0px -343px;
+	height: 20px;
 	border: none;
-	padding-left: 20px;
-	padding-right: 6px;
-	padding-top: 2px;
+	background: transparent;
+	margin-left: 20px;
+	margin-right: 6px;
+	margin-top: 2px;
 }
 #game .players .bottom .actions {
 	bottom: 0px;
 	left: 128px;
-	z-index: 3;
+	z-index: 4;
 }
 #game .players .bottom .actions div {
 	cursor: pointer;
@@ -497,7 +500,7 @@
 	top: 170px;
 	left: 30px;
 	width: 100%;
-	display: none;
+	visibility: hidden;
 	z-index: 10;
 	-webkit-transition-property: top;
 	-webkit-transition-duration: .4s;

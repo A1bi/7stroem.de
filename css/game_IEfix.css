@@ -1,0 +1,4 @@
+/* workarounds for bugs in that piece of shit also known as Internet Explorer */
+#game .players {
+	z-index: 3;
+}

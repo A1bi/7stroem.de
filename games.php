@@ -11,7 +11,7 @@ if ($_GET['action'] == "create") {
 	// check and correct given values
 	$public = ($_POST['public'] == 0) ? 0 : 1;
 	// bet less than 1 cent or more than user's credit ?
-	if (intval($_POST['bet']) < 1 || intval($_POST['bet']) > $_user['credit']) {
+	if (intval($_POST['bet']) < 0 || intval($_POST['bet']) > $_user['credit']) {
 		$bet = $_user['credit'];
 	} else {
 		$bet = intval($_POST['bet']);

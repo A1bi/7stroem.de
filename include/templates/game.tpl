@@ -1,4 +1,4 @@
-{include file="head.tpl" cssfile="game" jsfile="game"}
+{include file="head.tpl" cssfile="game" jsfile="game" head="game_head.tpl"}
 		<div id="loading">
 			Spiel wird geladen...
 			<p><img src="/gfx/game/loading.gif" alt="" /></p>
@@ -10,9 +10,9 @@
 					<div class="area">
 						<div class="name"></div>
 						<div class="flag"></div>
-						<div class="chat">
+						<div class="action chat">
 							<form action="game.php" method="post">
-								<input type="text" name="message" value="Chat" class="action inactive" />
+								<input type="text" name="message" value="Chat" class="inactive" />
 							</form>
 						</div>
 					</div>

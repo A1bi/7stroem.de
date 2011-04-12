@@ -245,12 +245,12 @@ var game = new function () {
 			out = false;
 			setFlag();
 			// pull out player area
-			$(".area", dom).addClass("shown", main.animationTime(500, true));
+			$(".area", dom).show().addClass("shown", main.animationTime(500, true));
 		}
 
 		this.roundEnded = function () {
 			// pull back player area
-			$(".area", dom).removeClass("shown", main.animationTime(500, true));
+			$(".area", dom).removeClass("shown", main.animationTime(500, true), function () { $(this).hide() });
 		}
 
 		// 
@@ -836,10 +836,15 @@ var game = new function () {
 		setTimeout(pollSession, 300000);
 	}
 
-	// hide loading sign and initiate butler connection
+	// images loaded
 	$(window).load(function () {
 		// initiate butler
 		butler.getActions();
+		
+		// hide loading sign
+		$("#loading").hide();
+		// show game
+		$("#panel, #game").css("visibility", "visible").hide().delay(200).fadeIn(main.animationTime(400));
 	});
 
 	// initialize game
@@ -900,18 +905,10 @@ var game = new function () {
 		hostChanged();
 
 		// preload images
-		imgs = ["actions", "areas", "box", "cards_bottom", "cards_top", "cards_left", "cards_right", "chat", "table"];
-		i = imgs.length;
+		imgs = ["actions", "areas", "cards_bottom", "cards_top", "cards_left", "cards_right"];
 		$.each(imgs, function (key, val) {
 			img = new Image();
-			$(img).attr("src", "/gfx/game/"+val+".png").load(function () {
-				i--;
-				if (i < imgs.length) {
-					$("#loading").hide();
-					// show game
-					$("#panel, #game").fadeIn(main.animationTime(400));
-				}
-			});
+			$(img).attr("src", "/gfx/game/"+val+".png");
 		});
 
 		/* testing
@@ -920,7 +917,7 @@ var game = new function () {
 		players[3] = new Player(3, "Bla2");
 		players[4] = new Player(4, "Bla3");
 		setTimeout(function () {
-			queue.push({"player":"1", "action": "started", "content": ""});
+			queue.push({"player":"1", "action": "started", "content": "1,3,4,2"});
 			queue.push({"player":"1", "action": "roundStarted", "content": ""});
 			queue.push({"player":"1", "action": "poor", "content": ""});
 			queue.push({"player":"1", "action": "smallRoundStarted", "content": ""});
@@ -934,7 +931,6 @@ var game = new function () {
 			//queue.push({"player":"2", "action": "poor", "content": ""});
 			//queue.push({"player":"1", "action": "knockTurn", "content": ""});
 			//queue.push({"player":"1", "action": "turn", "content": ""});
-			showError("hallo!", ".area");
 			//queue.push({"player":"1", "action": "smallRoundEnded", "content": ""});
 			//queue.push({"player":"1", "action": "roundEnded", "content": ""});
 			//processQueue(true);

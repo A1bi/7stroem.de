@@ -16,6 +16,10 @@
 {if $cssfile != ""}
 	<link rel="stylesheet" type="text/css" href="/css/{$cssfile}.css{fileVersion file="/css/{$cssfile}.css"}" />
 {/if}
+{if $head != ""}
+{include file=$head}
+{/if}
+
 	<script src="/js/fw/jquery.js"></script>
 	<script src="/js/fw/jquery-ui.js"></script>
 	<script src="/js/fw/modernizr.js"></script>
