@@ -44,7 +44,7 @@
 <body>
 	<div class="header{if $_user.id != ""} loggedIn{/if}">
 		<div class="hspace">
-			<a href="/" id="logo">7ström</a>
+			<a href="/" id="logo" class="txt-ind">7ström</a>
 			<div class="claim">
 				Siwweström, Siwweschräm, Sibbeschröm oder wie immer du es gerne nennst ;)
 			</div>
@@ -55,9 +55,9 @@
 				<li><a href="/settings">Einstellungen</a></li>
 			</ul>
 			<div class="userbox">
-				Hallo, {$_user.name|escape}!
-				<p>Guthaben: <span class="credit">{$_user.credit}</span> &euro;</p>
-				<div class="hright" style="font-size: 12px;"><a href="/logout">ausloggen</a></div>
+				Hallo, {$_user.name|escape}!<br />
+				<div class="credit">Guthaben: <span>{$_user.credit}</span> &euro;</div>
+				<div class="hright logout"><a href="/logout">ausloggen</a></div>
 			</div>
 		</div>
 		<div class="shadow l">&nbsp;</div>

@@ -20,11 +20,11 @@ p {
 .header {
 	position: relative;
 	width: 1009px;
-	height: 192px;
+	height: 108px;
 	color: #ffffff;
 	z-index: 89;
 	margin: auto;
-	background: url(/gfx/header.png) no-repeat -46px 0px;
+	background: url(/gfx/header.png) no-repeat -18px 0px;
 }
 .header .hspace {
 	position: absolute;
@@ -35,24 +35,24 @@ p {
 }
 .header #logo {
 	position: absolute;
-	left: 10px;
+	left: 15px;
 	top: 6px;
-	width: 320px;
-	height: 85px;
-	text-indent: -999px;
+	width: 258px;
+	height: 70px;
 }
 .header .claim {
 	position: absolute;
-	bottom: 29px;
-	left: 70px;
+	top: 61px;
+	left: 68px;
+	font-size: 14px;
 }
 .header.loggedIn .claim {
 	display: none;
 }
 .header .navi {
 	position: absolute;
-	left: 25px;
-	bottom: 20px;
+	left: 280px;
+	top: 55px;
 	margin: 0px;
 	text-align: center;
 	display: none;
@@ -74,21 +74,24 @@ p {
 }
 .header .userbox {
 	position: absolute;
-	top: 5px;
+	top: 2px;
 	right: 0px;
-	background: url(/gfx/header.png) no-repeat -1111px 0px;
-	width: 222px;
-	height: 100px;
-	padding-top: 15px;
+	background: url(/gfx/header.png) no-repeat -1045px 0px;
+	width: 155px;
+	height: 64px;
+	padding-top: 11px;
 	padding-left: 18px;
 	padding-right: 10px;
-	font-size: 14px;
+	font-size: 12px;
 	display: none;
 }
 .header.loggedIn .userbox {
 	display: block;
 }
 .header .userbox .credit {
+	margin-top: 3px;
+}
+.header .userbox .credit span {
 	-webkit-transition-property: background;
 	-webkit-transition-duration: .4s;
 	-webkit-transition-timing-function: ease-out;
@@ -96,23 +99,24 @@ p {
 	-moz-transition-duration: .4s;
 	-moz-transition-timing-function: ease-out;
 }
-.header .userbox .credit.updating {
+.header .userbox .credit span.updating {
 	background: #ff0000;
+}
+.header .userbox .logout {
+	margin-top: 4px;
 }
 .header .shadow {
 	background: url(/gfx/header.png) no-repeat;
 	position: absolute;
+	width: 18px;
+	height: 100%;
 }
 .header .shadow.l {
-	left: -46px;
-	width: 46px;
-	height: 192px;
+	left: -18px;
 }
 .header .shadow.r {
-	background-position: -1055px 0px;
-	right: -56px;
-	width: 56px;
-	height: 192px;
+	background-position: -1027px 0px;
+	right: -18px;
 }
 .header a {
 	color: #ffffff;
@@ -128,7 +132,6 @@ p {
 	width: 1009px;
 	margin: auto;
 	z-index: 2;
-	top: -20px;
 	padding-bottom: 50px;
 }
 .pspace .bg {
@@ -169,6 +172,9 @@ p {
 .head {
 	text-shadow: #000000 1px 1px 5px;
 	color: #ffffff;
+}
+.txt-ind {
+	text-indent: -999px;
 }
 
 /* content boxes */
