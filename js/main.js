@@ -13,11 +13,11 @@ var main = new function () {
 
 		this.updateCredit = function () {
 			$.getJSON("/ajax.php?action=getCredit", function (data) {
-				dom = $(".userbox .credit").addClass("updating", _this.animationTime(400, true));
+				dom = $(".userbox .credit span").addClass("updating", _this.animationTime(400, true));
 				setTimeout(function () {
 					dom.html(data.credit);
 					dom.removeClass("updating", _this.animationTime(400, true));
-				}, 405);
+				}, 500);
 			});
 
 		}

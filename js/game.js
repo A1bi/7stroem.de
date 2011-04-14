@@ -275,7 +275,10 @@ var game = new function () {
 				$("div", knockDom).addClass("down", main.animationTime(100, true), "easeInQuint");
 			}, 0);
 			setTimeout(function () {
-				$("#knockSfx").get(0).play();
+				// prevent errors in IE
+				try {
+					$("#knockSfx").get(0).play();
+				} catch (e) {}
 			}, 100);
 			setTimeout(function () {
 				knockDom.addClass("down", main.animationTime(400, true));
@@ -487,7 +490,7 @@ var game = new function () {
 					// update strike selection
 					knockDom = $(".blindKnock select");
 					knockDom.empty();
-					for (i = 1; i <= 6-players[userid].strikes; i++) {
+					for (i = 2; i <= 6-players[userid].strikes; i++) {
 						knockDom.append($("<option>").html(i));
 					}
 					fadeActionBtn("blindKnock", true);
@@ -872,11 +875,18 @@ var game = new function () {
 			return false;
 		});
 		// user used c shortcut
+		var chatField = $(".players .bottom .chat input");
+		var chatFocused = false;
 		$(document).keyup(function (event) {
-			field = $(".players .bottom .chat input");
-			if (event.which == 67 && !field.is(":focus")) {
-				field.focus();
+			if (event.which == 67 && roundStarted) {
+				if (!chatFocused) {
+					chatFocused = true;
+					chatField.focus();
+				}
 			}
+		});
+		chatField.focusout(function () {
+			chatFocused = false;
 		});
 
 		// warn user before leaving this page
