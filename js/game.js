@@ -221,12 +221,12 @@ var game = new function () {
 		// update the players entry in strikes table
 		this.updateStrikes = function (newState) {
 			for (i = this.strikes+1; i <= newState; i++) {
-				sDom = $("<div>").addClass("strike action");
+				sDom = $("<div>").addClass("strike element");
 				if (i % 5 == 0) {
 					sDom.addClass("cross");
 				} else {
-					pos = 100 + Math.round(Math.random() * 7) * 5;
-					sDom.css("background-position", "-"+pos+"px -207px").css("left", i*6+"px");
+					pos = 137 + Math.round(Math.random() * 7) * 4;
+					sDom.css("background-position", "-"+pos+"px -188px").css("left", i*5+"px");
 				}
 				$("#strikes .sTable tr:last td > div").eq(placeTable).append(sDom);
 			}
@@ -493,7 +493,7 @@ var game = new function () {
 					for (i = 2; i <= 6-players[userid].strikes; i++) {
 						knockDom.append($("<option>").html(i));
 					}
-					fadeActionBtn("blindKnock", true);
+					if (!knockDom.is(":empty")) fadeActionBtn("blindKnock", true);
 				} else {
 					knocked(0);
 				}
@@ -511,7 +511,7 @@ var game = new function () {
 					if (i == 0) {
 						cell.html(rounds).addClass("round");
 					} else {
-						cell.append($("<div>")).addClass("player");
+						cell.append($("<div>").addClass("strikesCon")).addClass("player");
 					}
 					row.append(cell);
 				}
@@ -842,7 +842,7 @@ var game = new function () {
 	// images loaded
 	$(window).load(function () {
 		// initiate butler
-		butler.getActions();
+		//butler.getActions();
 		
 		// hide loading sign
 		$("#loading").hide();
@@ -861,13 +861,13 @@ var game = new function () {
 
 		// chat
 		// user focused message field
-		$(".chat form input").focus(function () {
+		$("input.inactive").focus(function () {
 			if ($(this).is(".inactive")) {
 				$(this).removeClass("inactive").val("");
 			}
 		});
 		// user submitted a message
-		$(".chat form").submit(function () {
+		$("#log form").submit(function () {
 			message = encodeURIComponent($(this).find("input").val());
 			if (message == "") return false;
 			$(this).find("input").val("");
@@ -921,7 +921,7 @@ var game = new function () {
 			$(img).attr("src", "/gfx/game/"+val+".png");
 		});
 
-		/* testing
+		/* testing */
 		players[1] = new Player(1, "Albi");
 		players[2] = new Player(2, "Bla");
 		players[3] = new Player(3, "Bla2");
@@ -929,13 +929,14 @@ var game = new function () {
 		setTimeout(function () {
 			queue.push({"player":"1", "action": "started", "content": "1,3,4,2"});
 			queue.push({"player":"1", "action": "roundStarted", "content": ""});
-			queue.push({"player":"1", "action": "poor", "content": ""});
-			queue.push({"player":"1", "action": "smallRoundStarted", "content": ""});
-			queue.push({"player":"1", "action": "turn", "content": ""});
+			//queue.push({"player":"1", "action": "poor", "content": ""});
+			//queue.push({"player":"1", "action": "smallRoundStarted", "content": ""});
+			//queue.push({"player":"1", "action": "turn", "content": ""});
+			queue.push({"player":"1", "action": "strikes", "content": "5"});
 			processQueue(true);
 		}, 1500);
 		setTimeout(function () {
-			players[4].chat("test");
+			players[4].updateStrikes(7);
 		}, 3000);
 		setTimeout(function () {
 			//queue.push({"player":"2", "action": "poor", "content": ""});
@@ -944,7 +945,7 @@ var game = new function () {
 			//queue.push({"player":"1", "action": "smallRoundEnded", "content": ""});
 			//queue.push({"player":"1", "action": "roundEnded", "content": ""});
 			//processQueue(true);
-		}, 4000);*/
+		}, 4000);
 
 	});
 

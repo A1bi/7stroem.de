@@ -1,9 +1,7 @@
 #game {
 	position: absolute;
-	width: 869px;
-	height: 664px;
-	top: -20px;
-	left: 58px;
+	width: 690px;
+	height: 604px;
 	visibility: hidden;
 }
 #game div {
@@ -16,10 +14,10 @@
 	z-index: 99;
 }
 .pspace .content {
-	height: 1000px;
+	height: 680px;
 }
-.action {
-	background: url(/gfx/game/actions.png) no-repeat;
+.element {
+	background: url(/gfx/game/elements.png) no-repeat;
 }
 
 
@@ -485,10 +483,10 @@
 
 /*** table ***/
 #game .table {
-	top: 20px;
-	left: 28px;
-	width: 808px;
-	height: 620px;
+	top: 37px;
+	left: 50px;
+	width: 589px;
+	height: 512px;
 	background: url(/gfx/game/table.png) no-repeat;
 	z-index: 2;
 }
@@ -497,18 +495,11 @@
 /*** panel ***/
 #panel {
 	position: absolute;
-	top: 170px;
-	left: 30px;
-	width: 100%;
+	top: 50px;
+	right: 0px;
+	width: 307px;
 	visibility: hidden;
 	z-index: 10;
-	-webkit-transition-property: top;
-	-webkit-transition-duration: .4s;
-	-moz-transition-property: top;
-	-moz-transition-duration: .4s;
-}
-#panel.down {
-	top: 670px;
 }
 #panel div {
 	position: absolute;
@@ -516,70 +507,72 @@
 #panel .head {
 	width: 100%;
 	text-align: center;
-	padding-top: 30px;
-	font-size: 17px;
+	padding-top: 22px;
+	font-size: 15px;
 }
 /* common classes */
 #panel .box {
-	background: url(/gfx/game/box.png) no-repeat;
-	width: 513px;
-	height: 311px;
-}
-#panel .box .space {
-	color: #ffffff;
-	top: 80px;
-	left: 45px;
-	width: 424px;
-	height: 190px;
-}
-#panel .box .space div {
-	position: relative;
+	background: url(/gfx/game/boxes.png) no-repeat;
+	width: 100%;
 }
 #panel table {
 	width: 100%;
 	border-collapse: collapse;
 }
 
-/** chat **/
-#panel .chat {
-	left: 500px;
-	background: url(/gfx/game/chat.png) no-repeat;
-	width: 454px;
-	height: 311px;
+/** log **/
+#panel #log {
+	top: 253px;
+	width: 100%;
+	height: 234px;
+	background-position: 0px -233px;
 }
-#panel .chat .log {
-	top: 75px;
-	left: 50px;
+#panel #log .entries {
+	top: 55px;
+	left: 23px;
 	font-size: 13px;
-	height: 170px;
-	width: 360px;
+	height: 130px;
+	width: 256px;
 	overflow: auto;
 }
-#panel .chat .log div {
+#panel #log .entries div {
 	position: relative;
 	color: #999999;
 }
-#panel .chat .log .message {
+#panel #log .entries .message {
 	color: #000000;
 }
-#panel .chat .input {
-	bottom: 30px;
-	left: 44px;
+#panel #log .input {
+	bottom: 17px;
+	left: 39px;
 }
-#panel .chat .input input {
-	width: 361px;
+#panel #log .input input {
+	width: 239px;
+	height: 13px;
+	padding: 0px;
+	background: transparent;
+	border: none;
 }
-.chat input.inactive {
+input.inactive {
 	font-style: italic;
 	color: #cccccc;
 }
 
 /** strikes **/
 #panel #strikes {
-	display: none;
+	
+	height: 233px;
+	width: 100%;
+}
+#panel #strikes .space {
+	color: #ffffff;
+	top: 54px;
+	left: 22px;
+	width: 265px;
+	height: 155px;
 }
 #panel #strikes table {
-	width: 396px;
+	width: 238px;
 }
 #panel #strikes table td {
 	text-align: center;
@@ -592,10 +585,11 @@
 #panel #strikes table td.player {
 	width: 20%;
 }
-#panel #strikes .sTable table div {
-	height: 25px;
-	margin-top: 1px;
-	margin-left: 7px;
+#panel #strikes .sTable .strikesCon {
+	height: 20px;
+	margin-top: 2px;
+	margin-left: 2px;
+	top: 0px;
 }
 #panel #strikes table td.quit {
 	text-decoration: line-through;
@@ -605,15 +599,14 @@
 }
 #panel #strikes .sTable table tr {
 	border-top: 2px #363636 solid;
-	height: 34px;
+	height: 24px;
 }
 #panel #strikes table tr:first-child {
 	border-top: none;
 }
 #panel #strikes table.top {
 	border-bottom: 2px #363636 solid;
-	font-weight: bold;
-	font-size: 15px;
+	font-size: 12px;
 }
 #panel #strikes .sTable {
 	height: 95%;
@@ -624,22 +617,49 @@
 }
 #panel #strikes .strike {
 	position: absolute;
-	width: 5px;
-	height: 25px;
+	width: 4px;
+	height: 100%;
 }
 #panel #strikes .strike.cross {
-	width: 33px;
+	width: 27px;
 	left: 1px;
-	background-position: -143px -207px;
+	background-position: -172px -188px;
 }
-#panel #strikes .actions {
+
+/** overview **/
+#overview .space {
+	font-size: 14px;
+}
+#overview ul {
+	margin: 0px;
+	padding: 0px;
+}
+#overview tr td:first-child {
+	vertical-align: top;
+	font-weight: bold;
+}
+#overview #startGame {
+	margin-top: 10px;
+}
+#overview #startGame > div {
+	display: none;
+}
+#overview #startGame .startBtn {
+	position: absolute;
+	background-position: 0px -279px;
+	width: 183px;
+	height: 37px;
+	right: 0px;
+	cursor: pointer;
+}
+#overview .actions {
 	margin-top: 6px;
 	display: none;
 }
-#panel #strikes .actions div {
+#overview .actions div {
 	position: absolute;
 }
-#panel #strikes .actions .newRound {
+#overview .actions .newRound {
 	background-position: 0px -316px;
 	width: 175px;
 	height: 27px;
@@ -647,39 +667,12 @@
 	right: 0px;
 	display: none;
 }
-#panel #strikes .actions .waiting {
+#overview .actions .waiting {
 	width: 100%;
 	left: 0px;
 	top: 8px;
 	font-size: 13px;
 }
-#panel #strikes .actions .waiting div {
+#overview .actions .waiting div {
 	display: none;
-}
-
-/** overview **/
-#panel #overview .space {
-	font-size: 14px;
-}
-#panel #overview ul {
-	margin: 0px;
-	padding: 0px;
-}
-#panel #overview tr td:first-child {
-	vertical-align: top;
-	font-weight: bold;
-}
-#panel #startGame {
-	margin-top: 10px;
-}
-#panel #startGame > div {
-	display: none;
-}
-#panel #startGame .startBtn {
-	position: absolute;
-	background-position: 0px -279px;
-	width: 183px;
-	height: 37px;
-	right: 0px;
-	cursor: pointer;
 }

@@ -4,7 +4,43 @@
 			<p><img src="/gfx/game/loading.gif" alt="" /></p>
 		</div>
 		<div id="game">
-			<div class="table">&nbsp;</div>
+			<div class="table">
+				<div id="overview">
+					<div class="head">Übersicht</div>
+					<div class="space">
+						<table>
+							<tr>
+								<td>Spieler:</td>
+								<td>
+									<ul></ul>
+									noch <span id="maxplayers">{$maxplayers}</span> freie Plätze im Spiel
+								</td>
+							</tr>
+							<tr>
+								<td>Einsatz:</td>
+								<td>{$bet} &euro;</td>
+							</tr>
+							<tr>
+								<td>Typ:</td>
+								<td>{if $public}öffentlich{else}nur für Freunde{/if}</td>
+							</tr>
+						</table>
+						<div id="startGame">
+							<div>
+								Bitte warte, bis der Spielleiter das Spiel startet.
+							</div>
+							<div>
+								Sobald du denkst, dass genug Spieler dem Spiel beigetreten sind, kannst du das Spiel starten.
+								<div class="startBtn action" title="Spiel starten">&nbsp;</div>
+							</div>
+						</div>
+					</div>
+					<div class="actions">
+						<div class="waiting">Bitte warte, bis der Spielleiter eine neue Runde startet.</div>
+						<div class="newRound action">&nbsp;</div>
+					</div>
+				</div>
+			</div>
 			<div class="players">
 				<div class="bottom horizontal">
 					<div class="area">
@@ -63,38 +99,7 @@
 			</div>
 		</div>
 		<div id="panel">
-			<div class="box" id="overview">
-				<div class="head">Übersicht</div>
-				<div class="space">
-					<table>
-						<tr>
-							<td>Spieler:</td>
-							<td>
-								<ul></ul>
-								noch <span id="maxplayers">{$maxplayers}</span> freie Plätze im Spiel
-							</td>
-						</tr>
-						<tr>
-							<td>Einsatz:</td>
-							<td>{$bet} &euro;</td>
-						</tr>
-						<tr>
-							<td>Typ:</td>
-							<td>{if $public}öffentlich{else}nur für Freunde{/if}</td>
-						</tr>
-					</table>
-					<div id="startGame">
-						<div>
-							Bitte warte, bis der Spielleiter das Spiel startet.
-						</div>
-						<div>
-							Sobald du denkst, dass genug Spieler dem Spiel beigetreten sind, kannst du das Spiel starten.
-							<div class="startBtn action" title="Spiel starten">&nbsp;</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="box" id="strikes">
+			<div id="strikes" class="box">
 				<div class="head">Striche</div>
 				<div class="space">
 					<table class="top head">
@@ -109,18 +114,14 @@
 					<div class="sTable">
 						<table></table>
 					</div>
-					<div class="actions">
-						<div class="waiting">Bitte warte, bis der Spielleiter eine neue Runde startet.</div>
-						<div class="newRound action">&nbsp;</div>
-					</div>
 				</div>
 			</div>
-			<div class="chat">
+			<div id="log" class="box">
 				<div class="head">Spielprotokoll</div>
-				<div class="log"></div>
+				<div class="entries"></div>
 				<form action="game.php" method="post">
 				<div class="input">
-					<input type="text" name="message" value="Nachricht schreiben..." class="inactive" />
+					<input type="text" name="message" value="Chat" class="inactive" />
 				</div>
 				</form>
 			</div>
