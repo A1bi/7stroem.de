@@ -92,12 +92,8 @@ p {
 	margin-top: 3px;
 }
 .header .userbox .credit span {
-	-webkit-transition-property: background;
-	-webkit-transition-duration: .4s;
-	-webkit-transition-timing-function: ease-out;
-	-moz-transition-property: background;
-	-moz-transition-duration: .4s;
-	-moz-transition-timing-function: ease-out;
+	-webkit-transition: background .4s ease-out;
+	-moz-transition: background .4s ease-out;
 }
 .header .userbox .credit span.updating {
 	background: #ff0000;
@@ -175,6 +171,21 @@ p {
 }
 .txt-ind {
 	text-indent: -999px;
+}
+.fade {
+	-webkit-transition-property: opacity;
+	-webkit-transition-duration: .4s;
+	-webkit-transition-timing-function: ease-out;
+	-moz-transition-property: opacity;
+	-moz-transition-duration: .4s;
+	-moz-transition-timing-function: ease-out;
+}
+.fade.out {
+	opacity: 0 !important;
+}
+.fade.in {
+	visibility: visible !important;
+	opacity: 1 !important;
 }
 
 /* content boxes */

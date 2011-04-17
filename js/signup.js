@@ -113,12 +113,12 @@ var signup = new function () {
 	
 	var hideStep = function (s) {
 		sBox = $(".step").eq(s);
-		sBox.find(".contnt").addClass("collapsed", main.animationTime(400, true));
+		sBox.find(".contnt").addClass("collapsed", 400);
 		finishStep(sBox);
 	}
 
 	var showStep = function (s, noAnimation) {
-		$(".step .contnt").eq(s).removeClass("collapsed", (noAnimation) ? 0 : main.animationTime(400, true));
+		$(".step .contnt").eq(s).removeClass("collapsed", (noAnimation) ? 0 : 400);
 	}
 
 	var nextStep = function (noAnimation) {

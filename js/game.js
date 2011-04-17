@@ -34,28 +34,32 @@ var game = new function () {
 		var dom;
 		var laid = false;
 
-		var getBackground = function () {
+		var getBackground = function (front) {
 			suit = suits[id.substr(0, 1)];
 			number = id.substr(1)-3;
+			w = front.width();
+			h = front.height();
 
 			switch (place) {
 				case 0:
-					x = number * 87;
-					y = suit * 129;
+					x = number * w - 2;
+					y = suit * h;
 					break;
 				case 1:
-					x = 647 - (suit+1) * 129;
-					y = number * 87;
+					x = (4-suit) * w + 2;
+					y = number * h - 2;
 					break;
 				case 2:
-					x = 700 - (number+1) * 87;
-					y = 647 - (suit+1) * 129;
+					x = (7-number) * w;
+					y = (4-suit) * h + 2;
 					break;
 				case 3:
-					x = suit * 129;
-					y = (7-number) * 87 + 4;
+					x = suit * w;
+					y = (7-number) * h + 1;
 					break;
 			}
+			if (x < 0) x = 0;
+			if (y < 0) y = 0;
 
 			return "-" + x + "px -" + y + "px";
 		}
@@ -66,9 +70,10 @@ var game = new function () {
 			// add active class so hover event gets triggered
 			card.addClass("active");
 			// set correct background and fade in
-			front = $(".front", card).css("background-position", getBackground()).delay(200).fadeIn(main.animationTime(200));
+			front = $(".front", card);
+			front.css("background-position", getBackground(front)).delay(200).fadeIn(200);
 			// hide back
-			$(".back", card).delay(300).fadeOut(main.animationTime(100));
+			$(".back", card).delay(300).fadeOut(100);
 			if (place == 0) {
 				// register click and hover events only for this player
 				card.click(function () {
@@ -85,9 +90,9 @@ var game = new function () {
 			// increase z to lay the card on top of the other cards
 			card.css({"z-index": $(".stack", dom).length+6});
 			// add switch class so the card will move onto stack
-			card.switchClass("hand", "stack", main.animationTime(500, true));
+			card.switchClass("hand", "stack", 500);
 			// also move the front to a random position inside the card container
-			pos = {"left": Math.round(Math.random() * 40), "top": Math.round(Math.random() * 40)};
+			pos = {"left": Math.round(Math.random() * 20), "top": Math.round(Math.random() * 20)};
 			if (Modernizr.csstransitions) {
 				// webkit browser will animate on their own
 				card.find("div").css(pos);
@@ -98,8 +103,8 @@ var game = new function () {
 
 		this.fold = function () {
 			if (laid || place == 0) {
-				$(".front", card).fadeOut(main.animationTime(300));
-				$(".back", card).fadeIn(main.animationTime(400));
+				$(".front", card).fadeOut(300);
+				$(".back", card).fadeIn(400);
 			}
 			if (laid) {
 				remove = "stack";
@@ -107,14 +112,14 @@ var game = new function () {
 			} else {
 				remove = "hand";
 			}
-			card.switchClass(remove, "folded", main.animationTime(500, true));
+			card.switchClass(remove, "folded", 500);
 		}
 
 		var card = $("<div>").addClass("card hand").append($("<div>").addClass("back"), $("<div>").addClass("front"));
 
 		// add it to the players hand
 		dom = $(".players > div").eq(place).find(".cards");
-		card.appendTo(dom).css(positions[place], i*50).delay(i*100).fadeIn(main.animationTime(400));
+		card.appendTo(dom).css(positions[place], i*45).delay(i*100).fadeIn(400);
 
 	}
 
@@ -136,7 +141,7 @@ var game = new function () {
 		var bubble = new Bubble;
 
 		var removeCards = function () {
-			$(".card", dom).fadeOut(main.animationTime(400), function () {
+			$(".card", dom).fadeOut(400, function () {
 				$(this).remove();
 			});
 		}
@@ -146,10 +151,10 @@ var game = new function () {
 			flagDom = $(".flag", dom);
 			if (flag == "") {
 				if (!flagDom.is(":hidden")) {
-					flagDom.fadeIn(main.animationTime(100));
+					flagDom.fadeIn(100);
 				}
 			} else {
-				flagDom.html(flag).fadeIn(main.animationTime(100));
+				flagDom.html(flag).fadeIn(100);
 			}
 		}
 
@@ -197,7 +202,7 @@ var game = new function () {
 
 		// set or unset that it is this player's turn
 		this.toggleTurn = function () {
-			$(".name", dom).toggleClass("turn", main.animationTime(500, true));
+			$(".name", dom).toggleClass("turn", 500);
 		}
 
 		// user has laid a card on his stack
@@ -225,7 +230,7 @@ var game = new function () {
 				if (i % 5 == 0) {
 					sDom.addClass("cross");
 				} else {
-					pos = 137 + Math.round(Math.random() * 7) * 4;
+					pos = 138 + Math.round(Math.random() * 7) * 4;
 					sDom.css("background-position", "-"+pos+"px -188px").css("left", i*5+"px");
 				}
 				$("#strikes .sTable tr:last td > div").eq(placeTable).append(sDom);
@@ -245,15 +250,16 @@ var game = new function () {
 			out = false;
 			setFlag();
 			// pull out player area
-			$(".area", dom).show().addClass("shown", main.animationTime(500, true));
+			$(".area", dom).css("visibility", "visible").addClass("shown", 700);
 		}
 
 		this.roundEnded = function () {
 			// pull back player area
-			$(".area", dom).removeClass("shown", main.animationTime(500, true), function () { $(this).hide() });
+			$(".area", dom).removeClass("shown", 700, "", function () {
+				$(this).css("visibility", "hidden");
+			});
 		}
 
-		// 
 		this.smallRoundStarted = function () {
 			if (out) return;
 			// give cards
@@ -268,20 +274,15 @@ var game = new function () {
 		}
 
 		this.knocked = function () {
-			knockDom = $(".knocked", dom);
-			$("div", knockDom).removeClass("down");
-			knockDom.removeClass("down").fadeIn(main.animationTime(200));
-			setTimeout(function () {
-				$("div", knockDom).addClass("down", main.animationTime(100, true), "easeInQuint");
-			}, 0);
-			setTimeout(function () {
+			knockDom = $(".knocked", dom).removeClass("down");
+			$("div", knockDom).fadeTo(0, 1).css("visibility", "visible").addClass("down", 100, "easeInQuint", function () {
 				// prevent errors in IE
 				try {
 					$("#knockSfx").get(0).play();
 				} catch (e) {}
-			}, 100);
+			});
 			setTimeout(function () {
-				knockDom.addClass("down", main.animationTime(400, true));
+				knockDom.addClass("down", 400);
 			}, 1000);
 		}
 
@@ -291,8 +292,9 @@ var game = new function () {
 		}
 
 		this.knockFinished = function () {
-			$(".knocked", dom).fadeOut(main.animationTime(400));
-			$(".knocked div", dom).html("");
+			$(".knocked div", dom).fadeTo(400, 0, function () {
+				$(this).removeClass("down").html("");
+			});
 		}
 
 		this.folded = function () {
@@ -312,11 +314,9 @@ var game = new function () {
 		}
 
 		this.quit = function () {
-			// check if game is not yet started by looking if area is pulled out
+			// remove player from overview
+			listDom.remove();
 			if (!started) {
-				// remove player from list
-				listDom.remove();
-				
 				// increase player counter
 				$("#maxplayers").html(parseInt($("#maxplayers").html())+1);
 
@@ -329,7 +329,7 @@ var game = new function () {
 		}
 
 		this.chat = function (msg) {
-			if (!$(".area", dom).is(".shown")) return;
+			if (!roundStarted) return;
 			bubble.setContent(msg);
 			bubble.setType("info");
 			bubble.setIcon("chat");
@@ -390,9 +390,9 @@ var game = new function () {
 	var fadeActionBtn = function (action, show, time) {
 		if (time == undefined) time = 400;
 		if (show) {
-			$(".actions ."+action).fadeIn(main.animationTime(time));
+			$(".actions ."+action).fadeIn(time);
 		} else {
-			$(".actions ."+action).fadeOut(main.animationTime(time));
+			$(".actions ."+action).fadeOut(time);
 		}
 	}
 
@@ -485,7 +485,9 @@ var game = new function () {
 						player.smallRoundStarted();
 					}
 				});
-				fadeActionBtn("flipHand", true);
+				if (!players[userid].out) {
+					fadeActionBtn("flipHand", true);
+				}
 				if (!poor) {
 					// update strike selection
 					knockDom = $(".blindKnock select");
@@ -500,8 +502,14 @@ var game = new function () {
 				break;
 
 			case "roundStarted":
-				// hide new round actions
-				$("#strikes .actions").hide();
+				$("#overview").fadeOut(300, function () {
+					// hide start actions
+					if ($("#startGame").css("display") != "none") {
+						$("#startGame").hide();
+						// hide player counter because no more players can join the game
+						$(".counter", this).hide();
+					}
+				});
 				roundStarted = true;
 				rounds++;
 				row = $("<tr>");
@@ -515,7 +523,7 @@ var game = new function () {
 					}
 					row.append(cell);
 				}
-				$("#panel").addClass("down", main.animationTime(500, true));
+				$("#panel").addClass("down", 500);
 				strikesDom = $("#strikes");
 				$("actions", strikesDom).hide();
 				$(".sTable", strikesDom).removeClass("smaller").find("table").append(row);
@@ -539,19 +547,9 @@ var game = new function () {
 				$.each(players, function (key, player) {
 					if (player != null) player.roundEnded();
 				});
-				$("#panel").removeClass("down", main.animationTime(500, true));
-				strikesDom = $("#strikes");
-				actionsDom = $(".actions", strikesDom);
-				$(".sTable", strikesDom).addClass("smaller");
-				if (host == userid) {
-					$(".newRound", actionsDom).show();
-					$(".waiting", actionsDom).hide();
-				} else {
-					$(".newRound", actionsDom).hide();
-					$(".waiting", actionsDom).show();
-				}
-				$("#strikes .actions").show();
-				actionsDom.show();
+				
+				$("#overview").fadeIn(300);
+				$("#startRound").show();
 
 				// update user credit in userbox if this user has won
 				if (action.player == userid) {
@@ -567,7 +565,7 @@ var game = new function () {
 
 			case "smallRoundEnded":
 				poor = false;
-				$(".actions > div").fadeOut(main.animationTime(400));
+				$(".actions > div").fadeOut(400);
 				wait = 2000;
 				waitFunction = function () {
 					$.each(players, function (key, player) {
@@ -645,8 +643,8 @@ var game = new function () {
 		if (style != undefined) {
 			dom.addClass(style);
 		}
-		$(".chat .log").append(dom);
-		$(".chat .log").attr({scrollTop: $(".chat .log").attr("scrollHeight")});
+		entries = $("#log .entries").append(dom);
+		entries.attr({scrollTop: entries.attr("scrollHeight")});
 	}
 
 	// get new player info and add those players
@@ -795,20 +793,22 @@ var game = new function () {
 	}
 
 	var hostChanged = function () {
-		dom = $("#startGame > div");
+		off = 1;
+		on = 0;
 		if (host == userid) {
-			dom.last().show();
-			dom.first().hide();
-		} else {
-			dom.last().hide();
-			dom.first().show();
+			off = 0;
+			on = 1;
 		}
+		$("#overview > .space > div").each(function () {
+			b = $("> div", this);
+			b.eq(on).show();
+			b.eq(off).hide();
+		});
 	}
 
 	var finishStart = function (order) {
 		started = true;
 		order = order.split(",");
-		$("#overview").fadeOut(main.animationTime(400));
 		for (i = 0; i < order.length; i++) {
 			if (order[i] == userid) {
 				me = i;
@@ -821,7 +821,7 @@ var game = new function () {
 			}
 			players[order[i]].startGame(i, pos);
 		}
-		$("#strikes").delay(500).fadeIn(main.animationTime(400));
+		$("#strikes").delay(500).fadeIn(400);
 	}
 
 
@@ -842,12 +842,20 @@ var game = new function () {
 	// images loaded
 	$(window).load(function () {
 		// initiate butler
-		//butler.getActions();
-		
-		// hide loading sign
-		$("#loading").hide();
-		// show game
-		$("#panel, #game").css("visibility", "visible").hide().delay(200).fadeIn(main.animationTime(400));
+		butler.getActions();
+
+		// scroll down
+		$("html, body").attr("scrollTop", $(".header").height());
+		// start game box
+		hostChanged();
+		$("#startGame").show();
+
+		// preload images for cards
+		$.each(["bottom", "top", "left", "right"], function (key, val) {
+			img = new Image();
+			$(img).attr("src", "/gfx/game/cards_"+val+".png");
+		});
+
 	});
 
 	// initialize game
@@ -855,7 +863,7 @@ var game = new function () {
 
 		// register events
 		$("#startGame .startBtn").click(start);
-		$("#strikes .newRound").click(function () {
+		$("#startRound .newRound").click(function () {
 			butler.registerHostAction("newRound");
 		});
 
@@ -875,14 +883,12 @@ var game = new function () {
 			return false;
 		});
 		// user used c shortcut
-		var chatField = $(".players .bottom .chat input");
+		var chatField = $("#log input");
 		var chatFocused = false;
 		$(document).keyup(function (event) {
-			if (event.which == 67 && roundStarted) {
-				if (!chatFocused) {
-					chatFocused = true;
-					chatField.focus();
-				}
+			if (event.which == 67 && !chatFocused) {
+				chatFocused = true;
+				chatField.focus();
 			}
 		});
 		chatField.focusout(function () {
@@ -911,17 +917,7 @@ var game = new function () {
 		// session polling
 		pollSession();
 
-		// start game box
-		hostChanged();
-
-		// preload images
-		imgs = ["actions", "areas", "cards_bottom", "cards_top", "cards_left", "cards_right"];
-		$.each(imgs, function (key, val) {
-			img = new Image();
-			$(img).attr("src", "/gfx/game/"+val+".png");
-		});
-
-		/* testing */
+		/* testing*/
 		players[1] = new Player(1, "Albi");
 		players[2] = new Player(2, "Bla");
 		players[3] = new Player(3, "Bla2");
@@ -930,22 +926,25 @@ var game = new function () {
 			queue.push({"player":"1", "action": "started", "content": "1,3,4,2"});
 			queue.push({"player":"1", "action": "roundStarted", "content": ""});
 			//queue.push({"player":"1", "action": "poor", "content": ""});
-			//queue.push({"player":"1", "action": "smallRoundStarted", "content": ""});
+			queue.push({"player":"1", "action": "smallRoundStarted", "content": ""});
 			//queue.push({"player":"1", "action": "turn", "content": ""});
-			queue.push({"player":"1", "action": "strikes", "content": "5"});
 			processQueue(true);
 		}, 1500);
 		setTimeout(function () {
-			players[4].updateStrikes(7);
+			//queue.push({"player":"1", "action": "smallRoundEnded", "content": ""});
+			queue.push({"player":"1", "action": "laidStack", "content": "c3"});
+			//processQueue(true);
+			players[1].flipHand(3, "c3");
+			players[1].updateStrikes(7);
 		}, 3000);
 		setTimeout(function () {
 			//queue.push({"player":"2", "action": "poor", "content": ""});
 			//queue.push({"player":"1", "action": "knockTurn", "content": ""});
 			//queue.push({"player":"1", "action": "turn", "content": ""});
-			//queue.push({"player":"1", "action": "smallRoundEnded", "content": ""});
-			//queue.push({"player":"1", "action": "roundEnded", "content": ""});
+			queue.push({"player":"1", "action": "smallRoundEnded", "content": ""});
+			queue.push({"player":"3", "action": "roundEnded", "content": ""});
 			//processQueue(true);
-		}, 4000);
+		}, 6000);
 
 	});
 

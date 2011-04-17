@@ -1,23 +1,95 @@
+$.fn.extend({
+	transEnd: function (callback) {
+		if (callback && Modernizr.csstransitions) {
+			event = "TransitionEnd";
+			if ($.browser.webkit) {
+				event = "webkitTransitionEnd";
+			} else if ($.browser.mozilla) {
+				event = "transitionend";
+			} else if ($.browser.opera) {
+				event = "oTransitionEnd";
+			}
+			this.bind(event, callback);
+			this.bind(event, function () {
+				$(this).unbind(event);
+			});
+		}
+		return this;
+	},
+	checkIE: function (speed) {
+		if ($.browser.msie) {
+			if (this.css("background-image") != "none") return 0;
+			this.find("> div").each(function () {
+				if ($(this).css("background-image") != "none") {
+					speed = 0;
+					return;
+				}
+			});
+		}
+		return speed;
+	},
+	__fadeIn: $.fn.fadeIn,
+	fadeIn: function (speed, easing, callback) {
+		//if (!Modernizr.csstransitions) {
+			return this.__fadeIn(this.checkIE(speed), easing, callback);
+		//} else {
+			//return this.transEnd(callback).css({"visibility": "hidden", opacity: 0}).show()._addClass("fade in");
+		//}
+	},
+	__fadeOut: $.fn.fadeOut,
+	fadeOut: function (speed, easing, callback) {
+		//if (!Modernizr.csstransitions) {
+			return this.__fadeOut(this.checkIE(speed), easing, callback);
+		//} else {
+		//	return this.transEnd(callback)._addClass("fade out");
+		//}
+	},
+	__addClass: $.fn.addClass,
+	addClass: function (classNames, speed, easing, callback) {
+		if (speed && !Modernizr.csstransitions) {
+			return this.__addClass(classNames, speed, easing, callback);
+		} else {
+			return this.transEnd(callback)._addClass(classNames);
+		}
+	},
+	__removeClass: $.fn.removeClass,
+	removeClass: function (classNames, speed, easing, callback) {
+		if (speed && !Modernizr.csstransitions) {
+			return this.__removeClass(classNames, speed, easing, callback);
+		} else {
+			return this.transEnd(callback)._removeClass(classNames);
+		}
+	},
+	__switchClass: $.fn.switchClass,
+	switchClass: function (remove, add, speed, easing, callback) {
+		if (speed && !Modernizr.csstransitions) {
+			return this.__switchClass(remove, add, speed, easing, callback);
+		} else {
+			return this.transEnd(callback).__switchClass(remove, add, 0);
+		}
+	},
+	__toggleClass: $.fn.toggleClass,
+	toggleClass: function (classNames, speed, easing, callback) {
+		if (speed && !Modernizr.csstransitions) {
+			return this.__toggleClass(classNames, speed, easing, callback);
+		} else {
+			return this.transEnd(callback)._toggleClass(classNames);
+		}
+	}
+});
+
 var main = new function () {
 
 	var _this = this;
-
-	this.animationTime = function (time, dependend) {
-		if ((dependend && Modernizr.csstransitions) || navigator.platform.indexOf("iPhone") != -1 || navigator.platform.indexOf("iPod") != -1) {
-			time = 0;
-		}
-		return time;
-	}
 
 	this.userbox = new function () {
 
 		this.updateCredit = function () {
 			$.getJSON("/ajax.php?action=getCredit", function (data) {
-				dom = $(".userbox .credit span").addClass("updating", _this.animationTime(400, true));
-				setTimeout(function () {
-					dom.html(data.credit);
-					dom.removeClass("updating", _this.animationTime(400, true));
-				}, 500);
+				$(".userbox .credit span").addClass("updating", 400, "", function () {
+					$(this).html(data.credit);
+					$(this).removeClass("updating", 400);
+				});
 			});
 
 		}
@@ -124,13 +196,13 @@ function Bubble() {
 			bubble.css("visibility", "visible").hide();
 			if (type == undefined) this.setType("info");
 			shown = true;
-			bubble.show("drop", {direction: aniDirection}, main.animationTime(600)).fadeTo(main.animationTime(400), 0.9);
+			bubble.show("drop", {direction: aniDirection}, 600).fadeTo(400, 0.9);
 		}
 
 		// create timer for automatic hiding
 		if (this.autoHide > 0) {
 			timeout = setTimeout(function () {
-				bubble.fadeOut(main.animationTime(800), function () {
+				bubble.fadeOut(800, function () {
 					if (_this.destroy) {
 						bubble.remove();
 					} else {

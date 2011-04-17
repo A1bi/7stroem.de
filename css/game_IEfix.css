@@ -2,3 +2,7 @@
 #game .players {
 	z-index: 3;
 }
+#overview .obg {
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+	filter: alpha(opacity=50);
+}

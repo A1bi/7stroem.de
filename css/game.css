@@ -2,7 +2,6 @@
 	position: absolute;
 	width: 690px;
 	height: 604px;
-	visibility: hidden;
 }
 #game div {
 	position: absolute;
@@ -29,8 +28,8 @@
 /* common classes */
 #game .card {
 	display: none;
-	-webkit-transition-property: -webkit-transform, top, left, right, bottom;
-	-webkit-transition-duration: .3s, .4s, .4s, .4s, .4s;
+	-webkit-transition-property: top, left, right, bottom;
+	-webkit-transition-duration: .4s;
 	-webkit-transition-timing-function: ease-out;
 	-moz-transition-property: top, left, right, bottom;
 	-moz-transition-duration: .4s;
@@ -53,10 +52,8 @@
 	color: #ffffff;
 	text-shadow: #000000 1px 1px 4px;
 	font-weight: bold;
-	-webkit-transition-property: color;
-	-webkit-transition-duration: .5s;
-	-moz-transition-property: color;
-	-moz-transition-duration: .5s;
+	-webkit-transition: color .5s;
+	-moz-transition: color .5s;
 }
 #game .players .area .name.turn {
 	color: #ff0000;
@@ -72,7 +69,7 @@
 	z-index: 3;
 }
 #game .players .area {
-	display: none;
+	visibility: hidden;
 	z-index: 1;
 	background: url(/gfx/game/areas.png) no-repeat;
 	-webkit-transition-property: top, left, right, bottom;
@@ -82,9 +79,8 @@
 }
 #game .players .knocked {
 	width: 87px;
-	height: 101px;
+	height: 91px;
 	z-index: 11;
-	display: none;
 	-webkit-transition-property: top, left, right, bottom;
 	-webkit-transition-duration: .4s;
 	-webkit-transition-timing-function: ease-out;
@@ -93,22 +89,19 @@
 	-moz-transition-timing-function: ease-out;
 }
 #game .players .knocked div {
-	background-position: 0px -207px;
+	background-position: 0px -188px;
 	top: 0px;
-	width: 82px;
-	height: 51px;
-	-webkit-transition-property: top;
-	-webkit-transition-duration: .1s;
-	-webkit-transition-timing-function: ease-in;
-	-moz-transition-property: top;
-	-moz-transition-duration: .1s;
-	-moz-transition-timing-function: ease-in;
+	width: 70px;
+	height: 44px;
+	-webkit-transition: top .1s ease-in;
+	-moz-transition: top .1s ease-in;
 	text-align: center;
-	padding-top: 20px;
+	padding-top: 17px;
 	padding-right: 5px;
-	font-size: 16px;
+	font-size: 15px;
 	color: #ffffff;
 	text-shadow: #000000 1px 1px 2px;
+	visibility: hidden;
 }
 #game .players .knocked .down {
 	top: 30px;
@@ -120,12 +113,12 @@
 	width: 100%;
 }
 #game .players .horizontal .card {
-	width: 127px;
-	height: 169px;
+	width: 95px;
+	height: 130px;
 }
 #game .players .horizontal .card div {
-	width: 87px;
-	height: 129px;
+	width: 75px;
+	height: 110px;
 }
 #game .players .horizontal .area .name {
 	left: 10px;
@@ -136,7 +129,7 @@
 	bottom: 0px;
 }
 #game .players .bottom .cards {
-	left: 370px;
+	left: 260px;
 	bottom: 7px;
 	height: 100%;
 }
@@ -147,51 +140,35 @@
 	bottom: 0px;
 }
 #game .players .bottom .knocked {
-	bottom: 160px;
-	left: 500px;
+	bottom: 130px;
+	left: 450px;
 }
 #game .players .bottom .knocked.down {
-	bottom: 10px;
-	left: 280px;
+	bottom: 20px;
+	left: 190px;
 }
 #game .players .bottom .area {
 	bottom: 100px;
-	left: 123px;
-	background-position: -297px -135px;
-	width: 625px;
-	height: 151px;
+	left: 107px;
+	background-position: -306px -136px;
+	width: 475px;
+	height: 136px;
 }
 #game .players .bottom .area.shown {
 	bottom: 0px;
 }
 #game .players .bottom .area .name {
-	bottom: 60px;
-	left: 490px;
+	bottom: 55px;
+	left: 370px;
 	font-size: 19px;
 }
 #game .players .bottom .area .flag {
-	bottom: 47px;
-	left: 493px;
-}
-#game .players .bottom .area .chat {
-	bottom: 8px;
-	right: 6px;
-	width: 134px;
-	height: 26px;
-	background-position: 0px -343px;
-}
-#game .players .bottom .area .chat input {
-	width: 108px;
-	height: 20px;
-	border: none;
-	background: transparent;
-	margin-left: 20px;
-	margin-right: 6px;
-	margin-top: 2px;
+	bottom: 42px;
+	left: 373px;
 }
 #game .players .bottom .actions {
 	bottom: 0px;
-	left: 128px;
+	left: 115px;
 	z-index: 4;
 }
 #game .players .bottom .actions div {
@@ -199,43 +176,43 @@
 	display: none;
 }
 #game .players .bottom .activeKnock {
-	bottom: 18px;
+	bottom: 3px;
 	width: 240px;
-	height: 60px;
+	height: 80px;
 	cursor: auto !important;
 }
 #game .players .bottom .activeKnock div {
 	display: block;
 }
 #game .players .bottom .activeKnock .info {
-	left: 5px;
+	left: 0px;
 	color: #e9e9e9;
-	font-size: 14px;
+	font-size: 12px;
 	cursor: auto;
 }
 #game .players .bottom .activeKnock .fold {
 	bottom: 0px;
-	width: 120px;
-	height: 39px;
+	width: 96px;
+	height: 30px;
 	left: 0px;
 }
 #game .players .bottom .activeKnock .call {
-	left: 130px;
-	bottom: 0px;
-	background-position: 0px -167px;
-	width: 100px;
-	height: 40px;
+	left: 11px;
+	bottom: 37px;
+	background-position: 0px -161px;
+	width: 83px;
+	height: 27px;
 }
 #game .players .bottom .knock {
 	left: 0px;
 	bottom: 35px;
-	background-position: 0px -121px;
-	width: 152px;
-	height: 45px;
+	background-position: 0px -250px;
+	width: 126px;
+	height: 38px;
 }
 #game .players .bottom .blindKnock {
 	left: 0px;
-	bottom: 40px;
+	bottom: 30px;
 	height: 45px;
 }
 #game .players .bottom .blindKnock div {
@@ -244,47 +221,43 @@
 #game .players .bottom .blindKnock .number {
 	left: 0px;
 	z-index: 4;
-	top: 12px;
+	top: 9px;
 }
 #game .players .bottom .blindKnock .btn {
 	left: 25px;
-	background-position: 0px -76px;
-	width: 223px;
-	height: 44px;
+	background-position: 0px -124px;
+	width: 114px;
+	height: 36px;
 }
 #game .players .bottom .blindKnock img {
 	vertical-align: middle;
 }
 #game .players .bottom .flipHand {
-	left: 278px;
-	bottom: 55px;
-	width: 167px;
-	height: 37px;
-	background-position: 0px -39px;
+	left: 148px;
+	bottom: 20px;
+	width: 207px;
+	height: 84px;
+	background-position: 0px -30px;
 }
 #game .players .bottom .flipHand:active {
-	left: 279px;
-	bottom: 54px;
+	left: 151px;
+	bottom: 19px;
 }
 /* cards */
 #game .bottom .card div {
 	background: url(/gfx/game/cards_bottom.png);
 }
 #game .bottom .card .back {
-	background-position: 0px -516px;
+	background-position: 0px -440px;
 }
 #game .bottom .hand.active {
-	-webkit-transition-property: bottom;
-	-webkit-transition-duration: .1s;
-	-webkit-transition-timing-function: ease-out;
-	-moz-transition-property: bottom;
-	-moz-transition-duration: .1s;
-	-moz-transition-timing-function: ease-out;
-	width: 87px;
-	height: 129px;
+	-webkit-transition: bottom .1s ease-out;
+	-moz-transition: bottom .1s ease-out;
+	width: 75px;
+	height: 110px;
 }
 #game .bottom .hand.active:hover {
-	bottom: 15px;
+	bottom: 10px;
 	z-index: 10;
 }
 #game .bottom .hand .front {
@@ -292,7 +265,7 @@
 }
 #game .bottom .card.stack {
 	bottom: 130px;
-	left: 21px !important;
+	left: 40px !important;
 }
 #game .bottom .card.hand {
 	bottom: 0px;
@@ -308,20 +281,20 @@
 }
 #game .players .top .cards {
 	top: 4px;
-	left: 368px;
+	left: 300px;
 }
 #game .players .top .knocked {
-	top: 160px;
-	left: 290px;
+	top: 110px;
+	left: 220px;
 }
 #game .players .top .knocked.down {
-	top: -10px;
-	left: 280px;
+	top: -20px;
+	left: 230px;
 }
 #game .players .top .area {
-	left: 252px;
-	background-position: -297px 0px;
-	width: 360px;
+	left: 185px;
+	background-position: -306px 0px;
+	width: 331px;
 	height: 112px;
 	top: 100px;
 }
@@ -342,14 +315,14 @@
 	background: url(/gfx/game/cards_top.png);
 }
 #game .top .card .back {
-	background-position: -614px 0px;
+	background-position: -525px 0px;
 }
 #game .top .card.hand {
 	top: 0px;
 }
 #game .top .card.stack {
-	top: 140px;
-	left: 24px !important;
+	top: 130px;
+	left: 0px !important;
 }
 #game .top .card.folded {
 	left: 24px !important;
@@ -359,27 +332,21 @@
 #game .players .vertical {
 
 }
-#game .players .vertical .knocked {
-	top: 260px;
-}
-#game .players .vertical .knocked.down {
-	top: 180px;
-}
 #game .players .vertical .area {
-	width: 148px;
-	height: 296px;
-	top: 189px;
+	width: 153px;
+	height: 272px;
+	top: 160px;
 }
 #game .players .vertical .cards {
-	top: 240px;
+	top: 215px;
 }
 #game .players .vertical .card {
-	width: 169px;
-	height: 127px;
+	width: 130px;
+	height: 95px;
 }
 #game .vertical .card div {
-	width: 129px;
-	height: 87px;
+	width: 110px;
+	height: 75px;
 }
 #game .players .vertical .card.stack {
 	top: 40px !important;
@@ -399,10 +366,12 @@
 	left: 0px;
 }
 #game .players .left .knocked {
-	left: 150px;
+	top: 320px;
+	left: 130px;
 }
 #game .players .left .knocked.down {
-	left: 10px;
+	top: 180px;
+	left: 0px;
 }
 #game .players .left .cards {
 	left: 5px;
@@ -427,7 +396,7 @@
 	left: 0px;
 }
 #game .left .card.stack {
-	left: 230px;
+	left: 160px;
 }
 
 /** right **/
@@ -435,10 +404,12 @@
 	right: 0px;
 }
 #game .players .right .knocked {
-	right: 150px;
+	top: 150px;
+	right: 120px;
 }
 #game .players .right .knocked.down {
-	right: 20px;
+	top: 180px;
+	right: 0px;
 }
 #game .players .right .cards {
 	right: 6px;
@@ -448,7 +419,7 @@
 }
 #game .players .right .area {
 	right: 100px;
-	background-position: -148px 0px;
+	background-position: -153px 0px;
 }
 #game .players .right .area.shown {
 	right: 0px;
@@ -467,10 +438,10 @@
 	background: url(/gfx/game/cards_right.png);
 }
 #game .right .card .back {
-	background-position: -516px -614px;
+	background-position: -440px -525px;
 }
 #game .right .card.stack {
-	right: 190px;
+	right: 152px;
 	top: 200px;
 }
 #game .right .card.folded {
@@ -486,7 +457,7 @@
 	top: 37px;
 	left: 50px;
 	width: 589px;
-	height: 512px;
+	height: 515px;
 	background: url(/gfx/game/table.png) no-repeat;
 	z-index: 2;
 }
@@ -498,7 +469,6 @@
 	top: 50px;
 	right: 0px;
 	width: 307px;
-	visibility: hidden;
 	z-index: 10;
 }
 #panel div {
@@ -528,12 +498,13 @@
 	background-position: 0px -233px;
 }
 #panel #log .entries {
-	top: 55px;
-	left: 23px;
+	top: 54px;
+	left: 26px;
 	font-size: 13px;
 	height: 130px;
-	width: 256px;
+	width: 251px;
 	overflow: auto;
+	font-size: 12px;
 }
 #panel #log .entries div {
 	position: relative;
@@ -560,7 +531,7 @@ input.inactive {
 
 /** strikes **/
 #panel #strikes {
-	
+	display: none;
 	height: 233px;
 	width: 100%;
 }
@@ -585,7 +556,11 @@ input.inactive {
 #panel #strikes table td.player {
 	width: 20%;
 }
+#panel #strikes .sTable td.round {
+	font-size: 14px;
+}
 #panel #strikes .sTable .strikesCon {
+	position: relative;
 	height: 20px;
 	margin-top: 2px;
 	margin-left: 2px;
@@ -612,9 +587,6 @@ input.inactive {
 	height: 95%;
 	overflow: auto;
 }
-#panel #strikes .sTable.smaller {
-	height: 75%;
-}
 #panel #strikes .strike {
 	position: absolute;
 	width: 4px;
@@ -625,9 +597,43 @@ input.inactive {
 	left: 1px;
 	background-position: -172px -188px;
 }
+#panel #quit {
+	background-position: 0px -288px;
+	width: 169px;
+	height: 32px;
+	top: 505px;
+	right: 30px;
+}
 
 /** overview **/
+#overview {
+	position: absolute;
+	width: 400px;
+	min-height: 230px;
+	left: 145px;
+	top: 170px;
+	z-index: 11;
+	color: #ffffff;
+}
+#overview .obg {
+	position: absolute;
+	background: #000000;
+	width: 100%;
+	height: 100%;
+	top: 0px;
+	z-index: -1;
+	opacity: 0.5;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+}
+#overview table {
+	width: 100%;
+}
+#overview .head {
+	margin: 12px;
+}
 #overview .space {
+	margin: 10px;
 	font-size: 14px;
 }
 #overview ul {
@@ -638,41 +644,26 @@ input.inactive {
 	vertical-align: top;
 	font-weight: bold;
 }
-#overview #startGame {
+#overview .actions {
 	margin-top: 10px;
+	font-size: 12px;
 }
-#overview #startGame > div {
+#overview .btn {
+	cursor: pointer;
+	float: right;
+	margin: 5px;
+}
+#overview .actions, #overview .actions div {
 	display: none;
 }
 #overview #startGame .startBtn {
-	position: absolute;
-	background-position: 0px -279px;
-	width: 183px;
-	height: 37px;
-	right: 0px;
-	cursor: pointer;
+	background-position: 0px -338px;
+	width: 138px;
+	height: 26px;
+	display: block;
 }
-#overview .actions {
-	margin-top: 6px;
-	display: none;
-}
-#overview .actions div {
-	position: absolute;
-}
-#overview .actions .newRound {
-	background-position: 0px -316px;
-	width: 175px;
-	height: 27px;
-	cursor: pointer;
-	right: 0px;
-	display: none;
-}
-#overview .actions .waiting {
-	width: 100%;
-	left: 0px;
-	top: 8px;
-	font-size: 13px;
-}
-#overview .actions .waiting div {
-	display: none;
+#overview #startRound .newRound {
+	background-position: 0px -320px;
+	width: 126px;
+	height: 18px;
 }
