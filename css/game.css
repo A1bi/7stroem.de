@@ -603,6 +603,7 @@ input.inactive {
 	height: 32px;
 	top: 505px;
 	right: 30px;
+	cursor: pointer;
 }
 
 /** overview **/

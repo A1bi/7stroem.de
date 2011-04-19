@@ -133,7 +133,7 @@ var game = new function () {
 		this.strikes = 0;
 		var place = 0;
 		var placeTable = 0;
-		var out;
+		this.isOut = false;
 		var dom;
 		var listDom;
 		var tableDom;
@@ -247,7 +247,7 @@ var game = new function () {
 		this.roundStarted = function () {
 			this.strikes = 0;
 			dom.removeClass("out");
-			out = false;
+			this.isOut = false;
 			setFlag();
 			// pull out player area
 			$(".area", dom).css("visibility", "visible").addClass("shown", 700);
@@ -261,7 +261,7 @@ var game = new function () {
 		}
 
 		this.smallRoundStarted = function () {
-			if (out) return;
+			if (this.isOut) return;
 			// give cards
 			for (i = 0; i < 4; i++) {
 				cards[i] = new Card(place, i);
@@ -293,7 +293,7 @@ var game = new function () {
 
 		this.knockFinished = function () {
 			$(".knocked div", dom).fadeTo(400, 0, function () {
-				$(this).removeClass("down").html("");
+				$(this).removeClass("down").html("").parent().removeClass("down");
 			});
 		}
 
@@ -308,7 +308,7 @@ var game = new function () {
 		}
 
 		this.out = function () {
-			out = true;
+			this.isOut = true;
 			dom.addClass("out");
 			setFlag("raus");
 		}
@@ -485,7 +485,7 @@ var game = new function () {
 						player.smallRoundStarted();
 					}
 				});
-				if (!players[userid].out) {
+				if (!players[userid].isOut) {
 					fadeActionBtn("flipHand", true);
 				}
 				if (!poor) {
@@ -913,11 +913,19 @@ var game = new function () {
 		$(".blindKnock .btn").click(function () {
 			butler.registerAction("blindKnock", $(".blindKnock select").val());
 		});
+		// exit button
+		$("#quit").click(function () {
+			if (!roundStarted || confirm("Wenn du das Spiel jetzt verlässt, verlierst du deinen Einsatz. Möchtest du wirklich abhauen?")) {
+				// to prevent another exit message
+				roundStarted = false;
+				window.location.href = "/games";
+			}
+		});
 
 		// session polling
 		pollSession();
 
-		/* testing*/
+		/* testing
 		players[1] = new Player(1, "Albi");
 		players[2] = new Player(2, "Bla");
 		players[3] = new Player(3, "Bla2");
@@ -944,7 +952,7 @@ var game = new function () {
 			queue.push({"player":"1", "action": "smallRoundEnded", "content": ""});
 			queue.push({"player":"3", "action": "roundEnded", "content": ""});
 			//processQueue(true);
-		}, 6000);
+		}, 6000);*/
 
 	});
 
