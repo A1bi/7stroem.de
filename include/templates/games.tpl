@@ -1,21 +1,13 @@
 {include file="head.tpl" title="Spiele" cssfile="games" jsfile="games"}
-	<div class="box" id="publics">
+	<div class="box">
 		<div class="updating"></div>
 		<div class="head">
-			Öffentliche Spiele
+			Offene Spiele
 		</div>
 		<div class="space">
-			{include file="games_table.tpl" games=$publics}
-		</div>
-		<div class="wGrad"></div>
-	</div>
-	<div class="box" id="friends">
-		<div class="updating"></div>
-		<div class="head">
-			Spiele deiner Freunde
-		</div>
-		<div class="space">
-			{include file="games_table.tpl" games=$friends}
+			<div class="cats"><a href="#">Öffentliche Spiele</a> (<span>0</span>) | <a href="#">Spiele deiner Freunde</a> (<span>0</span>)</div>
+			<div id="publics" class="games"></div>
+			<div id="friends" class="games"></div>
 		</div>
 		<div class="wGrad"></div>
 	</div>
@@ -37,7 +29,7 @@
 				<p><strong>Einsatz:</strong>
 				<select name="bet" class="vcen">{html_options options=$bets selected=50}</select> &euro;</p>
 				<div class="hright">
-					<input type="image" src="/gfx/games/create_button.png" name="create" alt="eröffnen" />
+					<input type="submit" value="" name="create" title="Spiel eröffnen" id="createBtn" />
 				</div>
 				</form>
 			</div>
