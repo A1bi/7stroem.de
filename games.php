@@ -34,81 +34,85 @@ if ($_GET['action'] == "create") {
 
 } else {
 
-	// get friends games
-	$result = $_db->query('SELECT g.*,
-								  u.name,
-								  u.id AS userid
-							 FROM games AS g,
-								  users_friends AS uf,
-								  users AS u
-							WHERE g.host = uf.friend
-							  AND uf.user = ?
-							  AND uf.friend = u.id
-							  AND g.public = 0
-							  AND g.started = 0
-							  AND g.finished = 0',
-						array($_user['id']));
+	if ($_GET['ajax']) {
+		$games = array("friends" => array(), "publics" => array());
+		// get friends games
+		$result = $_db->query('SELECT g.*,
+									  u.name AS username,
+									  u.id AS userid
+								 FROM games AS g,
+									  users_friends AS uf,
+									  users AS u
+								WHERE g.host = uf.friend
+								  AND uf.user = ?
+								  AND uf.friend = u.id
+								  AND g.public = 0
+								  AND g.started = 0
+								  AND g.finished = 0',
+							array($_user['id']));
 
-	$i = 1;
-	while ($game = $result->fetch()) {
-		$_tpl->assign(array("i" => $i, "id" => $game['id'], "username" => $game['name'], "bet" => formatCredit($game['bet']), "maxplayers" => $game['maxplayers'], "players" => $game['players'], "userid" => $game['userid']));
-		$friends .= $_tpl->fetch("games_row.tpl");
-		$i++;
-	}
+		while ($game = $result->fetch()) {
+			$game['bet'] = formatCredit($game['bet']);
+			$games['friends'][] = $game;
+		}
 
-	// get public games
-	$result = $_db->query('SELECT g.*,
-								  u.name,
-								  u.id AS userid
-							 FROM games AS g,
-								  users AS u
-							WHERE g.host = u.id
-							  AND public = 1
-							  AND g.started = 0
-							  AND g.finished = 0
-							  AND host != ?',
-						array($_user['id']));
+		// get public games
+		$result = $_db->query('SELECT g.*,
+									  u.name AS username,
+									  u.id AS userid
+								 FROM games AS g,
+									  users AS u
+								WHERE g.host = u.id
+								  AND public = 1
+								  AND g.started = 0
 
-	$i = 1;
-	while ($game = $result->fetch()) {
-		$_tpl->assign(array("i" => $i, "id" => $game['id'], "username" => $game['name'], "bet" => formatCredit($game['bet']), "maxplayers" => $game['maxplayers'], "players" => $game['players'], "userid" => $game['userid']));
-		$publics .= $_tpl->fetch("games_row.tpl");
-		$i++;
-	}
+								  AND host != ?',
+							array($_user['id']));
 
-	$_tpl->assign("friends", $friends);
-	$_tpl->assign("publics", $publics);
+		while ($game = $result->fetch()) {
+			$game['bet'] = formatCredit($game['bet']);
+			$games['publics'][] = $game;
+		}
+	
+		$response = array("games" => array("friends" => "", "publics" => ""));
+		foreach ($games as $key => $val) {
+			$_tpl->assign("games", $games[$key]);
+			$response['games'][$key] .= $_tpl->fetch("games_table.tpl");
+		}
 
-	// bets
-	$bet = 10;
-	$bets = array();
-	$bets[0] = "keiner";
-	while ($bet <= $_user['credit']) {
-		$bets[$bet] = formatCredit($bet);
-		if ($bet >= 100) {
-			$bet = $bet + 100;
-		} elseif ($bet > 1000) {
-			break;
-		} else {
-			switch ($bet) {
-				case 10:
-					$bet = 20;
-					break;
-				case 20:
-					$bet = 30;
-					break;
-				case 30:
-					$bet = 50;
-					break;
-				case 50:
-					$bet = 100;
-					break;
+		echo json_encode($response);
+
+	} else {
+		// bets
+		$bet = 10;
+		$bets = array();
+		$bets[0] = "keiner";
+		while ($bet <= $_user['credit']) {
+			$bets[$bet] = formatCredit($bet);
+			if ($bet >= 100) {
+				$bet = $bet + 100;
+			} elseif ($bet > 1000) {
+				break;
+			} else {
+				switch ($bet) {
+					case 10:
+						$bet = 20;
+						break;
+					case 20:
+						$bet = 30;
+						break;
+					case 30:
+						$bet = 50;
+						break;
+					case 50:
+						$bet = 100;
+						break;
+				}
 			}
 		}
+		$_tpl->assign("bets", $bets);
+		$_tpl->display("games.tpl");
 	}
-	$_tpl->assign("bets", $bets);
-
-	$_tpl->display("games.tpl");
 
 }
 ?>

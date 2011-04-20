@@ -189,27 +189,7 @@ p {
 }
 
 /* content boxes */
-.box1 {
-	width: 630px;
-}
-.box1 .head {
-	height: 59px;
-	background: url(/gfx/box1_head.png) no-repeat;
-	padding-top: 38px;
-	padding-left: 20px;
-	padding-right: 25px;
-	font-size: 22px;
-	text-align: center;
-}
-.box1 .space {
-	background: url(/gfx/box1_bg.png) repeat-y;
-	padding: 0px 50px;
-	min-height: 120px;
-}
-.box1 .bottom {
-	background: url(/gfx/box1_bottom.png) no-repeat;
-	height: 82px;
-}
+
 
 /* info and error bubbles */
 .bubbles {

@@ -1,29 +1,23 @@
-{include file="head.tpl" title="Spiele" cssfile="games"}
-	<div class="box1">
-		<div class="head">
-			Spiele deiner Freunde
-		</div>
-		<div class="space">
-{if $friends != ""}
-{include file="games_table.tpl" public=0}
-{else}
-			Es gibt derzeit kein offenes Spiel deiner Freunde.
-{/if}
-		</div>
-		<div class="bottom">&nbsp;</div>
-	</div>
-	<div class="box1">
+{include file="head.tpl" title="Spiele" cssfile="games" jsfile="games"}
+	<div class="box" id="publics">
+		<div class="updating"></div>
 		<div class="head">
 			Öffentliche Spiele
 		</div>
 		<div class="space">
-{if $publics != ""}
-{include file="games_table.tpl" public=1}
-{else}
-			Es gibt derzeit keine öffentlichen Spiele.
-{/if}
+			{include file="games_table.tpl" games=$publics}
 		</div>
-		<div class="bottom">&nbsp;</div>
+		<div class="wGrad"></div>
+	</div>
+	<div class="box" id="friends">
+		<div class="updating"></div>
+		<div class="head">
+			Spiele deiner Freunde
+		</div>
+		<div class="space">
+			{include file="games_table.tpl" games=$friends}
+		</div>
+		<div class="wGrad"></div>
 	</div>
 	<div class="create">
 		<div class="head">
