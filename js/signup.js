@@ -4,12 +4,12 @@ var signup = new function () {
 
 	var stepError = function (s, msg) {
 		main.showBubble("error", msg, {of: s, at: "right", my: "left", tri: "left t"}, 8000);
-		button = s.closest(".step").find(".next input").show();
+		var button = s.closest(".step").find(".next input").show();
 		button.next().hide();
 	}
 
 	var checkUsername = function (sBox) {
-		field = sBox.find("input").first();
+		var field = sBox.find("input").first();
 		if (field.val() == "") {
 			stepError(field, "Bitte gib einen Spielernamen ein.");
 		} else if (!/^[a-zA-Z0-9._-]+$/.test(field.val())) {
@@ -50,7 +50,7 @@ var signup = new function () {
 	}
 
 	var checkPassword = function (sBox) {
-		fields = sBox.find("input");
+		var fields = sBox.find("input");
 		if (fields.eq(0).val() != fields.eq(1).val()) {
 			stepError(fields.eq(0), "Die Passwörter stimmen nicht überein!");
 		} else if (fields.eq(0).val().length < 6) {
@@ -61,7 +61,7 @@ var signup = new function () {
 	}
 
 	var save = function () {
-		steps = $(".step");
+		var steps = $(".step");
 		$.post("/signup.php?ajax=1", {
 			action: "save",
 			username: steps.eq(0).find("input").first().val(),
@@ -78,7 +78,7 @@ var signup = new function () {
 	}
 
 	var checkMail = function (sBox) {
-		field = sBox.find(".contnt table input").eq(0);
+		var field = sBox.find(".contnt table input").eq(0);
 		if (!/^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z]){2,9}$/.test(field.val())) {
 			stepError(field, "Die e-mail Adresse ist nicht korrekt!");
 		} else {
@@ -87,7 +87,7 @@ var signup = new function () {
 	}
 
 	var checkStep = function () {
-		s = $(this).closest(".step");
+		var s = $(this).closest(".step");
 		$(this).hide();
 		$(this).next().show();
 
@@ -112,7 +112,7 @@ var signup = new function () {
 	}
 	
 	var hideStep = function (s) {
-		sBox = $(".step").eq(s);
+		var sBox = $(".step").eq(s);
 		sBox.find(".contnt").addClass("collapsed", 400);
 		finishStep(sBox);
 	}

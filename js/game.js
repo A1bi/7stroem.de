@@ -35,10 +35,11 @@ var game = new function () {
 		var laid = false;
 
 		var getBackground = function (front) {
-			suit = suits[id.substr(0, 1)];
-			number = id.substr(1)-3;
-			w = front.width();
-			h = front.height();
+			var suit = suits[id.substr(0, 1)];
+			var number = id.substr(1)-3;
+			var w = front.width();
+			var h = front.height();
+			var x, y;
 
 			switch (place) {
 				case 0:
@@ -70,7 +71,7 @@ var game = new function () {
 			// add active class so hover event gets triggered
 			card.addClass("active");
 			// set correct background and fade in
-			front = $(".front", card);
+			var front = $(".front", card);
 			front.css("background-position", getBackground(front)).delay(200).fadeIn(200);
 			// hide back
 			$(".back", card).delay(300).fadeOut(100);
@@ -92,7 +93,7 @@ var game = new function () {
 			// add switch class so the card will move onto stack
 			card.switchClass("hand", "stack", 500);
 			// also move the front to a random position inside the card container
-			pos = {"left": Math.round(Math.random() * 20), "top": Math.round(Math.random() * 20)};
+			var pos = {"left": Math.round(Math.random() * 20), "top": Math.round(Math.random() * 20)};
 			if (Modernizr.csstransitions) {
 				// webkit browser will animate on their own
 				card.find("div").css(pos);
@@ -106,6 +107,7 @@ var game = new function () {
 				$(".front", card).fadeOut(300);
 				$(".back", card).fadeIn(400);
 			}
+			var remove;
 			if (laid) {
 				remove = "stack";
 				
@@ -148,7 +150,7 @@ var game = new function () {
 
 		var setFlag = function (flag) {
 			if (!flag) flag = "";
-			flagDom = $(".flag", dom);
+			var flagDom = $(".flag", dom);
 			if (flag == "") {
 				if (!flagDom.is(":hidden")) {
 					flagDom.fadeIn(100);
@@ -167,9 +169,10 @@ var game = new function () {
 			tableDom = $("#strikes .top td").eq(placeTable+1);
 			tableDom.html(this.name);
 			// set player's name on the table
-			nameDom = $(".name", dom);
+			var nameDom = $(".name", dom);
 			nameDom.html(this.name);
 			// position info bubble
+			var at, my, tri, offset;
 			switch (place) {
 				case 0:
 					at = "right top";
@@ -226,11 +229,11 @@ var game = new function () {
 		// update the players entry in strikes table
 		this.updateStrikes = function (newState) {
 			for (i = this.strikes+1; i <= newState; i++) {
-				sDom = $("<div>").addClass("strike element");
+				var sDom = $("<div>").addClass("strike element");
 				if (i % 5 == 0) {
 					sDom.addClass("cross");
 				} else {
-					pos = 138 + Math.round(Math.random() * 7) * 4;
+					var pos = 138 + Math.round(Math.random() * 7) * 4;
 					sDom.css("background-position", "-"+pos+"px -188px").css("left", i*5+"px");
 				}
 				$("#strikes .sTable tr:last td > div").eq(placeTable).append(sDom);
@@ -274,7 +277,7 @@ var game = new function () {
 		}
 
 		this.knocked = function () {
-			knockDom = $(".knocked", dom).removeClass("down");
+			var knockDom = $(".knocked", dom).removeClass("down");
 			$("div", knockDom).fadeTo(0, 1).css("visibility", "visible").addClass("down", 100, "easeInQuint", function () {
 				// prevent errors in IE
 				try {
@@ -416,6 +419,7 @@ var game = new function () {
 	}
 
 	var knocked = function (player) {
+		var info;
 		if (player > 0) {
 			if (player == userid) {
 				knockPossible = false;
@@ -439,11 +443,13 @@ var game = new function () {
 			processing = false;
 			return;
 		}
-		wait = 0;
-		waitFunction = null;
+		var wait = 0;
+		var waitFunction = null;
 
-		action = queue[0];
+		var action = queue[0];
 		queue.shift();
+
+		var i;
 		
 		switch (action.action) {
 
@@ -490,8 +496,7 @@ var game = new function () {
 				}
 				if (!poor) {
 					// update strike selection
-					knockDom = $(".blindKnock select");
-					knockDom.empty();
+					var knockDom = $(".blindKnock select").empty();
 					for (i = 2; i <= 6-players[userid].strikes; i++) {
 						knockDom.append($("<option>").html(i));
 					}
@@ -512,9 +517,9 @@ var game = new function () {
 				});
 				roundStarted = true;
 				rounds++;
-				row = $("<tr>");
+				var row = $("<tr>");
 				for (i = 0; i < 5; i++) {
-					cell = $("<td>");
+					var cell = $("<td>");
 					// add first cell for round number
 					if (i == 0) {
 						cell.html(rounds).addClass("round");
@@ -524,7 +529,7 @@ var game = new function () {
 					row.append(cell);
 				}
 				$("#panel").addClass("down", 500);
-				strikesDom = $("#strikes");
+				var strikesDom = $("#strikes");
 				$("actions", strikesDom).hide();
 				$(".sTable", strikesDom).removeClass("smaller").find("table").append(row);
 
@@ -639,11 +644,11 @@ var game = new function () {
 	}
 
 	var logAction = function (content, style) {
-		dom = $("<div>").html(content);
+		var dom = $("<div>").html(content);
 		if (style != undefined) {
 			dom.addClass(style);
 		}
-		entries = $("#log .entries").append(dom);
+		var entries = $("#log .entries").append(dom);
 		entries.attr({scrollTop: entries.attr("scrollHeight")});
 	}
 
@@ -677,7 +682,7 @@ var game = new function () {
 
 	// register all actions (is called by the script we got from the butler)
 	var registerActions = function (actions) {
-		playersJoined = false;
+		var playersJoined = false;
 
 		// go through all actions
 		$.each(actions, function (key, action) {
@@ -701,7 +706,7 @@ var game = new function () {
 				// received new chat message
 				case "chat":
 					// make sure to decode and escape to prevent XSS
-					decoded = $("<div>").text(decodeURIComponent(action.content)).html();
+					var decoded = $("<div>").text(decodeURIComponent(action.content)).html();
 					logChat(action.player, decoded);
 					players[action.player].chat(decoded);
 					break;
@@ -709,6 +714,7 @@ var game = new function () {
 				// host has changed to another player
 				case "hostChanged":
 					host = action.player;
+					var msg;
 					logAction(players[host].name + " ist der neue Leiter des Spiels.");
 					hostChanged();
 					if (host == userid) {
@@ -753,7 +759,7 @@ var game = new function () {
 
 			// we received actions
 			if (response.actions != null) {
-				old = butler.lastAction;
+				var old = butler.lastAction;
 				// set new lastAction
 				butler.lastAction = response.lastAction;
 				// first connection to server -> just update player info
@@ -768,11 +774,11 @@ var game = new function () {
 				fadeActionBtn("flipHand", false, 200);
 				fadeActionBtn("blindKnock", false, 200);
 				flipped = true;
-				if (this.turn == userid) {
+				if (this.turn == userid && activeKnock < 0) {
 					toggleActionBtn("knock", true);
 				}
 				// show player his cards
-				for (i = 0; i < 4; i++) {
+				for (var i = 0; i < 4; i++) {
 					players[userid].flipHand(i, response.cards[i]);
 				}
 			}
@@ -793,14 +799,14 @@ var game = new function () {
 	}
 
 	var hostChanged = function () {
-		off = 1;
-		on = 0;
+		var off = 1;
+		var on = 0;
 		if (host == userid) {
 			off = 0;
 			on = 1;
 		}
 		$("#overview > .space > div").each(function () {
-			b = $("> div", this);
+			var b = $("> div", this);
 			b.eq(on).show();
 			b.eq(off).hide();
 		});
@@ -809,13 +815,14 @@ var game = new function () {
 	var finishStart = function (order) {
 		started = true;
 		order = order.split(",");
+		var i;
 		for (i = 0; i < order.length; i++) {
 			if (order[i] == userid) {
-				me = i;
+				var me = i;
 			}
 		}
 		for (i = 0; i < order.length; i++) {
-			pos = i - me;
+			var pos = i - me;
 			if (pos < 0) {
 				pos = order.length - pos * -1;
 			}
@@ -852,7 +859,7 @@ var game = new function () {
 
 		// preload images for cards
 		$.each(["bottom", "top", "left", "right"], function (key, val) {
-			img = new Image();
+			var img = new Image();
 			$(img).attr("src", "/gfx/game/cards_"+val+".png");
 		});
 
@@ -876,7 +883,7 @@ var game = new function () {
 		});
 		// user submitted a message
 		$("#log form").submit(function () {
-			message = encodeURIComponent($(this).find("input").val());
+			var message = encodeURIComponent($(this).find("input").val());
 			if (message == "") return false;
 			$(this).find("input").val("");
 			butler.registerAction("chat", message);
@@ -903,10 +910,8 @@ var game = new function () {
 		});
 
 		// user actions
-		actionsBox = $(".bottom .actions");
-		actions = ["fold", "call", "knock", "flipHand"];
-		$.each(actions, function (key, action) {
-			$("."+action).click(function () {
+		$.each(["fold", "call", "knock", "flipHand"], function (key, action) {
+			$(".actions ."+action).click(function () {
 				butler.registerAction(action);
 			});
 		});

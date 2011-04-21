@@ -1,7 +1,7 @@
 $.fn.extend({
 	transEnd: function (callback) {
 		if (callback && Modernizr.csstransitions) {
-			event = "TransitionEnd";
+			var event = "TransitionEnd";
 			if ($.browser.webkit) {
 				event = "webkitTransitionEnd";
 			} else if ($.browser.mozilla) {
@@ -99,8 +99,7 @@ var main = new function () {
 	this.facebook = new function () {
 
 		this.showAuthDialog = function (uri) {
-			fb = window.open("https://www.facebook.com/dialog/oauth?client_id=211597832188896&display=popup&redirect_uri=http://"+window.location.host+"/"+uri, "fb", "dependent=yes,width=550px,height=320px,status=no,scrollbars=no,resizable=no");
-			fb.focus();
+			window.open("https://www.facebook.com/dialog/oauth?client_id=211597832188896&display=popup&redirect_uri=http://"+window.location.host+"/"+uri, "fb", "dependent=yes,width=550px,height=320px,status=no,scrollbars=no,resizable=no").focus();
 			return false;
 		}
 	}
@@ -118,7 +117,7 @@ var main = new function () {
 				of: $("#logo"), at: "left bottom", my: "left top", tri: "top l", offset: "20 0"
 			};
 		}
-		bubble = new Bubble;
+		var bubble = new Bubble;
 		bubble.setType(type);
 		bubble.setContent(content);
 		bubble.pos = pos;
@@ -128,9 +127,9 @@ var main = new function () {
 	}
 
 	this.getGet = function (key) {
-		gets = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-		for (i = 0; i < gets.length; i++) {
-			parts = gets[i].split('=');
+		var gets = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+		for (var i = 0; i < gets.length; i++) {
+			var parts = gets[i].split('=');
 			if (parts[0] != key) continue;
 			return parts[1];
 		}
@@ -170,9 +169,9 @@ function Bubble() {
 			// set a default offset
 			if (this.pos.offset == undefined || this.pos.offset == "") this.pos.offset = "0 0";
 			// split x and y offset
-			offs = this.pos.offset.split(" ");
+			var offs = this.pos.offset.split(" ");
 
-			tri = this.pos.tri.split(" ");
+			var tri = this.pos.tri.split(" ");
 			aniDirection = tri[0];
 			if (aniDirection == "bottom" || aniDirection == "top") {
 				if (aniDirection == "bottom") {
@@ -217,6 +216,7 @@ function Bubble() {
 	this.setIcon = function (i) {
 		if (i == icon) return;
 		icon = i;
+		var y;
 		switch (i) {
 			case "chat":
 				y = 0;
