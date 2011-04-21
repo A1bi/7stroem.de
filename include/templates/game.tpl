@@ -1,5 +1,5 @@
 {include file="head.tpl" cssfile="game" jsfile="game" head="game_head.tpl"}
-		<div id="game">
+		<div id="game" class="onLoad">
 			<div class="table"></div>
 			<div class="players">
 				<div class="bottom horizontal">
@@ -89,7 +89,7 @@
 			</div>
 			<div class="obg"></div>
 		</div>
-		<div id="panel">
+		<div id="panel" class="onLoad">
 			<div id="strikes" class="box">
 				<div class="head">Striche</div>
 				<div class="space">

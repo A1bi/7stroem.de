@@ -18,6 +18,9 @@
 .element {
 	background: url(/gfx/game/elements.png) no-repeat;
 }
+.onLoad {
+	display: none;
+}
 
 
 /*** players ***/

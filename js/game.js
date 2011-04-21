@@ -674,7 +674,7 @@ var game = new function () {
 		if (this.turn != userid) {
 			showError("Du bist nicht am Zug!");
 		} else if (activeKnock > -1) {
-			showError("Du musst erst entscheiden, ob du mitgehst oder rausgehst!");
+			showError("Du musst erst entscheiden, ob du hältst oder passt!");
 		} else {
 			butler.registerAction("layStack", cardid);
 		}
@@ -731,6 +731,9 @@ var game = new function () {
 						roundStarted = false;
 						msg = "Du bist nun der letzte Spieler im Spiel und hast damit automatisch gewonnen!<br />Das Spiel ist hiermit beendet.";
 					} else {
+						if (host == userid) {
+							$("#startRound").hide();
+						}
 						msg = "Es ist kein weiterer Spieler mehr anwesend.<br />Das Spiel ist hiermit beendet.";
 					}
 					main.showBubble("error", msg, "", 0);
@@ -851,6 +854,8 @@ var game = new function () {
 		// initiate butler
 		butler.getActions();
 
+		// show table and panel
+		$(".onLoad").removeClass("onLoad");
 		// scroll down
 		$("html, body").attr("scrollTop", $(".header").height());
 		// start game box
