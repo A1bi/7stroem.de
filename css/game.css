@@ -34,12 +34,17 @@
 	-moz-transition-property: top, left, right, bottom;
 	-moz-transition-duration: .4s;
 	-moz-transition-timing-function: ease-out;
+	-o-transition-property: top, left, right, bottom;
+	-o-transition-duration: .4s;
+	-o-transition-timing-function: ease-out;
 }
 #game .card div {
 	-webkit-transition-property: top, left;
 	-webkit-transition-duration: .4s;
 	-moz-transition-property: top, left;
 	-moz-transition-duration: .4s;
+	-o-transition-property: top, left;
+	-o-transition-duration: .4s;
 }
 #game .card .front {
 	display: none;
@@ -54,6 +59,7 @@
 	font-weight: bold;
 	-webkit-transition: color .5s;
 	-moz-transition: color .5s;
+	-o-transition: color .5s;
 }
 #game .players .area .name.turn {
 	color: #ff0000;
@@ -76,6 +82,8 @@
 	-webkit-transition-duration: .5s;
 	-moz-transition-property: top, left, right, bottom;
 	-moz-transition-duration: .5s;
+	-o-transition-property: top, left, right, bottom;
+	-o-transition-duration: .5s;
 }
 #game .players .knocked {
 	width: 87px;
@@ -87,6 +95,9 @@
 	-moz-transition-property: top, left, right, bottom;
 	-moz-transition-duration: .4s;
 	-moz-transition-timing-function: ease-out;
+	-o-transition-property: top, left, right, bottom;
+	-o-transition-duration: .4s;
+	-o-transition-timing-function: ease-out;
 }
 #game .players .knocked div {
 	background-position: 0px -188px;
@@ -95,6 +106,7 @@
 	height: 44px;
 	-webkit-transition: top .1s ease-in;
 	-moz-transition: top .1s ease-in;
+	-o-transition: top .1s ease-in;
 	text-align: center;
 	padding-top: 17px;
 	padding-right: 5px;
@@ -253,6 +265,7 @@
 #game .bottom .hand.active {
 	-webkit-transition: bottom .1s ease-out;
 	-moz-transition: bottom .1s ease-out;
+	-o-transition: bottom .1s ease-out;
 	width: 75px;
 	height: 110px;
 }

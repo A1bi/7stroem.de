@@ -65,8 +65,9 @@ if ($_GET['action'] == "create") {
 								WHERE g.host = u.id
 								  AND public = 1
 								  AND g.started = 0
-
-								  AND host != ?',
+								  AND g.finished = 0
+								  AND host != ?
+							 ORDER BY id DESC',
 							array($_user['id']));
 
 		while ($game = $result->fetch()) {

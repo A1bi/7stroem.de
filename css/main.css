@@ -94,6 +94,7 @@ p {
 .header .userbox .credit span {
 	-webkit-transition: background .4s ease-out;
 	-moz-transition: background .4s ease-out;
+	-o-transition: background-color .4s ease-out;
 }
 .header .userbox .credit span.updating {
 	background: #ff0000;

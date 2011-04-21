@@ -9,7 +9,6 @@
 			<div id="publics" class="games"></div>
 			<div id="friends" class="games"></div>
 		</div>
-		<div class="wGrad"></div>
 	</div>
 	<div class="create">
 		<div class="head">

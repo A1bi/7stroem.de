@@ -57,6 +57,9 @@
 	-moz-transition-property: height, padding-top;
 	-moz-transition-duration: .4s;
 	-moz-transition-timing-function: ease-out;
+	-o-transition-property: height, padding-top;
+	-o-transition-duration: .4s;
+	-o-transition-timing-function: ease-out;
 }
 .steps .step .contnt.collapsed {
 	padding-top: 0px;

@@ -17,14 +17,10 @@ var updateGames = function (init) {
 			$(".cats a:"+show+", .games:"+show).addClass("active");
 		}
 		$(".updating").hide();
-		setTimeout(updateGames, 10000);
+		setTimeout(updateGames, 5000);
 	});
 }
 $(function () {
-	$(".wGrad").each(function () {
-		var space = $(this).prev();
-		$(this).show().position({of: space, at: "left bottom", my: "left bottom"}).width(space.outerWidth());
-	});
 	$(".cats a").click(function (e) {
 		if (!$(this).is(".active")) {
 			$(".cats a, .games").toggleClass("active");
