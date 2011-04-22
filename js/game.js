@@ -351,26 +351,40 @@ var game = new function () {
 	// butler
 	var butler = new function () {
 
+		var _this = this;
 		// the butler's address to connect to
-		var addr = "192.168.10.10:4926";
+		var host = "albisigns.ath.cx:4926";
 		// number of last action we got from the butler
 		this.lastAction = 0;
 		var requesting = false;
+		var CORS = true;
+		var uri = "http://" + host + "/";
+		var requestUri = uri + "player";
+		var requestStart;
 
 		// connect to server and make a request
-		var makeRequest = function (request, arguments) {
-			// get javascript with data from butler
-			url = "http://" + addr + "/player?gId=" + gameid + "&pId=" + userid + "&authcode=" + authcode + "&request=" + request + "&" + arguments;
-			$.getScript(url, function () {
-				if (request != "getActions") {
-					requesting = false;
-				}
-			});
+		var makeRequest = function (request, args) {
+			var requestData = $.extend({}, requestStart, {request: request}, args);
+
+			// only if cross-origin requests are supported by browser
+			if (CORS) {
+				$.getJSON(requestUri, requestData, function (data) {
+					if (request != "getActions") requesting = false;
+					_this.parent.processResponse(data);
+				}).error(function (e) {
+					main.showBubble("error", "Sorry, der Server hat sich mal wieder verabschiedet.", "", 5000);
+				});
+			} else {
+				// get data via jsonp
+				$.get(requestUri, $.extend(requestData, {jsonp: 1}), function () {
+					if (request != "getActions") requesting = false;
+				}, "script");
+			}
 		}
 		
 		// receive all actions since lastAction
 		this.getActions = function () {
-			makeRequest("getActions", "since=" + this.lastAction);
+			makeRequest("getActions", {since: this.lastAction});
 		}
 
 		// register an action
@@ -378,17 +392,29 @@ var game = new function () {
 			if (requesting) return;
 			if (content == null) content = "";
 			requesting = true;
-			makeRequest("registerAction", "action=" + action + "&content=" + content);
+			makeRequest("registerAction", {action: action, content: content});
 		}
 
 		// register host action
 		this.registerHostAction = function (action) {
 			if (requesting) return;
 			requesting = true;
-			makeRequest("registerHostAction", "action=" + action);
+			makeRequest("registerHostAction", {action: action});
+		}
+
+		this.init = function () {
+			requestStart = {gId: gameid, pId: userid, authcode: authcode};
+			// check if CORS is available
+			$.get(uri+"test", this.getActions).error(function (e) {
+				if (e.responseText != "ok") {
+					CORS = false;
+					_this.getActions();
+				}
+			});
 		}
 
 	}
+	butler.parent = this;
 
 	var fadeActionBtn = function (action, show, time) {
 		if (time == undefined) time = 400;
@@ -706,7 +732,7 @@ var game = new function () {
 				// received new chat message
 				case "chat":
 					// make sure to decode and escape to prevent XSS
-					var decoded = $("<div>").text(decodeURIComponent(action.content)).html();
+					var decoded = $("<div>").text(decodeURIComponent(action.content.replace(/\+/g, " "))).html();
 					logChat(action.player, decoded);
 					players[action.player].chat(decoded);
 					break;
@@ -852,7 +878,7 @@ var game = new function () {
 	// images loaded
 	$(window).load(function () {
 		// initiate butler
-		butler.getActions();
+		butler.init();
 
 		// show table and panel
 		$(".onLoad").removeClass("onLoad");
@@ -888,7 +914,7 @@ var game = new function () {
 		});
 		// user submitted a message
 		$("#log form").submit(function () {
-			var message = encodeURIComponent($(this).find("input").val());
+			var message = $(this).find("input").val();
 			if (message == "") return false;
 			$(this).find("input").val("");
 			butler.registerAction("chat", message);
