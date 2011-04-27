@@ -153,10 +153,18 @@ var game = new function () {
 			var flagDom = $(".flag", dom);
 			if (flag == "") {
 				if (!flagDom.is(":hidden")) {
-					flagDom.fadeIn(100);
+					flagDom.fadeOut(100);
 				}
 			} else {
 				flagDom.html(flag).fadeIn(100);
+			}
+		}
+
+		var shortName = function(chars) {
+			if (_this.name.length > chars) {
+				return _this.name.substr(0, chars) + ".";
+			} else {
+				return _this.name;
 			}
 		}
 
@@ -167,10 +175,10 @@ var game = new function () {
 			// add player to strikes table
 			// +1 because first cell is for round number
 			tableDom = $("#strikes .top td").eq(placeTable+1);
-			tableDom.html(this.name);
+			tableDom.html(shortName(5));
 			// set player's name on the table
 			var nameDom = $(".name", dom);
-			nameDom.html(this.name);
+			nameDom.html(shortName(8));
 			// position info bubble
 			var at, my, tri, offset;
 			switch (place) {
@@ -353,7 +361,7 @@ var game = new function () {
 
 		var _this = this;
 		// the butler's address to connect to
-		var host = "albisigns.ath.cx:4926";
+		var host = "192.168.10.10:4926";
 		// number of last action we got from the butler
 		this.lastAction = 0;
 		var requesting = false;
@@ -609,8 +617,8 @@ var game = new function () {
 			case "folded":
 				if (action.player == userid) {
 					toggleActionBtn("activeKnock", false);
+					fadeActionBtn("flipHand", false);
 				}
-				fadeActionBtn("flipHand", false);
 				players[action.player].folded();
 				playersSmallRound--;
 				break;
@@ -821,6 +829,9 @@ var game = new function () {
 				case "auth":
 					main.showBubble("error", "Authentifizierung fehlgeschlagen!", "", 0);
 					break;
+				case "fatalCrash":
+					main.showBubble("error", "Sorry! Es ist ein Fehler aufgetreten, deshalb müssen wir das Spiel an dieser Stelle abbrechen.<br />Deinen Einsatz kriegst du natürlich wieder gutgeschrieben.");
+					break;
 				default:
 					showError("Es ist ein Fehler bei dieser Aktion aufgetreten. Versuchs noch mal :)");
 			}
@@ -971,17 +982,22 @@ var game = new function () {
 			queue.push({"player":"1", "action": "roundStarted", "content": ""});
 			//queue.push({"player":"1", "action": "poor", "content": ""});
 			queue.push({"player":"1", "action": "smallRoundStarted", "content": ""});
-			//queue.push({"player":"1", "action": "turn", "content": ""});
+			queue.push({"player":"2", "action": "knocked", "content": ""});
+			queue.push({"player":"2", "action": "out", "content": ""});
 			processQueue(true);
 		}, 1500);
 		setTimeout(function () {
 			//queue.push({"player":"1", "action": "smallRoundEnded", "content": ""});
-			queue.push({"player":"1", "action": "laidStack", "content": "c3"});
+			//queue.push({"player":"1", "action": "laidStack", "content": "c3"});
 			//processQueue(true);
 			players[1].flipHand(3, "c3");
+			players[1].flipHand(1, "c3");
+			players[1].flipHand(2, "c3");
+			players[1].flipHand(0, "c3");
 			players[1].updateStrikes(7);
 		}, 3000);
 		setTimeout(function () {
+			fadeActionBtn("flipHand", false);
 			//queue.push({"player":"2", "action": "poor", "content": ""});
 			//queue.push({"player":"1", "action": "knockTurn", "content": ""});
 			//queue.push({"player":"1", "action": "turn", "content": ""});

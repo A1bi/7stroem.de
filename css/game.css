@@ -56,7 +56,7 @@
 	/* -webkit-transform: rotate(180deg); */
 }
 #game .players .area .name {
-	font-size: 18px;
+	font-size: 17px;
 	color: #ffffff;
 	text-shadow: #000000 1px 1px 4px;
 	font-weight: bold;
@@ -175,7 +175,7 @@
 #game .players .bottom .area .name {
 	bottom: 55px;
 	left: 370px;
-	font-size: 19px;
+	font-size: 17px;
 }
 #game .players .bottom .area .flag {
 	bottom: 42px;
@@ -183,7 +183,7 @@
 }
 #game .players .bottom .actions {
 	bottom: 0px;
-	left: 115px;
+	left: 112px;
 	z-index: 4;
 }
 #game .players .bottom .actions div {
@@ -192,7 +192,7 @@
 }
 #game .players .bottom .activeKnock {
 	bottom: 3px;
-	width: 240px;
+	width: 146px;
 	height: 80px;
 	cursor: auto !important;
 }
@@ -374,7 +374,7 @@
 	top: 7px;
 }
 #game .players .vertical .flag {
-	top: 30px;
+	top: 28px;
 }
 
 /** left **/
@@ -601,6 +601,7 @@ input.inactive {
 }
 #panel #strikes .sTable {
 	height: 95%;
+	width: 100%;
 	overflow: auto;
 }
 #panel #strikes .strike {
