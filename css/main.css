@@ -202,18 +202,36 @@ p {
 	visibility: visible !important;
 	opacity: 1 !important;
 }
+.icon {
+	background: url(/gfx/icons.png) no-repeat;
+	display: inline-block;
+	width: 16px;
+}
+.icon.add {
+	height: 15px;
+	vertical-align: -3px;
+}
+.icon.del {
+	height: 14px;
+	background-position: 0px -15px;
+	vertical-align: -2px;
+}
 
 /* content boxes */
 .cBox {
 	border: 1px solid #cccccc;
 	background: #ffffff;
 	box-shadow: 0px 0px 8px 1px #cccccc;
+	-moz-box-shadow: 0px 0px 8px 1px #cccccc;
+	-webkit-box-shadow: 0px 0px 8px 1px #cccccc;
 }
 .cBox .head {
 	height: 21px;
 	padding: 3px 6px;
 	background: url(/gfx/box_head.png) repeat-x;
 	box-shadow: 0px 2px 4px 1px #cccccc;
+	-moz-box-shadow: 0px 2px 4px 1px #cccccc;
+	-webkit-box-shadow: 0px 2px 4px 1px #cccccc;
 }
 .cBox .space {
 	padding: 6px;

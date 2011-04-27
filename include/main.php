@@ -9,8 +9,9 @@ error_reporting(E_ALL ^ E_NOTICE);
  *
  * @param string $url
  */
-function redirectTo($url = "") {
-	if (empty($url)) $url = $_SERVER['REQUEST_URI'];
+function redirectTo($url = "0") {
+	if ($url == "0") $url = $_SERVER['REQUEST_URI'];
+	elseif ($url == "") $url = "/";
 	header("Location: " . $url);
 	exit();
 }

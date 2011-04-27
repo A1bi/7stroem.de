@@ -1,29 +1,77 @@
-.infos {
-	position: relative;
-	background: url(/gfx/player/infos.png) no-repeat;
-	width: 460px;
-	height: 442px;
+.cBox {
+	margin: 10px;
 }
-.infos .head {
-	position: absolute;
+.fCon {
 	width: 100%;
-	text-align: center;
-	top: 37px;
-	font-size: 18px;
+	overflow: auto;
+}
+.fCon .left {
+	float: left;
+	width: 35%;
 }
 .infos .space {
-	position: absolute;
-	font-size: 14px;
-	top: 90px;
-	left: 45px;
-	width: 370px;
+	font-size: 13px;
 }
 .infos .space table {
 	width: 100%;
+	margin-bottom: 15px;
 }
 .infos .space .subhead {
 	border-bottom: 1px solid #000000;
 	padding: 2px;
 	margin-bottom: 5px;
-	font-size: 17px;
+	font-size: 15px;
+}
+.comments {
+	float: right;
+	width: 62%;
+}
+.comments .post {
+	margin-top: 20px;
+	font-size: 13px;
+}
+.comments .post .hcen {
+	margin: 10px;
+}
+.comments .post textarea {
+	width: 99%;
+}
+.comment {
+	padding: 8px 0px;
+	border-bottom: 1px solid #cccccc;
+}
+.comment .by {
+	font-size: 12px;
+	color: #808080;
+}
+.comment .text {
+	padding: 6px 0px 0px 5px;
+}
+.actions {
+	font-size: 11px;
+	margin: 20px 0px 5px 20px;
+}
+.addFriend {
+	margin: auto;
+	width: 170px;
+	text-align: center;
+	background: #e5e5e5;
+	background: -moz-linear-gradient(top, #ffffff, #e5e5e5);
+	background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#e5e5e5));
+	background: -o-linear-gradient(top, #ffffff, #e5e5e5);
+	background: filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#e5e5e5');
+	box-shadow: 0px 0px 2px 0px #cccccc;
+	-moz-box-shadow: 0px 0px 2px 0px #cccccc;
+	-webkit-box-shadow: 0px 0px 2px 0px #cccccc;
+	border: 1px solid #878787;
+	padding: 4px;
+	font-size: 12px;
+	text-decoration: none;
+	display: block;
+}
+.addFriend:hover {
+	background: #f3f3f3;
+}
+.addFriend:active {
+	background: #cccccc;
 }

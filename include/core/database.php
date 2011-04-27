@@ -23,7 +23,7 @@ class database {
 
 		// initiate and connect to db
 		try {
-			$this->db = new PDO("mysql:dbname=" . $name . ";host=" . $host, $user, $password);
+			$this->db = new PDO("mysql:dbname=" . $name . ";host=" . $host, $user, $password, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
 		// some error occurred
 		} catch (PDOException $exc) {
 			echo "Fehler beim Verbinden mit Datenbank: " . $exc->getMessage();
