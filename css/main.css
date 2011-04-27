@@ -2,6 +2,7 @@
 body {
 	font-family: "DejaVu Sans", "Arial";
 	margin: 0px;
+	min-width: 1009px;
 }
 a {
 	color: #474747;
@@ -138,22 +139,35 @@ p {
 .pspace .bg.gradient {
 	width: 100%;
 	height: 1024px;
-	bottom: 50px;
+	bottom: 0px;
 }
 .pspace .bg.foot {
 	background-position: 0px -1024px;
 	height: 50px;
 	width: 100%;
-	bottom: 0px;
+	bottom: -50px;
+}
+.pspace .foot {
+	color: #a3a3a3;
+	font-size: 12px;
+}
+.pspace .foot a {
+	color: #a3a3a3;
+	text-decoration: none;
+}
+.pspace .foot a:hover {
+	text-decoration: underline;
 }
 .pspace .foot div {
 	position: absolute;
 	top: 12px;
 }
-.pspace .foot .copyright {
-	color: #a3a3a3;
+.pspace .foot .left {
 	left: 30px;
-	font-size: 12px;
+}
+.pspace .foot .right {
+	right: 30px;
+	font-size: 11px;
 }
 
 /* common classes */
@@ -190,7 +204,21 @@ p {
 }
 
 /* content boxes */
-
+.cBox {
+	border: 1px solid #cccccc;
+	background: #ffffff;
+	box-shadow: 0px 0px 8px 1px #cccccc;
+}
+.cBox .head {
+	height: 21px;
+	padding: 3px 6px;
+	background: url(/gfx/box_head.png) repeat-x;
+	box-shadow: 0px 2px 4px 1px #cccccc;
+}
+.cBox .space {
+	padding: 6px;
+	font-size: 14px;
+}
 
 /* info and error bubbles */
 .bubbles {

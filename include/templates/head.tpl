@@ -67,6 +67,7 @@
 	<div class="pspace">
 		<div class="bg gradient">&nbsp;</div>
 		<div class="bg foot">
-			<div class="copyright">&copy; Albisigns 2011 - Impressum</div>
+			<div class="left">&copy; Albisigns 2011 - <a href="/impressum">Impressum</a></div>
+			<div class="right">Bei allen genannten Geldbeträgen handelt es sich nur um Spielgeld.</div>
 		</div>
 		<div class="content">

@@ -1,0 +1,16 @@
+.cBox {
+	float: left;
+	width: 45%;
+	margin: 20px;
+	height: 200px;
+}
+.cBox.tos {
+	float: right;
+}
+.disc div {
+	margin: 10px;
+	float: left;
+}
+.pspace .content {
+	height: 400px;
+}
