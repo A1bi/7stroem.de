@@ -4,21 +4,25 @@
 	<title>7ström</title>
 	<meta charset="utf-8" />
 	<script>
-		var ok = {$ok};
+		var ok = {$ok|default:"false"};
 		var type = "{$type}";
 		var known = {$known|default:"false"};
 		function finish() {
-			if (type == "login") {
+			if (type == "signup") {
+				window.opener.signup.finishFb(ok, known);
+			} else {
 				if (ok) {
-					if (known) {
-						url = "/games";
+					if (type == "settings") {
+						url = "/settings/facebook";
 					} else {
-						url = "/signup?fb=1";
+						if (known) {
+							url = "/games";
+						} else {
+							url = "/signup?fb=1";
+						}
 					}
 					window.opener.location.href = url;
 				}
-			} else if (type == "signup") {
-				window.opener.signup.finishFb(ok, known);
 			}
 			window.close();
 		}

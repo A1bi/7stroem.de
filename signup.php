@@ -69,22 +69,22 @@ if ($_GET['ajax']) {
 	echo json_encode(array("result" => $result));
 
 } elseif ($_GET['action'] == "finishFb") {
-	if (!empty($_GET['error'])) {
-		$ok = "false";
-	} else {
-		$ok = "true";
+	if (empty($_GET['error'])) {
 		$_fb->login($_GET['code'], "/signup?action=finishFb");
+		if ($_fb->getId()) {
+			$ok = "true";
 
-		$result = $_db->query('SELECT id, name FROM users WHERE fb = ?', array($_fb->getId()));
-		$user = $result->fetch();
+			$result = $_db->query('SELECT id, name FROM users WHERE fb = ?', array($_fb->getId()));
+			$user = $result->fetch();
 
-		// found ?
-		if (!empty($user['id'])) {
-			$known = "true";
-			$_fb->logout();
-		// facebook user not found
-		} else {
-			$known = "false";
+			// found ?
+			if (!empty($user['id'])) {
+				$known = "true";
+				$_fb->logout();
+			// facebook user not found
+			} else {
+				$known = "false";
+			}
 		}
 	}
 

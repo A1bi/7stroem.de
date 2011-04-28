@@ -216,6 +216,26 @@ p {
 	background-position: 0px -15px;
 	vertical-align: -2px;
 }
+.cats {
+	margin: 3px;
+	margin-bottom: 10px;
+	height: 19px;
+	padding-top: 3px;
+	text-align: center;
+	background: #cccccc;
+	background: -moz-linear-gradient(top, #ffffff, #cccccc);
+	background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#cccccc));
+	background: -o-linear-gradient(top, #ffffff, #cccccc);
+	background: filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#cccccc');
+	border-radius: 11px;
+	box-shadow: 0px 0px 3px rgba(0, 0, 0, .7);
+	-webkit-box-shadow: 0px 0px 3px rgba(0, 0, 0, .7);
+	-moz-box-shadow: 0px 0px 3px rgba(0, 0, 0, .7);
+	font-size: 12px;
+}
+.cats a.active {
+	text-decoration: none;
+}
 
 /* content boxes */
 .cBox {

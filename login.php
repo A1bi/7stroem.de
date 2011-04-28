@@ -7,25 +7,26 @@ if ($_GET['action'] == "logout") {
 	showInfo("Du hast dich erfolgreich ausgeloggt!<br />Schau nochmal rein :)<br />Bis dann!");
 
 } else if ($_GET['fb']) {
-	if (!empty($_GET['error'])) {
-		$ok = "false";
-	} else {
-		$ok = "true";
+	if (empty($_GET['error'])) {
 		$_fb->login($_GET['code'], "/login?fb=1");
 
-		$result = $_db->query('SELECT id, name FROM users WHERE fb = ?', array($_fb->getId()));
-		$user = $result->fetch();
+		if ($_fb->getId()) {
+			$ok = "true";
 
-		// found ?
-		if (!empty($user['id'])) {
-			$known = "true";
-			// store in session
-			$_SESSION['user']['id'] = $user['id'];
-			showInfo("Grüß dich, ".htmlspecialchars($user['name'])."!");
+			$result = $_db->query('SELECT id, name FROM users WHERE fb = ?', array($_fb->getId()));
+			$user = $result->fetch();
 
-		// facebook user not found
-		} else {
-			$known = "false";
+			// found ?
+			if (!empty($user['id'])) {
+				$known = "true";
+				// store in session
+				$_SESSION['user']['id'] = $user['id'];
+				showInfo("Grüß dich, ".htmlspecialchars($user['name'])."!");
+
+			// facebook user not found
+			} else {
+				$known = "false";
+			}
 		}
 	}
 

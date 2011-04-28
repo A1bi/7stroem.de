@@ -123,10 +123,11 @@ if (!defined("NO_SESSION")) {
 			// look in database for facebook user
 			$result = $_db->query('SELECT id, name, credit FROM users WHERE fb = ?', array($_fb->getId()));
 			$user = $result->fetch();
+			$user['fb'] = $_fb->getId();
 		// regular 7stroem account
 		} else {
 			// look in database for given user
-			$result = $_db->query('SELECT id, name, credit FROM users WHERE id = ? AND pass = ?', array($_SESSION['user']['id'], $_SESSION['user']['pass']));
+			$result = $_db->query('SELECT id, name, credit, email FROM users WHERE id = ? AND pass = ?', array($_SESSION['user']['id'], $_SESSION['user']['pass']));
 			$user = $result->fetch();
 		}
 

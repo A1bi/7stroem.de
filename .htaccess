@@ -2,6 +2,5 @@ RewriteEngine on
 RewriteRule ^games/([0-9]+)/?$ /game.php?id=$1
 RewriteRule ^player/([a-zA-Z0-9._-]+)/?$ /player.php?name=$1 [QSA]
 RewriteRule ^logout$ /login.php?action=logout
-RewriteCond %{REQUEST_FILENAME} !-U
-RewriteRule ^([a-z]+)/([a-z]+)$ $1.php?action=$2
+RewriteRule ^([a-z]+)/([a-z]+)/?$ $1.php?action=$2 [QSA]
 RewriteRule ^([a-z]+)$ $1.php [QSA]

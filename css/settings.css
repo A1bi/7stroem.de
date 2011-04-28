@@ -1,0 +1,11 @@
+.cBox {
+	width: 97%;
+	margin: auto;
+}
+.cBox .space {
+	font-size: 13px;
+}
+.cats {
+	width: 80%;
+	margin: 10px auto;
+}
