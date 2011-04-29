@@ -1,6 +1,5 @@
 <?php
 include('include/main.php');
-kickGuests();
 
 $name = (!empty($_GET['name'])) ? $_GET['name'] : $_user['name'];
 $result = $_db->query('SELECT id, name, realname, registered, rounds, won FROM users WHERE name = ?', array($name));

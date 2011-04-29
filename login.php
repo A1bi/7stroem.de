@@ -21,7 +21,6 @@ if ($_GET['action'] == "logout") {
 				$known = "true";
 				// store in session
 				$_SESSION['user']['id'] = $user['id'];
-				showInfo("Grüß dich, ".htmlspecialchars($user['name'])."!");
 
 			// facebook user not found
 			} else {
@@ -51,8 +50,6 @@ if ($_GET['action'] == "logout") {
 			// store in session
 			$_SESSION['user']['id'] = $user['id'];
 			$_SESSION['user']['pass'] = $hash;
-			showInfo("Grüß dich, ".htmlspecialchars($_POST['name'])."!");
-			redirectTo("/games");
 
 		// not found - login incorrect
 		} else {

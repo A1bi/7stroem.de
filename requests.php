@@ -15,7 +15,7 @@ function delRequest($id) {
 // accept a request
 if ($_GET['action'] == "accept") {
 	$_db->query('INSERT INTO users_friends VALUES (:1, :2), (:2, :1)', array(":1" => $_user['id'], ":2" => $request['by']));
-	delRequest($request['id']);
-	redirectTo($_SERVER['HTTP_REFERER']);
 }
+delRequest($request['id']);
+redirectTo($_SERVER['HTTP_REFERER']);
 ?>

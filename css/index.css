@@ -110,3 +110,41 @@
 .pspace .content {
 	height: 500px;
 }
+.welcome {
+	margin-top: 7px;
+	margin-left: 10px;
+	font-size: 22px;
+}
+.con {
+	margin-top: 20px;
+}
+.con.l {
+	float: left;
+	margin-left: 10px;
+	width: 57%;
+}
+.con.r {
+	float: right;
+	margin-right: 10px;
+	width: 38%;
+}
+.games {
+	margin-top: 20px;
+}
+.games table {
+	width: 55%;
+}
+.requests table {
+	width: 100%;
+	border-collapse: collapse;
+}
+.requests tr:hover {
+	background: #e5e5e5;
+}
+.requests td {
+	padding: 3px;
+}
+.forgotPass {
+	width: 70%;
+	margin: 50px auto;
+}

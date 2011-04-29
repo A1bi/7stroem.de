@@ -55,7 +55,7 @@
 				<li><a href="/settings">Einstellungen</a></li>
 			</ul>
 			<div class="userbox">
-				Hallo, {$_user.name|escape}!<br />
+				Spieler: {$_user.name|escape}<br />
 				<div class="credit">Guthaben: <span>{$_user.credit}</span> &euro;</div>
 				<div class="hright logout"><a href="/logout">ausloggen</a></div>
 			</div>

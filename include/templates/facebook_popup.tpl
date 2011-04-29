@@ -16,7 +16,7 @@
 						url = "/settings/facebook";
 					} else {
 						if (known) {
-							url = "/games";
+							url = "/";
 						} else {
 							url = "/signup?fb=1";
 						}

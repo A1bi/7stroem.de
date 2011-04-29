@@ -10,7 +10,7 @@
 				{foreach $games as $game}
 				<tr class="r{$game@iteration mod 2}">
 					<td>{$game@iteration}.</td>
-					<td><a href="/player/{$game.userid}">{$game.username|escape}</a></td>
+					<td><a href="/player/{$game.username|escape}">{$game.username|escape}</a></td>
 					<td>{$game.bet} &euro;</td>
 					<td>{$game.players} / {$game.maxplayers}</td>
 					<td><a href="/games/{$game.id}">beitreten</a></td>
