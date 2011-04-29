@@ -1,11 +1,31 @@
 <?php
 include('include/main.php');
 
+// checks if login is correct, rewards user once a day
+function login($user) {
+	global $_db;
+	
+	if (empty($user['id'])) return false;
+
+	$_SESSION['user']['id'] = $user['id'];
+	if (!empty($user['pass'])) {
+		$_SESSION['user']['pass'] = $user['pass'];
+	}
+	// check if user needs to be rewarded
+	if ($user['lastreward']+86400 < time()) {
+		$_db->query('UPDATE users SET credit = credit + 500, lastreward = ? WHERE id = ?', array(time(), $user['id']));
+	}
+	$_db->query('UPDATE users SET lastlogin = ? WHERE id = ?', array(time(), $user['id']));
+
+	return true;
+}
+
 // logout
 if ($_GET['action'] == "logout") {
 	unset($_SESSION['user']);
 	showInfo("Du hast dich erfolgreich ausgeloggt!<br />Schau nochmal rein :)<br />Bis dann!");
 
+// login via facebook
 } else if ($_GET['fb']) {
 	if (empty($_GET['error'])) {
 		$_fb->login($_GET['code'], "/login?fb=1");
@@ -13,15 +33,12 @@ if ($_GET['action'] == "logout") {
 		if ($_fb->getId()) {
 			$ok = "true";
 
-			$result = $_db->query('SELECT id, name FROM users WHERE fb = ?', array($_fb->getId()));
+			$result = $_db->query('SELECT id, name, lastreward FROM users WHERE fb = ?', array($_fb->getId()));
 			$user = $result->fetch();
 
 			// found ?
-			if (!empty($user['id'])) {
+			if (login($user)) {
 				$known = "true";
-				// store in session
-				$_SESSION['user']['id'] = $user['id'];
-
 			// facebook user not found
 			} else {
 				$known = "false";
@@ -35,27 +52,22 @@ if ($_GET['action'] == "logout") {
 	$_tpl->display("facebook_popup.tpl");
 	exit();
 
-// login
+// regular login
 } else {
 	if (!empty($_POST['name'])) {
 		// create md5 hash of given password
 		$hash = md5($_POST['pass']);
 
 		// look in database for given user
-		$result = $_db->query('SELECT id FROM users WHERE name = ? AND pass = ?', array($_POST['name'], $hash));
+		$result = $_db->query('SELECT id, lastreward, pass FROM users WHERE name = ? AND pass = ?', array($_POST['name'], $hash));
 		$user = $result->fetch();
 
-		// found ?
-		if (!empty($user['id'])) {
-			// store in session
-			$_SESSION['user']['id'] = $user['id'];
-			$_SESSION['user']['pass'] = $hash;
-
-		// not found - login incorrect
-		} else {
+		if (!login($user)) {
+			// user not found
 			showError("Benutzername oder Passwort stimmt nicht!<br />Versuchs einfach nochmal.", ".login table td:first", "left center", "right top", "right t");
 		}
 	}
 }
+
 redirectTo("/");
 ?>
