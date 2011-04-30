@@ -1,5 +1,6 @@
 RewriteEngine on
 RewriteRule ^games/([0-9]+)/?$ /game.php?id=$1
+RewriteRule ^hilfe/([a-zA-Z-]+)/?$ /help.php?page=$1
 RewriteRule ^player/([a-zA-Z0-9._-]+)/?$ /player.php?name=$1 [QSA]
 RewriteRule ^logout$ /login.php?action=logout
 RewriteRule ^forgotpass$ /index.php?action=forgotpass

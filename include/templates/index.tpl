@@ -30,7 +30,7 @@
 				<form action="login.php" method="post">
 				<table>
 					<tr>
-						<td style="width: 42%;" class="vcen">Benutzername:</td>
+						<td style="width: 42%;" class="vcen">Spielername:</td>
 						<td><input type="text" name="name" class="field" tabindex="1" /></td>
 					</tr>
 					<tr>
@@ -62,8 +62,9 @@
 				<div class="head">Neues</div>
 				<div class="space">
 					Moin!
-					<p>7ström ist fertig! Ja, hat bisschen gedauert, aber jetzt kanns ja losgehen.<br />Hier und da kann noch irgendein Fehler stecken, also bitte sofort melden, wenn ihr was entdeckt. Die Seite befindet sich noch in der Testphase, es kann sich also noch ne Menge ändern und verbessern.
-					<br />Wenn das Ganze anfangs etwas verwirrend sein sollte, lest euch einfach die ersten Schritte durch und es sollte alles schon etwas klarer sein ;)</p>
+					<p><b>7ström ist da!</b>
+					<br />Ja, hat bisschen gedauert, aber jetzt kanns ja losgehen.<br />Hier und da kann noch irgendein Fehler stecken, also bitte sofort melden, wenn ihr was entdeckt. Die Seite befindet sich noch in der Testphase, es kann sich also noch ne Menge ändern und verbessern. Das Ding ist sowieso immer noch nicht ganz fertig.</p>
+					<p>Wenn das Ganze anfangs etwas verwirrend sein sollte, lest euch <a href="/hilfe/so-funktionierts">das hier</a> einfach mal durch und es sollte alles schon etwas klarer sein ;)</p>
 					<p>Viel Spaß beim Zocken!</p>
 				</div>
 			</div>

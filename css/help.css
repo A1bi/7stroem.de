@@ -1,0 +1,75 @@
+.pspace .content {
+	font-size: 15px;
+	text-align: justify;
+}
+.hdl {
+	margin-top: 20px;
+	margin-bottom: 4px;
+	font-size: 19px;
+	border-bottom: 1px solid #cccccc;
+	padding-bottom: 3px;
+	font-weight: bold;
+}
+.space {
+	width: 100%;
+	overflow: auto;
+	margin: 10px 0px;
+}
+.space .text {
+	float: left;
+	width: 75%;
+	margin: 0px 20px;
+}
+.piece {
+	background: url(/gfx/help/pieces.png) no-repeat;
+	width: 195px;
+	float: left;
+	margin: 0px 5px;
+	height: 100%;
+}
+.credit .piece {
+	background-position: 0px -186px;
+	height: 84px;
+}
+.requests .piece {
+	height: 120px;
+	background-position: 0px -270px;
+}
+.requests .text {
+	margin-top: 20px;
+}
+.games .piece {
+	height: 115px;
+	background-position: 0px -390px;
+}
+.games .text {
+	margin-top: 25px;
+}
+.create .piece {
+	height: 186px;
+}
+.create .text {
+	margin-top: 40px;
+}
+.overview .piece {
+	background-position: 0px -505px;
+	height: 100px;
+}
+.overview .text {
+	margin-top: 7px;
+}
+.blindKnock .piece {
+	height: 69px;
+	background-position: 0px -605px;
+}
+.knocked .piece {
+	height: 73px;
+	background-position: 0px -674px;
+}
+.strikes .piece {
+	height: 149px;
+	background-position: 0px -747px;
+}
+.strikes .text {
+	margin-top: 40px;
+}

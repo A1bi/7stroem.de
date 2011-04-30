@@ -46,7 +46,7 @@ if ($_GET['ajax']) {
 					}
 					$pass = md5($pass);
 					// insert into db
-					$result = $_db->query('INSERT INTO users VALUES (null, ?, ?, ?, ?, ?, ?, 1000, 0, 0, ?)', array($_POST['username'], $realname, $_POST['email'], $pass, $fb, time(), time()));
+					$result = $_db->query('INSERT INTO users VALUES (null, ?, ?, ?, ?, ?, ?, 1000, 0, 0, ?, ?)', array($_POST['username'], $realname, $_POST['email'], $pass, $fb, time(), time(), time()));
 					if ($result->rowCount() > 0) {
 						// login
 						$_SESSION['user']["id"] = $_db->id();
