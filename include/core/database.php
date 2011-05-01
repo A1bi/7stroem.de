@@ -16,14 +16,11 @@ class database {
 	function __construct() {
 
 		// authentication
-		$host = "127.0.0.1";
-		$name = "7stroem";
-		$user = "7stroem";
-		$password = "EM76C2d9cbxbPQKM";
+		global $_config;
 
 		// initiate and connect to db
 		try {
-			$this->db = new PDO("mysql:dbname=" . $name . ";host=" . $host, $user, $password, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
+			$this->db = new PDO("mysql:dbname=" . $_config['db']['name'] . ";host=" . $_config['db']['host'], $_config['db']['user'], $_config['db']['pass'], array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
 		// some error occurred
 		} catch (PDOException $exc) {
 			echo "Fehler beim Verbinden mit Datenbank: " . $exc->getMessage();

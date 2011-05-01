@@ -94,7 +94,7 @@
 				</div>
 				{/foreach}
 				<div class="post">
-				<form method="post" action="#">
+				<form method="post" action="{$smarty.server.REQUEST_URI}">
 					Auch etwas schreiben:
 					<div><textarea name="comment"></textarea></div>
 					<div class="hcen"><input type="submit" name="submit" value="speichern" /></div>

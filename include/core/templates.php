@@ -6,8 +6,13 @@
 require($_base.'/include/core/smarty/Smarty.class.php');
 
 // init object
-global $_tpl;
+global $_tpl, $_config;
 $_tpl = new Smarty();
+
+$config = $_config;
+// for security: remove access to database config
+unset($config['db']);
+$_tpl->assign("_config", $config);
 
 // configure
 $_tpl->setTemplateDir($_base.'/include/templates');

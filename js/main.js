@@ -44,6 +44,19 @@ $.fn.extend({
 		//	return this.transEnd(callback)._addClass("fade out");
 		//}
 	},
+	__fadeTo: $.fn.fadeTo,
+	fadeTo: function (speed, to, callback) {
+		speed = this.checkIE(speed);
+		if ((to == 1 || to == 0) && speed < 1 && $.browser.msie) {
+			this.css("visibility", to == 1 ? "visible" : "hidden");
+			if ($.isFunction(callback)) {
+				this.each(callback);
+			}
+			return this;
+		} else {
+			return this.__fadeTo(speed, to, callback);
+		}
+	},
 	__addClass: $.fn.addClass,
 	addClass: function (classNames, speed, easing, callback) {
 		if (speed && !Modernizr.csstransitions) {

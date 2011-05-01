@@ -8,7 +8,7 @@
 				<div style="margin: 20px auto; width: 95%;">
 					{if $smarty.get.action == "password"}
 					Hier kannst du dein Passwort ändern. Gib dazu dein altes sowie zweimal dein neues ein.
-					<form method="post" action="#">
+					<form method="post" action="/settings/password">
 					<table style="width: 100%; margin-top: 10px;">
 						<tr>
 							<td style="width: 30%;">Altes Passwort:</td><td><input type="password" name="old" /></td>
@@ -31,7 +31,7 @@
 						{else}
 							{if $smarty.get.delFb == 1}
 					Um die Facebook-Verknüpfung aufzuheben, musst du eine e-mail Adresse und ein Passwort für dein 7ström-Konto festlegen, damit du dich später auch weiterhin bei 7ström anmelden kannst.
-					<form method="post" action="#">
+					<form method="post" action="/settings/facebook>
 					<table style="width: 100%; margin-top: 10px;">
 						<tr>
 							<td style="width: 30%;">e-mail Adresse:</td><td><input type="text" name="email" /></td>
@@ -53,7 +53,7 @@
 						{/if}
 					{else}
 					Hier kannst du deine e-mail Adresse ändern.
-					<form method="post" action="#">
+					<form method="post" action="/settings/email">
 					<table style="width: 100%; margin-top: 10px;">
 						<tr>
 							<td style="width: 30%;">e-mail Adresse:</td><td><input type="text" name="email" value="{$_user.email|escape}" /></td>

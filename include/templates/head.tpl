@@ -23,7 +23,7 @@
 	<script src="/js/fw/jquery.js"></script>
 	<script src="/js/fw/jquery-ui.js"></script>
 	<script src="/js/fw/modernizr.js"></script>
-	<script src="/js/main.js"></script>
+	<script src="/js/main.js{fileVersion file="/js/main.js"}"></script>
 {if $jsfile != ""}
 	<script src="/js/{$jsfile}.js{fileVersion file="/js/{$jsfile}.js"}"></script>
 {/if}

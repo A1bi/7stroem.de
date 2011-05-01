@@ -92,6 +92,8 @@ function showInfo($msg, $of = "", $at = "", $my = "", $tri = "", $off = "") {
 	createBubble($msg, "info", $of, $at, $my, $tri, $off);
 }
 
+// get config
+require("./include/config.inc.php");
 $_base = $_SERVER['DOCUMENT_ROOT'];
 
 // components to load

@@ -5,7 +5,7 @@
 			<div class="head">Passwort vergessen</div>
 			<div class="space">
 				Du hast dein Passwort vergessen? Kein Problem! Gib hier deine e-mail Adresse ein und wir schicken dir dorthin ein neues Passwort.
-				<form method="post" action="#">
+				<form method="post" action="/index">
 				<p class="hcen">Deine e-mail Adresse: <input type="text" name="email" /></p>
 				<p class="hcen"><input type="submit" name="submit" value="abschicken" /></p>
 				</form>

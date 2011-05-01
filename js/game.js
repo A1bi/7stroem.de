@@ -364,7 +364,7 @@ var game = new function () {
 
 		var _this = this;
 		// the butler's address to connect to
-		var host = "192.168.10.10:4926";
+		var host = "h1.butler.7stroem.de:4926";
 		// number of last action we got from the butler
 		this.lastAction = 0;
 		var requesting = false;

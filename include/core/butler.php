@@ -9,7 +9,7 @@ class butler {
 
 	// contains secret butler authcode
 	private static $authcode = "zGLqz2QM5RGQkwld";
-	private static $addr = "http://192.168.10.10:4926/";
+	private static $addr = "http://h1.butler.7stroem.de:4926/";
 
 	/**
 	 * construct
