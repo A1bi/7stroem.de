@@ -3,7 +3,7 @@
 			Du hast dich erfolgreich mit deinem Facebook-Konto eingeloggt.<br />
 			Da du zum ersten Mal hier bist, musst du dir jetzt nur noch einen Spielernamen aussuchen.{else}
 			Du willst mitmachen bei 7ström?<br />
-			Nimm dir zwei Minuten Zeit, folge diesen fünf Schritten und schon kanns los gehen.{/if}
+			Nimm dir zwei Minuten Zeit, folge diesen fünf Schritten und schon kanns losgehen.{/if}
 			<br />Achja.. es ist alles garantiert <b>kostenlos</b>!
 		</div>
 		<div class="steps">
@@ -85,7 +85,8 @@
 				</div>
 				<div class="contnt hcen collapsed">
 					<div>Es ist geschafft!</div>
-					Du kannst nun sofort loszocken. Lies dir aber besser vorher die ersten Schritte durch, falls du erfahren möchtest, wie 7ström funktioniert.
+					Bevor du loslegst, solltest du dir besser vorher anschauen, <a href="/hilfe/so-funktionierts">wie alles funktioniert</a>.<br />
+					Natürlich kannst du auch sofort <a href="/games">loszocken</a>.
 					<p>Viel Spaß beim Spielen!</p>
 				</div>
 			</div>

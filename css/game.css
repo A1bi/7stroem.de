@@ -551,6 +551,13 @@ input.inactive {
 	height: 233px;
 	width: 100%;
 }
+#panel #strikes a {
+	color: #ffffff;
+	text-decoration: none;
+}
+#panel #strikes a:hover {
+	text-decoration: underline;
+}
 #panel #strikes .space {
 	color: #ffffff;
 	top: 54px;

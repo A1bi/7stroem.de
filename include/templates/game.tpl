@@ -96,10 +96,10 @@
 					<table class="top head">
 						<tr>
 							<td class="round">Runde</td>
-							<td class="player"></td>
-							<td class="player"></td>
-							<td class="player"></td>
-							<td class="player"></td>
+							<td class="player"><a target="_blank"></a></td>
+							<td class="player"><a target="_blank"></a></td>
+							<td class="player"><a target="_blank"></a></td>
+							<td class="player"><a target="_blank"></a></td>
 						</tr>
 					</table>
 					<div class="sTable">
@@ -112,7 +112,7 @@
 				<div class="entries"></div>
 				<form action="game.php" method="post">
 				<div class="input">
-					<input type="text" name="message" value="Chat" class="inactive" />
+					<input type="text" name="message" value="Chat" class="inactive" autocomplete="off" />
 				</div>
 				</form>
 			</div>

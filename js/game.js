@@ -160,7 +160,7 @@ var game = new function () {
 			}
 		}
 
-		var shortName = function(chars) {
+		var shortName = function (chars) {
 			if (_this.name.length > chars) {
 				return _this.name.substr(0, chars) + ".";
 			} else {
@@ -168,17 +168,20 @@ var game = new function () {
 			}
 		}
 
+		var insertName = function (dom, chars) {
+			dom.html(shortName(chars)).attr("title", _this.name);
+		}
+
 		this.startGame = function (i, p) {
 			place = p;
 			placeTable = i;
 			dom = $(".players > div").eq(place);
 			// add player to strikes table
-			// +1 because first cell is for round number
-			tableDom = $("#strikes .top td").eq(placeTable+1);
-			tableDom.html(shortName(5));
+			tableDom = $("#strikes .top a").eq(placeTable).attr("href", "/player/"+this.name);
+			insertName(tableDom, 5);
 			// set player's name on the table
 			var nameDom = $(".name", dom);
-			nameDom.html(shortName(8));
+			insertName(nameDom, 7);
 			// position info bubble
 			var at, my, tri, offset;
 			switch (place) {
@@ -379,8 +382,10 @@ var game = new function () {
 				$.getJSON(requestUri, requestData, function (data) {
 					if (request != "getActions") requesting = false;
 					_this.parent.processResponse(data);
-				}).error(function (e) {
-					main.showBubble("error", "Sorry, der Server hat sich mal wieder verabschiedet.", "", 5000);
+				}).error(function () {
+					setTimeout(function () {
+						main.showBubble("error", "Sorry, da ist was schiefgelaufen...", "", 5000);
+					}, 500);
 				});
 			} else {
 				// get data via jsonp
@@ -971,40 +976,6 @@ var game = new function () {
 
 		// session polling
 		pollSession();
-
-		/* testing
-		players[1] = new Player(1, "Albi");
-		players[2] = new Player(2, "Bla");
-		players[3] = new Player(3, "Bla2");
-		players[4] = new Player(4, "Bla3");
-		setTimeout(function () {
-			queue.push({"player":"1", "action": "started", "content": "1,3,4,2"});
-			queue.push({"player":"1", "action": "roundStarted", "content": ""});
-			//queue.push({"player":"1", "action": "poor", "content": ""});
-			queue.push({"player":"1", "action": "smallRoundStarted", "content": ""});
-			queue.push({"player":"2", "action": "knocked", "content": ""});
-			queue.push({"player":"2", "action": "out", "content": ""});
-			processQueue(true);
-		}, 1500);
-		setTimeout(function () {
-			//queue.push({"player":"1", "action": "smallRoundEnded", "content": ""});
-			//queue.push({"player":"1", "action": "laidStack", "content": "c3"});
-			//processQueue(true);
-			players[1].flipHand(3, "c3");
-			players[1].flipHand(1, "c3");
-			players[1].flipHand(2, "c3");
-			players[1].flipHand(0, "c3");
-			players[1].updateStrikes(7);
-		}, 3000);
-		setTimeout(function () {
-			fadeActionBtn("flipHand", false);
-			//queue.push({"player":"2", "action": "poor", "content": ""});
-			//queue.push({"player":"1", "action": "knockTurn", "content": ""});
-			//queue.push({"player":"1", "action": "turn", "content": ""});
-			queue.push({"player":"1", "action": "smallRoundEnded", "content": ""});
-			queue.push({"player":"3", "action": "roundEnded", "content": ""});
-			//processQueue(true);
-		}, 6000);*/
 
 	});
 
