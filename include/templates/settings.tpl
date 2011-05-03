@@ -31,7 +31,7 @@
 						{else}
 							{if $smarty.get.delFb == 1}
 					Um die Facebook-Verknüpfung aufzuheben, musst du eine e-mail Adresse und ein Passwort für dein 7ström-Konto festlegen, damit du dich später auch weiterhin bei 7ström anmelden kannst.
-					<form method="post" action="/settings/facebook>
+					<form method="post" action="/settings/facebook">
 					<table style="width: 100%; margin-top: 10px;">
 						<tr>
 							<td style="width: 30%;">e-mail Adresse:</td><td><input type="text" name="email" /></td>
