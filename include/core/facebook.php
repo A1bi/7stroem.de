@@ -19,12 +19,8 @@ class facebook {
 	
 	function __construct() {
 		if (!empty($_SESSION['user']['fb']['id'])) {
-			if ($_SESSION['user']['fb']['expires'] <= time()) {
-				$this->logout();
-			} else {
-				$this->userid = $_SESSION['user']['fb']['id'];
-				$this->token = $_SESSION['user']['fb']['token'];
-			}
+			$this->userid = $_SESSION['user']['fb']['id'];
+			$this->token = $_SESSION['user']['fb']['token'];
 		}
 	}
 	
