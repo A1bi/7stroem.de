@@ -148,3 +148,13 @@
 	width: 70%;
 	margin: 50px auto;
 }
+.bulletin {
+	border: 1px solid #ff0000;
+	width: 90%;
+	margin: 10px auto;
+	padding: 5px;
+	font-size: 13px;
+	background: #ffc6c6;
+	border-radius: 7px;
+	-moz-border-radius: 7px;
+}

@@ -61,6 +61,10 @@
 			<div class="cBox">
 				<div class="head">Neues</div>
 				<div class="space">
+					<div class="bulletin hcen">
+						<b>Sorry für die nervigen Fehler, die noch drin sind!</b><br />
+						Es wird auf Hochtouren dran gearbeitet und hoffentlich bald behoben.
+					</div>
 					Moin!
 					<p><b>7ström ist da!</b>
 					<br />Ja, hat bisschen gedauert, aber jetzt kanns ja losgehen.<br />Hier und da kann noch irgendein Fehler stecken, also bitte sofort melden, wenn ihr was entdeckt. Die Seite befindet sich noch in der Testphase, es kann sich also noch ne Menge ändern und verbessern. Das Ding ist sowieso immer noch nicht ganz fertig.</p>
