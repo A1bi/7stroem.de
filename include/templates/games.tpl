@@ -24,7 +24,8 @@
 				<p><strong>Spielart:</strong><br />
 				<input type="radio" name="public" value="1" checked="checked" /> öffentlich <input type="radio" name="public" value="0" /> nur gegen Freunde</p>
 				<p><strong>Max. Anzahl an Spielern:</strong>
-				<select name="maxplayers" class="vcen"><option>2</option><option>3</option><option selected="selected">4</option></select></p>
+				<select name="maxplayers" class="vcen"><option>2</option></select>
+				<br /><span style="font-size: 11px;"><em>Wegen technischer Probleme sind derzeit nur zwei Spieler möglich, sorry!</em></span></p>
 				<p><strong>Einsatz:</strong>
 				<select name="bet" class="vcen">{html_options options=$bets selected=50}</select> &euro;</p>
 				<div class="hright">
