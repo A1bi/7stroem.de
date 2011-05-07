@@ -7,17 +7,54 @@
  */
 class butler {
 
-	// contains secret butler authcode
-	private static $authcode = "zGLqz2QM5RGQkwld";
-	private static $addr = "http://h1.butler.7stroem.de:4926/";
+	// contains butler information
+	private $server = array();
 
 	/**
 	 * construct
 	 * initiates curl lib
 	 */
-	function __construct() {
+	function __construct($id = -1) {
 		// we need curl for this
 		loadComponent("curl");
+		if ($id > -1) {
+			$this->setServer($id);
+		}
+	}
+
+	/**
+	 * retrieves server information from database
+	 * 
+	 * @global $_db
+	 * @param int $id
+	 * @return bool
+	 */
+	function setServer($id) {
+		global $_db;
+
+		$result = $_db->query('SELECT id, address, remote_authcode FROM butlers WHERE id = ?', array($id));
+		$server = $result->fetch();
+
+		if (empty($server['id'])) {
+			return false;
+		} else {
+			$this->server = $server;
+			return true;
+		}
+	}
+
+	/*
+	 * just returns the server id
+	 */
+	function getId() {
+		return $this->server['id'];
+	}
+
+	/*
+	 * just returns server address
+	 */
+	function getAddr() {
+		return $this->server['address'];
 	}
 
 	/**
@@ -33,7 +70,7 @@ class butler {
 			$get .= "&" . $argument . "=" . $value;
 		}
 		// preparing request
-		$curl = new curl(self::$addr . "server?authcode=" . self::$authcode . "&request=" . $request . $get);
+		$curl = new curl("http://" . $this->server['address'] . "/server?authcode=" . $this->server['remote_authcode'] . "&request=" . $request . $get);
 		// executing
 		$response = $curl->response();
 		if ($response == "ok") {

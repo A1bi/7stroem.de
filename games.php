@@ -18,8 +18,21 @@ if ($_GET['action'] == "create") {
 	}
 	$maxplayers = (intval($_POST['maxplayers']) < 2 || intval($_POST['maxplayers']) > 4) ? 4 : intval($_POST['maxplayers']);
 
+	// an admin predefined a server ?
+	if ($_user['admin'] && !empty($_POST['butler'])) {
+		if (!$butler->setServer($_POST['butler'])) {
+			showError("Fehler bei der Auswahl eines Servers!", ".create", "right bottom", "right top", "top r", "-40 -20");
+			redirectTo("/games");
+		}
+	// look for an available server
+	} else {
+		$result = $_db->query('SELECT id FROM butlers WHERE dev = 0 AND online = 1 LIMIT 0, 1');
+		$server = $result->fetch();
+		$butler->setServer($server['id']);
+	}
+
 	// create db entry
-	$_db->query('INSERT INTO games VALUES (null, ?, 0, ?, ?, 0, 0, ?, ?)', array($public, $maxplayers, $bet, time(), $_user['id']));
+	$_db->query('INSERT INTO games VALUES (null, ?, 0, ?, ?, ?, 0, 0, ?, ?)', array($public, $maxplayers, $bet, $butler->getId(), time(), $_user['id']));
 	$id = $_db->id();
 	// create game on server
 	if (!$butler->createGame($id, $_user['id'])) {

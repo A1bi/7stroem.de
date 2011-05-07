@@ -1,6 +1,11 @@
 var game = new function () {
 
 	var _this = this;
+	// user id of current user
+	this.user = -1;
+	// game id of this game
+	this.game = -1;
+	var host;
 	var players = [];
 	var playersCount = 0;
 	var playersSmallRound = 0;
@@ -14,6 +19,7 @@ var game = new function () {
 	var processing = false;
 	var started = false;
 	var roundStarted = false;
+	var butler = null;
 
 	var positions = [];
 	positions[0] = "left";
@@ -360,18 +366,18 @@ var game = new function () {
 
 	
 	// butler
-	var butler = new function () {
+	var Butler = function (authcode, addr, parent) {
 
 		var _this = this;
-		// the butler's address to connect to
-		var host = "h1.butler.7stroem.de:4926";
+		var _parent = parent;
 		// number of last action we got from the butler
 		this.lastAction = 0;
 		var requesting = false;
 		var CORS = true;
-		var uri = "http://" + host + "/";
+		// the butler's address to connect to
+		var uri = "http://" + addr + "/";
 		var requestUri = uri + "player";
-		var requestStart;
+		var requestStart = {gId: _parent.game, pId: _parent.user, authcode: authcode};
 
 		// connect to server and make a request
 		var makeRequest = function (request, args) {
@@ -381,7 +387,7 @@ var game = new function () {
 			if (CORS) {
 				$.getJSON(requestUri, requestData, function (data) {
 					if (request != "getActions") requesting = false;
-					_this.parent.processResponse(data);
+					_parent.processResponse(data);
 				}).error(function () {
 					setTimeout(function () {
 						main.showBubble("error", "Sorry, da ist was schiefgelaufen...", "", 5000);
@@ -416,7 +422,6 @@ var game = new function () {
 		}
 
 		this.init = function () {
-			requestStart = {gId: gameid, pId: userid, authcode: authcode};
 			// check if CORS is available
 			$.get(uri+"test", this.getActions).error(function (e) {
 				if (e.responseText != "ok") {
@@ -427,7 +432,10 @@ var game = new function () {
 		}
 
 	}
-	butler.parent = this;
+
+	var isHost = function () {
+		return (host == this.user);
+	}
 
 	var fadeActionBtn = function (action, show, time) {
 		if (time == undefined) time = 400;
@@ -460,7 +468,7 @@ var game = new function () {
 	var knocked = function (player) {
 		var info;
 		if (player > 0) {
-			if (player == userid) {
+			if (player == this.user) {
 				knockPossible = false;
 			}
 			info = players[player].name + " hat geklopft!";
@@ -506,13 +514,13 @@ var game = new function () {
 					toggleActionBtn("activeKnock", false);
 				}
 				activeKnock = -1;
-				toggleActionBtn("knock", (action.player == userid));
+				toggleActionBtn("knock", (action.player == this.user));
 				break;
 
 			case "knockTurn":
 				setTurn(action.player);
 				toggleActionBtn("knock", false);
-				toggleActionBtn("activeKnock", (action.player == userid));
+				toggleActionBtn("activeKnock", (action.player == this.user));
 				break;
 
 			// some player has laid on of his cards on his stack
@@ -530,13 +538,13 @@ var game = new function () {
 						player.smallRoundStarted();
 					}
 				});
-				if (!players[userid].isOut) {
+				if (!players[this.user].isOut) {
 					fadeActionBtn("flipHand", true);
 				}
 				if (!poor) {
 					// update strike selection
 					var knockDom = $(".blindKnock select").empty();
-					for (i = 2; i <= 6-players[userid].strikes; i++) {
+					for (i = 2; i <= 6-players[this.user].strikes; i++) {
 						knockDom.append($("<option>").html(i));
 					}
 					if (!knockDom.is(":empty")) fadeActionBtn("blindKnock", true);
@@ -596,7 +604,7 @@ var game = new function () {
 				$("#startRound").show();
 
 				// update user credit in userbox if this user has won
-				if (action.player == userid) {
+				if (action.player == this.user) {
 					main.userbox.updateCredit();
 				}
 
@@ -620,7 +628,7 @@ var game = new function () {
 				break;
 
 			case "folded":
-				if (action.player == userid) {
+				if (action.player == this.user) {
 					toggleActionBtn("activeKnock", false);
 					fadeActionBtn("flipHand", false);
 				}
@@ -629,7 +637,7 @@ var game = new function () {
 				break;
 
 			case "called":
-				if (action.player == userid) {
+				if (action.player == this.user) {
 					toggleActionBtn("activeKnock", false);
 					knockPossible = true;
 				}
@@ -694,13 +702,13 @@ var game = new function () {
 	// get new player info and add those players
 	// avoids too many ajax request at a time
 	var updatePlayerInfo = function (log) {
-		$.getJSON("/ajax.php?action=getUserInfo&game=" + gameid, function (data) {
+		$.getJSON("/ajax.php?action=getUserInfo&game=" + _this.game, function (data) {
 			$.each(data.users, function (key, user) {
 				// only add player if he does not exist yet
 				if (players[user.id] == null) {
 					players[user.id] = new Player(user.id, user.name);
 					playersCount++;
-					if (log || user.id == username) {
+					if (log || user.id == _this.user) {
 						logAction(user.name + " hat das Spiel betreten.");
 					}
 				}
@@ -710,7 +718,7 @@ var game = new function () {
 
 	// user wants to lay a card on stack
 	this.layStack = function (cardid) {
-		if (this.turn != userid) {
+		if (this.turn != this.user) {
 			showError("Du bist nicht am Zug!");
 		} else if (activeKnock > -1) {
 			showError("Du musst erst entscheiden, ob du hältst oder passt!");
@@ -756,7 +764,7 @@ var game = new function () {
 					var msg;
 					logAction(players[host].name + " ist der neue Leiter des Spiels.");
 					hostChanged();
-					if (host == userid) {
+					if (isHost()) {
 						msg = "Du bist nun Leiter des Spiels, da der bisherige Leiter das Spiel verlassen hat!";
 					} else {
 						msg = players[host].name + " ist nun Leiter des Spiels, da der bisherige Leiter das Spiel verlassen hat!";
@@ -770,7 +778,7 @@ var game = new function () {
 						roundStarted = false;
 						msg = "Du bist nun der letzte Spieler im Spiel und hast damit automatisch gewonnen!<br />Das Spiel ist hiermit beendet.";
 					} else {
-						if (host == userid) {
+						if (isHost()) {
 							$("#startRound").hide();
 						}
 						msg = "Es ist kein weiterer Spieler mehr anwesend.<br />Das Spiel ist hiermit beendet.";
@@ -816,12 +824,12 @@ var game = new function () {
 				fadeActionBtn("flipHand", false, 200);
 				fadeActionBtn("blindKnock", false, 200);
 				flipped = true;
-				if (this.turn == userid && activeKnock < 0) {
+				if (this.turn == this.user && activeKnock < 0) {
 					toggleActionBtn("knock", true);
 				}
 				// show player his cards
 				for (var i = 0; i < 4; i++) {
-					players[userid].flipHand(i, response.cards[i]);
+					players[this.user].flipHand(i, response.cards[i]);
 				}
 			}
 
@@ -846,7 +854,7 @@ var game = new function () {
 	var hostChanged = function () {
 		var off = 1;
 		var on = 0;
-		if (host == userid) {
+		if (isHost()) {
 			off = 0;
 			on = 1;
 		}
@@ -862,7 +870,7 @@ var game = new function () {
 		order = order.split(",");
 		var i;
 		for (i = 0; i < order.length; i++) {
-			if (order[i] == userid) {
+			if (order[i] == this.user) {
 				var me = i;
 			}
 		}
@@ -889,6 +897,13 @@ var game = new function () {
 	var pollSession = function () {
 		$.get("/ajax.php?action=pollSession");
 		setTimeout(pollSession, 300000);
+	}
+
+	this.setProperties = function (p) {
+		this.game = p.id;
+		this.user = p.user;
+		host = p.host;
+		butler = new Butler(p.authcode, p.butler, this);
 	}
 
 	// images loaded

@@ -1,5 +1,7 @@
-		var userid = {$userid};
-		var username = "{$username|escape}";
-		var authcode = "{$authcode}";
-		var gameid = {$gameid};
-		var host = {$host};
+		game.setProperties({
+			id: {$gameid},
+			user: {$userid},
+			butler: "{$butler}",
+			authcode: "{$authcode}",
+			host: {$host}
+		});
