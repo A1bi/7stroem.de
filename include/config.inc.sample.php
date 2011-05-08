@@ -9,8 +9,12 @@ $_config = array(
 		"user"	=>	"",
 		"pass"	=>	""
 	),
+
+	"admins" => array(),
 	
-	"dev" => false
+	"dev" => false,
+	"maintenance" => false,
+	"maintenance_games" => false
 
 );
 ?>

@@ -6,6 +6,7 @@ loadComponent("butler");
 
 // user wants to create a new game
 if ($_GET['action'] == "create") {
+	if ($_config['maintenance_games'] && !$_user['admin']) redirectTo();
 	$butler = new butler;
 
 	// check and correct given values
@@ -125,6 +126,16 @@ if ($_GET['action'] == "create") {
 			}
 		}
 		$_tpl->assign("bets", $bets);
+
+		if ($_user['admin']) {
+			$result = $_db->query('SELECT id, dev FROM butlers');
+			$butlers = array();
+			while ($butler = $result->fetch()) {
+				$butlers[] = $butler['id'] . (($butler['dev']) ? " (dev)" : "");
+			}
+			$_tpl->assign("butlers", $butlers);
+		}
+		
 		$_tpl->display("games.tpl");
 	}
 

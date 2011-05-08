@@ -135,6 +135,8 @@ if (!defined("NO_SESSION")) {
 
 		// found ?
 		if (!empty($user['id'])) {
+			// check if user is admin
+			$user['admin'] = in_array($user['id'], $_config['admins']);
 			// mark as logged in for templates
 			$_user = $user;
 			// format credit
