@@ -131,7 +131,7 @@ if ($_GET['action'] == "create") {
 			$result = $_db->query('SELECT id, dev FROM butlers');
 			$butlers = array();
 			while ($butler = $result->fetch()) {
-				$butlers[] = $butler['id'] . (($butler['dev']) ? " (dev)" : "");
+				$butlers[$butler['id']] = $butler['id'] . (($butler['dev']) ? " (dev)" : "");
 			}
 			$_tpl->assign("butlers", $butlers);
 		}
