@@ -434,7 +434,7 @@ var game = new function () {
 	}
 
 	var isHost = function () {
-		return (host == this.user);
+		return (host == _this.user);
 	}
 
 	var fadeActionBtn = function (action, show, time) {
@@ -468,7 +468,7 @@ var game = new function () {
 	var knocked = function (player) {
 		var info;
 		if (player > 0) {
-			if (player == this.user) {
+			if (player == _this.user) {
 				knockPossible = false;
 			}
 			info = players[player].name + " hat geklopft!";
@@ -514,13 +514,13 @@ var game = new function () {
 					toggleActionBtn("activeKnock", false);
 				}
 				activeKnock = -1;
-				toggleActionBtn("knock", (action.player == this.user));
+				toggleActionBtn("knock", (action.player == _this.user));
 				break;
 
 			case "knockTurn":
 				setTurn(action.player);
 				toggleActionBtn("knock", false);
-				toggleActionBtn("activeKnock", (action.player == this.user));
+				toggleActionBtn("activeKnock", (action.player == _this.user));
 				break;
 
 			// some player has laid on of his cards on his stack
@@ -538,13 +538,13 @@ var game = new function () {
 						player.smallRoundStarted();
 					}
 				});
-				if (!players[this.user].isOut) {
+				if (!players[_this.user].isOut) {
 					fadeActionBtn("flipHand", true);
 				}
 				if (!poor) {
 					// update strike selection
 					var knockDom = $(".blindKnock select").empty();
-					for (i = 2; i <= 6-players[this.user].strikes; i++) {
+					for (i = 2; i <= 6-players[_this.user].strikes; i++) {
 						knockDom.append($("<option>").html(i));
 					}
 					if (!knockDom.is(":empty")) fadeActionBtn("blindKnock", true);
@@ -604,7 +604,7 @@ var game = new function () {
 				$("#startRound").show();
 
 				// update user credit in userbox if this user has won
-				if (action.player == this.user) {
+				if (action.player == _this.user) {
 					main.userbox.updateCredit();
 				}
 
@@ -628,7 +628,7 @@ var game = new function () {
 				break;
 
 			case "folded":
-				if (action.player == this.user) {
+				if (action.player == _this.user) {
 					toggleActionBtn("activeKnock", false);
 					fadeActionBtn("flipHand", false);
 				}
@@ -637,7 +637,7 @@ var game = new function () {
 				break;
 
 			case "called":
-				if (action.player == this.user) {
+				if (action.player == _this.user) {
 					toggleActionBtn("activeKnock", false);
 					knockPossible = true;
 				}
@@ -870,7 +870,7 @@ var game = new function () {
 		order = order.split(",");
 		var i;
 		for (i = 0; i < order.length; i++) {
-			if (order[i] == this.user) {
+			if (order[i] == _this.user) {
 				var me = i;
 			}
 		}
