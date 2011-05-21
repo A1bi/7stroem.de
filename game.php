@@ -72,7 +72,8 @@ if (empty($user['user'])) {
 
 // prepare templates
 $_tpl->assign(array(
-	"userid" => $_user['id'], "authcode" => $authcode, "gameid" => $game['id'], "butler" => $butler->getAddr(),
+	"userid" => $_user['id'], "authcode" => $authcode, "gameid" => $game['id'],
+	"butlerid" => $butler->getId(), "butleraddr" => $butler->getAddr(),
 	"maxplayers" => $game['maxplayers'], "public" => $game['public'], "bet" => formatCredit($game['bet']), "host" => $game['host']
 ));
 $jsvars = $_tpl->fetch("game_js.tpl");

@@ -67,9 +67,8 @@ if (!empty($server['id'])) {
 				$response['kick'] = array();
 				while ($user = $result->fetch()) {
 					$newCredit = $user['credit']-$game['bet'];
-					if ($newCredit >= 0) {
-						$_db->query('UPDATE users SET credit = ?, rounds = rounds+1 WHERE id = ?', array($newCredit, $user['id']));
-					} else {
+					$_db->query('UPDATE users SET credit = ?, rounds = rounds+1 WHERE id = ?', array($newCredit, $user['id']));
+					if ($newCredit < 0) {
 						$response['kick'][] = $user['id'];
 					}
 					$players++;
@@ -100,6 +99,7 @@ if (!empty($server['id'])) {
 
 			case "changeHost":
 				$_db->query('UPDATE games SET host = ? WHERE id = ?', array($request['host'], $game['id']));
+				$response['result'] = "ok";
 				break;
 
 			case "startGame":

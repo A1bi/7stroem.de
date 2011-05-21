@@ -366,16 +366,18 @@ var game = new function () {
 
 	
 	// butler
-	var Butler = function (authcode, addr, parent) {
+	var Butler = function (authcode, p, parent) {
 
 		var _this = this;
 		var _parent = parent;
 		// number of last action we got from the butler
 		this.lastAction = 0;
+		// contains id and addr
+		var props = p;
 		var requesting = false;
-		var CORS = true;
+		var curRequest;
 		// the butler's address to connect to
-		var uri = "http://" + addr + "/";
+		var uri = "http://" + props.addr + "/";
 		var requestUri = uri + "player";
 		var requestStart = {gId: _parent.game, pId: _parent.user, authcode: authcode};
 
@@ -383,22 +385,19 @@ var game = new function () {
 		var makeRequest = function (request, args) {
 			var requestData = $.extend({}, requestStart, {request: request}, args);
 
-			// only if cross-origin requests are supported by browser
-			if (CORS) {
-				$.getJSON(requestUri, requestData, function (data) {
-					if (request != "getActions") requesting = false;
-					_parent.processResponse(data);
-				}).error(function () {
-					setTimeout(function () {
-						main.showBubble("error", "Sorry, da ist was schiefgelaufen...", "", 5000);
-					}, 500);
-				});
-			} else {
-				// get data via jsonp
-				$.get(requestUri, $.extend(requestData, {jsonp: 1}), function () {
-					if (request != "getActions") requesting = false;
-				}, "script");
-			}
+			curRequest = $.getJSON(requestUri, requestData, function (data) {
+				if (request != "getActions") {
+					requesting = false;
+					if ($.browser.opera) {
+						_this.getActions();
+					}
+				}
+				_parent.processResponse(data);
+			}).error(function () {
+				setTimeout(function () {
+					main.showBubble("error", "Sorry, da ist was schiefgelaufen...", "", 5000);
+				}, 500);
+			});
 		}
 		
 		// receive all actions since lastAction
@@ -411,6 +410,10 @@ var game = new function () {
 			if (requesting) return;
 			if (content == null) content = "";
 			requesting = true;
+			// opera won't do two ajax requests simultaneously -> abort current request
+			if ($.browser.opera) {
+				curRequest.abort();
+			}
 			makeRequest("registerAction", {action: action, content: content});
 		}
 
@@ -425,7 +428,8 @@ var game = new function () {
 			// check if CORS is available
 			$.get(uri+"test", this.getActions).error(function (e) {
 				if (e.responseText != "ok") {
-					CORS = false;
+					requestUri = "/ajax.php";
+					$.extend(requestStart, {server: props.id, proxyButler: 1});
 					_this.getActions();
 				}
 			});
@@ -832,6 +836,10 @@ var game = new function () {
 					players[this.user].flipHand(i, response.cards[i]);
 				}
 			}
+
+		// waiting for new action has timed out -> reconnect
+		} else if (response.result == "timeout") {
+			butler.getActions();
 
 		// an error occurred ?
 		} else if (response.result == "error") {

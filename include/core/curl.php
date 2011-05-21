@@ -11,6 +11,7 @@ class curl {
 	private $headers = array(
 		"Accept-Language: de-de,de;q=0.8"
 	);
+	private $url;
 
 	/**
 	 * creates curl object with given url
@@ -21,12 +22,18 @@ class curl {
 	 * @param int $proxy
 	 */
 	function __construct($url = "", $proxy = 1) {
-		global $_settings;
-		
+		$this->url = $url;
 		$this->curl = curl_init($url);
 		curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($this->curl, CURLOPT_CONNECTTIMEOUT, 30);
 
+	}
+
+	private function getQueryString($a) {
+		foreach ($a as $name => $value) {
+			$args .= $name . "=" . $value . "&";
+		}
+		return $args;
 	}
 
 	/**
@@ -36,10 +43,11 @@ class curl {
 	 */
 	function post($posts) {
 		curl_setopt($this->curl, CURLOPT_POST, 1);
-		foreach ($posts as $name => $value) {
-			$args .= $name . "=" . $value . "&";
-		}
-		curl_setopt($this->curl, CURLOPT_POSTFIELDS, $args);
+		curl_setopt($this->curl, CURLOPT_POSTFIELDS, $this->getQueryString($posts));
+	}
+
+	function setGetArgs($gets) {
+		curl_setopt($this->curl, CURLOPT_URL, $this->url . "?" . $this->getQueryString($gets));
 	}
 
 	/**
