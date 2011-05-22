@@ -146,6 +146,7 @@ var game = new function () {
 		var listDom;
 		var tableDom;
 		var cards = [];
+		var hasQuit = false;
 		var bubble = new Bubble;
 
 		var removeCards = function () {
@@ -265,12 +266,18 @@ var game = new function () {
 		}
 
 		this.roundStarted = function () {
+			if (hasQuit) {
+				return false;
+			}
+			
 			this.strikes = 0;
 			dom.removeClass("out");
 			this.isOut = false;
 			setFlag();
 			// pull out player area
 			$(".area", dom).css("visibility", "visible").addClass("shown", 700);
+
+			return true;
 		}
 
 		this.roundEnded = function () {
@@ -341,9 +348,11 @@ var game = new function () {
 				$("#maxplayers").html(parseInt($("#maxplayers").html())+1);
 
 			} else {
+				hasQuit = true;
 				removeCards();
 				tableDom.addClass("quit");
-				this.roundEnded();
+				this.out();
+				setFlag("Spiel verlassen");
 			}
 
 		}
@@ -590,7 +599,12 @@ var game = new function () {
 				wait = 700;
 				waitFunction = function () {
 					$.each(players, function (key, player) {
-						if (player != null) player.roundStarted();
+						if (player != null) {
+							if (!player.roundStarted()) {
+								delete player;
+								players[key] = null;
+							}
+						}
 					});
 					processQueue(true);
 				}
@@ -667,9 +681,6 @@ var game = new function () {
 			case "playerQuit":
 				logAction(players[action.player].name + " hat das Spiel verlassen.");
 				players[action.player].quit();
-				// remove from list
-				delete players[action.player];
-				players[action.player] = null;
 				playersSmallRound--;
 				break;
 

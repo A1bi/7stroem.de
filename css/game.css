@@ -589,7 +589,7 @@ input.inactive {
 	margin-left: 2px;
 	top: 0px;
 }
-#panel #strikes table td.quit {
+#panel #strikes table a.quit {
 	text-decoration: line-through;
 }
 #panel #strikes table td:first-child {
