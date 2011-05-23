@@ -557,7 +557,7 @@ var game = new function () {
 				if (!poor) {
 					// update strike selection
 					var knockDom = $(".blindKnock select").empty();
-					for (i = 2; i <= 6-players[_this.user].strikes; i++) {
+					for (i = 2; i <= 8-players[_this.user].strikes && i < 8; i++) {
 						knockDom.append($("<option>").html(i));
 					}
 					if (!knockDom.is(":empty")) fadeActionBtn("blindKnock", true);
