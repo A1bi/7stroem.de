@@ -387,26 +387,31 @@ var game = new function () {
 		var curRequest;
 		// the butler's address to connect to
 		var uri = "http://" + props.addr + "/";
-		var requestUri = uri + "player";
+
 		var requestStart = {gId: _parent.game, pId: _parent.user, authcode: authcode};
+		var settingsStart = {url: uri + "player", dataType: "json"};
 
 		// connect to server and make a request
 		var makeRequest = function (request, args) {
 			var requestData = $.extend({}, requestStart, {request: request}, args);
-
-			curRequest = $.getJSON(requestUri, requestData, function (data) {
-				if (request != "getActions") {
-					requesting = false;
-					if ($.browser.opera) {
-						_this.getActions();
+			var settings = $.extend({}, settingsStart, {data: requestData,
+				success: function (data) {
+					if (request != "getActions") {
+						requesting = false;
+						if ($.browser.opera) {
+							_this.getActions();
+						}
 					}
+					_parent.processResponse(data);
+				},
+				error: function () {
+					setTimeout(function () {
+						main.showBubble("error", "Sorry, da ist was schiefgelaufen...", "", 5000);
+					}, 500);
 				}
-				_parent.processResponse(data);
-			}).error(function () {
-				setTimeout(function () {
-					main.showBubble("error", "Sorry, da ist was schiefgelaufen...", "", 5000);
-				}, 500);
 			});
+
+			curRequest = $.ajax(settings);
 		}
 		
 		// receive all actions since lastAction
@@ -437,11 +442,18 @@ var game = new function () {
 			// check if CORS is available
 			$.get(uri+"test", this.getActions).error(function (e) {
 				if (e.responseText != "ok") {
-					requestUri = "/ajax.php";
+					settingsStart.url = "/ajax.php";
 					$.extend(requestStart, {server: props.id, proxyButler: 1});
 					_this.getActions();
 				}
 			});
+		}
+		
+		this.quit = function () {
+			curRequest.abort();
+			settingsStart.async = false;
+			settingsStart.timeout = 1000;
+			makeRequest("quit");
 		}
 
 	}
@@ -601,8 +613,7 @@ var game = new function () {
 					$.each(players, function (key, player) {
 						if (player != null) {
 							if (!player.roundStarted()) {
-								delete player;
-								players[key] = null;
+								killPlayer(key);
 							}
 						}
 					});
@@ -681,6 +692,9 @@ var game = new function () {
 			case "playerQuit":
 				logAction(players[action.player].name + " hat das Spiel verlassen.");
 				players[action.player].quit();
+				if (!roundStarted) {
+					killPlayer(action.player);
+				}
 				playersSmallRound--;
 				break;
 
@@ -697,6 +711,11 @@ var game = new function () {
 			processQueue(true);
 		}
 
+	}
+	
+	var killPlayer = function (id) {
+		delete players[id];
+		players[id] = null;
 	}
 
 	// received a chat message -> write it into chat box
@@ -1002,6 +1021,7 @@ var game = new function () {
 		// exit button
 		$("#quit").click(function () {
 			if (!roundStarted || confirm("Wenn du das Spiel jetzt verlässt, verlierst du deinen Einsatz. Möchtest du wirklich abhauen?")) {
+				butler.quit();
 				// to prevent another exit message
 				roundStarted = false;
 				window.location.href = "/games";
