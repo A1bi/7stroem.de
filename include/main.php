@@ -67,6 +67,7 @@ function formatCredit($credit) {
  */
 function kickGuests() {
 	if (empty($_SESSION['user']['id'])) {
+		showError("Bitte logge dich ein!");
 		redirectTo("/");
 	}
 }

@@ -42,6 +42,7 @@
 							<td>{$user.quota} %</td>
 						</tr>
 					</table>
+					{if $_user.id != ""}
 					{if $user.request.by == $user.id}
 					<a href="/requests?id={$user.request.id}&action=accept" class="addFriend">
 						<span class="icon add"></span> Anfrage annehmen
@@ -52,6 +53,7 @@
 					<a href="?action=addFriend" class="addFriend">
 						<span class="icon add"></span> als Freund hinzufügen
 					</a>
+					{/if}
 					{/if}
 				</div>
 			</div>
@@ -93,6 +95,7 @@
 					<em>Noch keine Kommentare hinterlassen.</em>
 				</div>
 				{/foreach}
+				{if $_user.id != ""}
 				<div class="post">
 				<form method="post" action="{$smarty.server.REQUEST_URI}">
 					Auch etwas schreiben:
@@ -100,6 +103,7 @@
 					<div class="hcen"><input type="submit" name="submit" value="speichern" /></div>
 				</form>
 				</div>
+				{/if}
 			</div>
 		</div>
 	</div>

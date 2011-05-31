@@ -1,7 +1,13 @@
 <?php
 include('include/main.php');
 
-$name = (!empty($_GET['name'])) ? $_GET['name'] : $_user['name'];
+if (empty($_GET['name'])) {
+	kickGuests();
+	$name = $_user['name'];
+} else {
+	$name = $_GET['name'];
+}
+
 $result = $_db->query('SELECT id, name, realname, registered, rounds, won FROM users WHERE name = ?', array($name));
 $user = $result->fetch();
 if (empty($user['id'])) {
@@ -9,53 +15,59 @@ if (empty($user['id'])) {
 	redirectTo("/player");
 }
 
-// check if the users are friends
-if ($user['id'] != $_user['id']) {
-	$result = $_db->query('SELECT friend FROM users_friends WHERE user = ? AND friend = ?', array($_user['id'], $user['id']));
-	$tmp = $result->fetch();
-	if (!empty($tmp['friend'])) {
-		$user['isFriend'] = true;
-	// check if request pending
-	} else {
-		$result = $_db->query('SELECT id, `by` FROM requests WHERE type = 1 AND ((user = :1 AND `by` = :2) OR (`by` = :1 AND user = :2))', array(":1" => $_user['id'], ":2" => $user['id']));
+
+// the following things only have to be done for logged in users
+if (!empty($_user['id'])) {
+
+	// check if the users are friends
+	if ($user['id'] != $_user['id']) {
+		$result = $_db->query('SELECT friend FROM users_friends WHERE user = ? AND friend = ?', array($_user['id'], $user['id']));
 		$tmp = $result->fetch();
-		$user['request'] = $tmp;
-	}
-	unset($tmp);
-} else {
-	$user['isFriend'] = true;
-}
-
-// add comment
-if (!empty($_POST['submit'])) {
-	$_db->query('INSERT INTO comments VALUES (null, ?, ?, ?, ?)', array($user['id'], $_user['id'], $_POST['comment'], time()));
-	redirectTo();
-
-// delete comment
-} elseif ($_GET['action'] == "delComment" && $_user['id'] == $user['id']) {
-	$result = $_db->query('DELETE FROM comments WHERE id = ? AND user = ?', array($_GET['id'], $_user['id']));
-	if ($_db->changes($result)) {
-		showInfo("Der Kommentar wurde gelöscht.");
+		if (!empty($tmp['friend'])) {
+			$user['isFriend'] = true;
+		// check if request pending
+		} else {
+			$result = $_db->query('SELECT id, `by` FROM requests WHERE type = 1 AND ((user = :1 AND `by` = :2) OR (`by` = :1 AND user = :2))', array(":1" => $_user['id'], ":2" => $user['id']));
+			$tmp = $result->fetch();
+			$user['request'] = $tmp;
+		}
+		unset($tmp);
 	} else {
-		showError("Der Kommentar konnte nicht gelöscht werden.");
+		$user['isFriend'] = true;
 	}
-	redirectTo("/player");
 
-// add as friend
-} elseif ($_GET['action'] == "addFriend") {
-	if ($user['isFriend'] || !empty($user['request']['id'])) {
-		showError("Du bist mit diesem Spieler bereits befreundet oder es steht noch eine Anfrage aus.");
-	} else {
-		$_db->query('INSERT INTO requests VALUES (null, 1, ?, ?)', array($user['id'], $_user['id']));
-		showInfo("Eine Freundschaftsanfrage wurde gesendet.");
+	// add comment
+	if (!empty($_POST['submit'])) {
+		$_db->query('INSERT INTO comments VALUES (null, ?, ?, ?, ?)', array($user['id'], $_user['id'], $_POST['comment'], time()));
+		redirectTo();
+
+	// delete comment
+	} elseif ($_GET['action'] == "delComment" && $_user['id'] == $user['id']) {
+		$result = $_db->query('DELETE FROM comments WHERE id = ? AND user = ?', array($_GET['id'], $_user['id']));
+		if ($_db->changes($result)) {
+			showInfo("Der Kommentar wurde gelöscht.");
+		} else {
+			showError("Der Kommentar konnte nicht gelöscht werden.");
+		}
+		redirectTo("/player");
+
+	// add as friend
+	} elseif ($_GET['action'] == "addFriend") {
+		if ($user['isFriend'] || !empty($user['request']['id'])) {
+			showError("Du bist mit diesem Spieler bereits befreundet oder es steht noch eine Anfrage aus.");
+		} else {
+			$_db->query('INSERT INTO requests VALUES (null, 1, ?, ?)', array($user['id'], $_user['id']));
+			showInfo("Eine Freundschaftsanfrage wurde gesendet.");
+		}
+		redirectTo("/player/".$user['name']);
+
+	// remove friend
+	} elseif ($_GET['action'] == "delFriend" && $user['isFriend']) {
+		$_db->query('DELETE FROM users_friends WHERE (user = :1 AND friend = :2) OR (friend = :1 AND user = :2)', array(":1" => $_user['id'], ":2" => $user['id']));
+		showInfo("Ihr seid nun nicht mehr befreundet.");
+		redirectTo("/player/".$user['name']);
 	}
-	redirectTo("/player/".$user['name']);
-
-// remove friend
-} elseif ($_GET['action'] == "delFriend" && $user['isFriend']) {
-	$_db->query('DELETE FROM users_friends WHERE (user = :1 AND friend = :2) OR (friend = :1 AND user = :2)', array(":1" => $_user['id'], ":2" => $user['id']));
-	showInfo("Ihr seid nun nicht mehr befreundet.");
-	redirectTo("/player/".$user['name']);
+	
 }
 
 
